@@ -3,13 +3,13 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import jwt from 'jsonwebtoken';
-import {Product, User} from '../Database/models';
+import { Product, User } from '../Database/models';
 import app from '../../index';
+
 const { expect } = chai;
 chai.use(chaiHttp);
 
 describe('POST PRODUCT', async () => {
-
   let sellerToken;
   let adminToken;
   let sellerId;
@@ -20,26 +20,24 @@ describe('POST PRODUCT', async () => {
     firstname: 'James',
     lastname: 'admin',
     email: 'admin19@gmail.com',
-    password: 'Admin1912',
+    password: 'Admin1912'
   };
   const sellerData = {
     firstname: 'Jana',
     lastname: 'Seller',
     email: 'seller19@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
   const loginAdmin = {
     email: 'admin19@gmail.com',
-    password: 'Admin1912',
+    password: 'Admin1912'
   };
   const loginSeller = {
     email: 'seller19@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
 
   beforeEach(async () => {
- 
-
     // Register admin
     const adminRegRes = await chai
       .request(app)
@@ -95,12 +93,11 @@ describe('POST PRODUCT', async () => {
   after(async () => {
     // Delete all the products from the Products table
     await Product.destroy({ truncate: true, cascade: true });
-  
+
     // Delete all the users from the Users table
     await User.destroy({ truncate: true, cascade: true });
   });
 
-  
   context('CREATE PRODUCT WITH valid Data', () => {
     it('should return status 201 and add the product to the database', (done) => {
       const productData = {
@@ -111,7 +108,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2023-04-30',
+        exDate: '2023-04-30'
       };
 
       chai
@@ -138,7 +135,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2023-04-30',
+        exDate: '2023-04-30'
       };
 
       chai
@@ -164,7 +161,7 @@ describe('POST PRODUCT', async () => {
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
         price: 2000.99,
         quantity: 10,
-        category: 'Electronics',
+        category: 'Electronics'
         // exDate is missing
       };
 
@@ -191,7 +188,7 @@ describe('POST PRODUCT', async () => {
         price: 'invalid_price_value',
         quantity: 10,
         category: 'example',
-        exDate: '2023-04-30',
+        exDate: '2023-04-30'
       };
 
       chai
@@ -222,7 +219,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2023-04-30',
+        exDate: '2023-04-30'
       };
       chai
         .request(app)
@@ -250,7 +247,7 @@ describe('POST PRODUCT', async () => {
         quantity: -12,
         price: 200,
         category: 'example',
-        exDate: '2023-04-30',
+        exDate: '2023-04-30'
       };
 
       chai
@@ -280,7 +277,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'HP',
-        exDate: '2023-04-30',
+        exDate: '2023-04-30'
       };
       chai
         .request(app)

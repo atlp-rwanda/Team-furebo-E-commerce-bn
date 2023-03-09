@@ -14,7 +14,7 @@ export class PublicController {
       if (!email || !password) {
         return res
           .status(400)
-          .json({ msg: 'Please Fill in blank fields', error: '' });
+          .json({ msg: 'Please Fiil in blank fields', error: '' });
       }
 
       const doesExist = await User.findOne({ where: { email } });

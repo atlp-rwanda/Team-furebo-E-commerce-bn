@@ -1,6 +1,7 @@
 import express from 'express';
 import disableAccount from '../controllers/disableAccount.controller';
 import { authorizeAdmin } from '../middlewares/userRoles.middleware';
+import AuthMiddleware from '../middlewares/login.middleware';
 
 const router = express.Router();
 /**
@@ -82,6 +83,6 @@ const router = express.Router();
  *                 message: Failed to disable an account
  *
  */
-router.patch('/disableAccount/:id', authorizeAdmin, disableAccount);
+router.patch('/disableAccount/:id', AuthMiddleware.checkAuthentication, authorizeAdmin, disableAccount);
 
 export default router;

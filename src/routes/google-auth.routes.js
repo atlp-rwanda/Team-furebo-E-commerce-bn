@@ -12,6 +12,8 @@ import googleFailure from '../controllers/google-auth-controller';
 // eslint-disable-next-line import/no-duplicates
 import googleProtected from '../controllers/google-auth-controller';
 import 'dotenv/config';
+// eslint-disable-next-line import/no-duplicates
+import logout from '../controllers/google-auth-controller';
 
 const router = express.Router();
 
@@ -38,6 +40,7 @@ router.get(
 );
 router.get('/auth/failure', googleFailure.googleFailure);
 router.get('/protected', isLoggedIn, googleProtected.googleProtected);
+router.get('/logout', logout.logout);
 /**
  * @swagger
  * tags:
