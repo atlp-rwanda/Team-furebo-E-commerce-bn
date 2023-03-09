@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak */
 import express from 'express';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import passport from 'passport';

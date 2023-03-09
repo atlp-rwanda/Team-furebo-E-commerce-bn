@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable arrow-parens */
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
