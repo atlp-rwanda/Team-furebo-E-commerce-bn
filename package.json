@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "coveralls-ci": "nyc report --reporter=text-lcov | coveralls --service-name=circleci --repo-token=$COVERALLS_REPO_TOKEN"
   },
   "jest": {
     "testEnvironment": "node",
