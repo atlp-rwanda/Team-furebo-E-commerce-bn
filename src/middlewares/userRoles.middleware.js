@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import jwt from 'jsonwebtoken';
 import db from '../Database/models';
 import { verifyToken } from '../utils/user.util';
@@ -77,8 +76,19 @@ export const authorizeMerchant = async (req, res, next) => {
     if (!userRole || userRole.name !== 'merchant') {
       return res.status(403).send({ message: 'Merchant access only' });
     }
-    req.user = user;
-    next();
+    if (user.enable2FA) {
+      if (user.checkTwoFactor) {
+        req.user = user;
+        next();
+      } else {
+        return res.status(403).json({
+          msg: 'Incomplete Two-Factor Authentication (2FA) verification process',
+        });
+      }
+    } else {
+      req.user = user;
+      next();
+    }
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
       return res.status(401).json({ message: 'Invalid token' });

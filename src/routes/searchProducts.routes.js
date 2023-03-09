@@ -2,6 +2,7 @@ import express from 'express';
 import searchProduct from '../controllers/searchProducts.controller';
 import { authorizeUser } from '../middlewares/userRoles.middleware';
 import searchProductValidator from '../middlewares/searchProduct.middleware';
+import AuthMiddleware from '../middlewares/login.middleware';
 
 const router = express.Router();
 
@@ -48,5 +49,11 @@ const router = express.Router();
  */
 
 router.get('/search', authorizeUser, searchProductValidator, searchProduct);
+router.get(
+  '/search',
+  AuthMiddleware.checkAuthentication,
+  authorizeUser,
+  searchProduct
+);
 
 export default router;

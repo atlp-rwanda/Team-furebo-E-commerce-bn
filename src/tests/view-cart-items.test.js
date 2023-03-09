@@ -4,7 +4,8 @@ import chaiHttp from 'chai-http';
 
 import app from '../../index';
 
-import { sequelize } from '../Database/models';
+// import { sequelize } from '../Database/models';
+
 const { expect } = chai;
 chai.use(chaiHttp);
 
@@ -37,16 +38,10 @@ describe('VIEW ITEMS IN SHOPPING CART', () => {
 
   beforeEach(async () => {
     // ========= SELLER ACCOUNT
-    await chai
-      .request(app)
-      .post('/api/register')
-      .send(sellerData);
+    await chai.request(app).post('/api/register').send(sellerData);
 
     // ========= BUYER ACCOUNT
-    await chai
-      .request(app)
-      .post('/api/register')
-      .send(buyerData);
+    await chai.request(app).post('/api/register').send(buyerData);
 
     const sellerLogin = await chai
       .request(app)
@@ -62,9 +57,9 @@ describe('VIEW ITEMS IN SHOPPING CART', () => {
     expect(buyerLogin).to.have.status(200);
     BUYER_TOKEN = buyerLogin.body.token;
   });
-  after(async () => {
-    await sequelize.sync({ force: true });
-  });
+  // after(async () => {
+  //   await sequelize.sync({ force: true });
+  // });
 
   context(' IT SHOULD RETRIEVE ALL ITEMS IN USER ACCOUNT ', () => {
     it(' should retrieve data and return 200 status', async () => {

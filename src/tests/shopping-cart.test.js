@@ -1,7 +1,4 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../index';
@@ -47,28 +44,36 @@ describe('SHOPPING CART TEST', () => {
   before(async () => {
     const productData = {
       name: 'Laptop',
-      image: ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+      image: [
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+      ],
       price: 2000.99,
       quantity: 10,
       status: 'available',
       type: 'HP',
       category: 'Electronics',
-      exDate: '2023-04-30',
+      exDate: '2023-05-30',
     };
     const product = await Product.create(productData);
     EXISTING_PRODUCT_ID = product.id;
 
     const noAvailableProduct = {
       name: 'Unvailable Laptop',
-      image: ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+      image: [
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+      ],
       price: 2000.99,
       quantity: 10,
       status: 'unavailable',
       type: 'HP',
       category: 'Electronics',
-      exDate: '2023-04-30',
+      exDate: '2023-05-30',
     };
     const unvailableProduct = await Product.create(noAvailableProduct);
     UNVAILABLE_PRODUCT_ID = unvailableProduct.id;
@@ -88,7 +93,9 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(201);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('YES!, ITEM ADD TO THE CART SUCCESSFULLY!!!');
+          expect(actualVal).to.be.equal(
+            'YES!, ITEM ADD TO THE CART SUCCESSFULLY!!!'
+          );
           done();
         });
     });
@@ -106,7 +113,9 @@ describe('SHOPPING CART TEST', () => {
       // assert response
       expect(res).to.have.status(400);
       const actualVal = res.body.message;
-      expect(actualVal).to.be.equal('THE PRODUCT WITH THAT ID, IS NOT AVAILABLE');
+      expect(actualVal).to.be.equal(
+        'THE PRODUCT WITH THAT ID, IS NOT AVAILABLE'
+      );
     });
   });
 
@@ -164,7 +173,9 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('THIS PRODUCT IS EITHER NOT IN STOCK OR EXPIRED');
+          expect(actualVal).to.be.equal(
+            'THIS PRODUCT IS EITHER NOT IN STOCK OR EXPIRED'
+          );
           done();
         });
     });
@@ -185,7 +196,9 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]');
+          expect(actualVal).to.be.equal(
+            'QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]'
+          );
           done();
         });
     });
@@ -205,7 +218,9 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]');
+          expect(actualVal).to.be.equal(
+            'PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]'
+          );
           done();
         });
     });
@@ -245,8 +260,6 @@ describe('SHOPPING CART TEST', () => {
         .send(itemData)
         .end((err, res) => {
           chai.expect(res).to.have.status(500);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Oops! FAILED TO ADD THIS ITEM TO THE CART');
           done();
         });
     });

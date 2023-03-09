@@ -23,21 +23,21 @@ describe('SEARCH PRODUCTS', async () => {
     firstname: 'James',
     lastname: 'admin',
     email: 'laura@gmail.com',
-    password: 'Admin1912',
+    password: 'Admin1912'
   };
   const sellerData = {
     firstname: 'Jana',
     lastname: 'Seller',
     email: 'idole@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
   const loginAdmin = {
     email: 'laura@gmail.com',
-    password: 'Admin1912',
+    password: 'Admin1912'
   };
   const loginSeller = {
     email: 'idole@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
 
   before(async () => {
@@ -95,13 +95,16 @@ describe('SEARCH PRODUCTS', async () => {
   it('should return status 201 and add first product to the database', (done) => {
     const productData = {
       name: 'Screen',
-      image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+      image: [
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'
+      ],
       price: 900.99,
       quantity: 10,
       category: 'Electronics',
-      exDate: '2023-04-30',
+      exDate: '2123-05-30'
     };
 
     chai
@@ -120,13 +123,16 @@ describe('SEARCH PRODUCTS', async () => {
   it('should return status 201 and add second product to the database', (done) => {
     const productData = {
       name: 'lenovo',
-      image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+      image: [
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'
+      ],
       price: 900.99,
       quantity: 10,
       category: 'Electronics',
-      exDate: '2023-04-30',
+      exDate: '2123-05-30'
     };
 
     chai
@@ -149,7 +155,8 @@ describe('SEARCH PRODUCTS', async () => {
         name: 'lenovo'
       }
     };
-    chai.request(app)
+    chai
+      .request(app)
       .get('/api/search')
       .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
       .query(req.query)
@@ -167,7 +174,8 @@ describe('SEARCH PRODUCTS', async () => {
         maxPrice: 1000
       }
     };
-    chai.request(app)
+    chai
+      .request(app)
       .get('/api/search')
       .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
       .query(req.query)
@@ -179,7 +187,8 @@ describe('SEARCH PRODUCTS', async () => {
 
   // Define a test for searching by category
   it('should return products that match the category query', (done) => {
-    chai.request(app)
+    chai
+      .request(app)
       .get('/api/search?category=Electronics')
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
@@ -190,8 +199,11 @@ describe('SEARCH PRODUCTS', async () => {
 
   // Define a test for searching with a combination of queries
   it('should return products that match the combination of queries', (done) => {
-    chai.request(app)
-      .get('/api/search?name=Screen&category=Electronics&minPrice=100&maxPrice=1000')
+    chai
+      .request(app)
+      .get(
+        '/api/search?name=Screen&category=Electronics&minPrice=100&maxPrice=1000'
+      )
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
@@ -201,7 +213,8 @@ describe('SEARCH PRODUCTS', async () => {
 
   // Define a test for searching with unavailable product
   it('should return error of 404 and a message of product not found ', (done) => {
-    chai.request(app)
+    chai
+      .request(app)
       .get('/api/search?name=Lion')
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
@@ -213,7 +226,8 @@ describe('SEARCH PRODUCTS', async () => {
   });
 
   it('should return error with status 406 when you entered an invalid credentials', (done) => {
-    chai.request(app)
+    chai
+      .request(app)
       .get('/api/search?minPrice=1000&maxPrice=100')
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
@@ -223,7 +237,8 @@ describe('SEARCH PRODUCTS', async () => {
   });
 
   it('should return error with status 406 when you entered an invalid credentials', (done) => {
-    chai.request(app)
+    chai
+      .request(app)
       .get('/api/search?name=')
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
@@ -233,7 +248,8 @@ describe('SEARCH PRODUCTS', async () => {
   });
 
   it('should return error with status 406 when you entered no query', (done) => {
-    chai.request(app)
+    chai
+      .request(app)
       .get('/api/search')
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {

@@ -6,17 +6,20 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Order.belongsTo(models.User, { foreignKey: 'userId' });
     }
-  };
-  Order.init({
-    userId: DataTypes.INTEGER,
-    products: DataTypes.ARRAY(DataTypes.JSONB),
-    deliveryAddress: DataTypes.JSONB,
-    paymentMethod: DataTypes.STRING,
-    status: DataTypes.STRING,
-    totalPrice: DataTypes.FLOAT
-  }, {
-    sequelize,
-    modelName: 'Order',
-  });
+  }
+  Order.init(
+    {
+      userId: DataTypes.INTEGER,
+      products: DataTypes.ARRAY(DataTypes.JSONB),
+      deliveryAddress: DataTypes.JSONB,
+      paymentMethod: DataTypes.STRING,
+      status: DataTypes.STRING,
+      totalPrice: DataTypes.FLOAT,
+    },
+    {
+      sequelize,
+      modelName: 'Order',
+    }
+  );
   return Order;
 };

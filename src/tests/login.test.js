@@ -1,10 +1,8 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-expressions */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sgMail from '@sendgrid/mail';
 import app from '../../index';
-import db from '../Database/models';
+// import db from '../Database/models';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const { expect } = chai;
@@ -61,9 +59,9 @@ describe('LOGIN USER', () => {
   });
 
   // LOGIN
-  before(async () => {
-    await db.sequelize.sync({ force: true });
-  });
+  // before(async () => {
+  //   await db.sequelize.sync({ force: true });
+  // });
 
   it('should login user return status 200 and send token', async () => {
     const res = await chai.request(app).post('/api/login').send({
@@ -83,7 +81,7 @@ describe('LOGIN USER', () => {
     });
 
     expect(res).to.have.status(400);
-    expect(res.body).to.have.property('msg', 'Please Fill in blank fields');
+    expect(res.body).to.have.property('msg', 'Please Fiil in blank fields');
   });
 
   it('should return status 401 and deny access if the password is invalid', async () => {
@@ -131,7 +129,6 @@ describe('LOGIN USER', () => {
       .request(app)
       .get('/api/protectedroute')
       .set({ authorization: `Bearer ${token}` });
-
     expect(res).to.have.status(400);
   });
 });

@@ -2,6 +2,7 @@ import express from 'express';
 import deleteProduct from '../controllers/deleteProduct.controller';
 import { authorizeUser } from '../middlewares/userRoles.middleware';
 import RoleCheck from '../middlewares/user.Checkrole';
+import AuthMiddleware from '../middlewares/login.middleware';
 
 const router = express.Router();
 
@@ -65,5 +66,11 @@ const router = express.Router();
  *                 message: Failed to delete product
  *
  */
-router.delete('/deleteProduct/:id', authorizeUser, RoleCheck(['merchant', 'admin']), deleteProduct);
+router.delete(
+  '/deleteProduct/:id',
+  AuthMiddleware.checkAuthentication,
+  authorizeUser,
+  RoleCheck(['merchant', 'admin']),
+  deleteProduct
+);
 export default router;

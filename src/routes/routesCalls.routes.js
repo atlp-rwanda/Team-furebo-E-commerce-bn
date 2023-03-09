@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import express from 'express';
 import resetPassword from './reset-password.routes';
 import signupRouter from './signup.routes';
@@ -17,7 +16,15 @@ import ShoppingCart from './shopping-cart.routes';
 import updateShoppingCart from './update-shopping-cart.routes';
 import deleteProductRouter from './deleteProduct.routes';
 import viewCartItems from './view-cart-items.routes';
-import checkOut from './checkOut.routes' ;
+import checkOut from './checkOut.routes';
+import paymentRouter from './payment.routes';
+import logout from './logout.routes';
+import markProductAvailability from './mark-availability.routes';
+import changePassword from './change-password.routes';
+import clearCart from './clear-cart.routes';
+import chatRouter from './chats.routes';
+import profilePage from './profile.routes';
+import readNotificatioRouter from './notificationRead.routes';
 
 const routes = express();
 
@@ -38,6 +45,17 @@ routes.use('/api', ShoppingCart);
 routes.use('/api', updateShoppingCart);
 routes.use('/api', deleteProductRouter);
 routes.use('/api', viewCartItems);
+routes.use('/api', logout);
 routes.use('/api', checkOut);
+routes.use('/api', paymentRouter);
+routes.use('/api', markProductAvailability);
+routes.use('/api', changePassword);
+routes.use('/api', logout);
+routes.use('/api', markProductAvailability);
+routes.use('/api', changePassword);
+routes.use('/api', clearCart);
+routes.use('/api', chatRouter);
+routes.use('/api', profilePage);
+routes.use('/api', readNotificatioRouter);
 
 export default routes;

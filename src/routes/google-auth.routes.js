@@ -1,21 +1,17 @@
-/* eslint-disable implicit-arrow-linebreak */
 import express from 'express';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import passport from 'passport';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import session from 'express-session';
-// eslint-disable-next-line import/no-duplicates
-// eslint-disable-next-line import/no-duplicates
 import googleAuth from '../controllers/google-auth-controller';
-// eslint-disable-next-line import/no-duplicates
 import googleFailure from '../controllers/google-auth-controller';
-// eslint-disable-next-line import/no-duplicates
 import googleProtected from '../controllers/google-auth-controller';
 import 'dotenv/config';
+// eslint-disable-next-line import/no-duplicates
+import logout from '../controllers/google-auth-controller';
 
 const router = express.Router();
 
-const isLoggedIn = ({ user }, res, next) => (user ? next() : res.sendStatus(401));
+const isLoggedIn = ({ user }, res, next) =>
+  user ? next() : res.sendStatus(401);
 router.use(
   session({
     secret: 'keyboard cat',
@@ -38,6 +34,7 @@ router.get(
 );
 router.get('/auth/failure', googleFailure.googleFailure);
 router.get('/protected', isLoggedIn, googleProtected.googleProtected);
+router.get('/logout', logout.logout);
 /**
  * @swagger
  * tags:

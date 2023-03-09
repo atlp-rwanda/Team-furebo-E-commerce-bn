@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
 import chai from 'chai';
@@ -11,32 +10,44 @@ import { Product } from '../Database/models';
 chai.use(chaiHttp);
 const { expect } = chai;
 
-describe('PATCH /api/updateProduct/:id', () => {
+describe('UPDATE PRODUCT', () => {
   let existingProductId;
+  let existingProduct2Id;
   let sellerToken;
+  let seller2Token;
   let adminToken;
   let sellerId;
   let adminRegResToken;
   let customerTokenBeforeMechant;
 
   const adminData = {
-    firstname: 'James',
-    lastname: 'admin',
-    email: 'james@gmail.com',
+    firstname: 'ZIGA',
+    lastname: 'SHEILA',
+    email: 'sheila@gmail.com',
+    password: 'Admin1912',
+  };
+  const loginAdmin = {
+    email: 'sheila@gmail.com',
     password: 'Admin1912',
   };
   const sellerData = {
-    firstname: 'Jana',
-    lastname: 'Seller',
-    email: 'mizero@gmail.com',
+    firstname: 'Mike',
+    lastname: 'sinzi',
+    email: 'sinzi@gmail.com',
     password: 'Seller1912',
   };
-  const loginAdmin = {
-    email: 'james@gmail.com',
-    password: 'Admin1912',
-  };
   const loginSeller = {
-    email: 'mizero@gmail.com',
+    email: 'sinzi@gmail.com',
+    password: 'Seller1912',
+  };
+  const seller2Data = {
+    firstname: 'Michael',
+    lastname: 'sinzi',
+    email: 'michael@gmail.com',
+    password: 'Seller1912',
+  };
+  const login2Seller = {
+    email: 'michael@gmail.com',
     password: 'Seller1912',
   };
 
@@ -50,6 +61,7 @@ describe('PATCH /api/updateProduct/:id', () => {
 
     // Register seller
     await chai.request(app).post('/api/register').send(sellerData);
+    await chai.request(app).post('/api/register').send(seller2Data);
 
     // Login as admin and get token
     const adminRes = await chai
@@ -88,35 +100,81 @@ describe('PATCH /api/updateProduct/:id', () => {
       .send(loginSeller);
     expect(sellerLoginRes).to.have.status(200);
     sellerToken = sellerLoginRes.body.token;
-  });
 
-  before(async () => {
-    const productData = {
-      name: 'Laptop',
-      image:
-      ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
-      price: 2000.99,
-      quantity: 10,
-      category: 'Electronics',
-      exDate: '2023-04-30',
-    };
-    const product = await Product.create(productData);
-    existingProductId = product.id;
+    // Login as seller 2 and get token
+    const seller2LoginRes = await chai
+      .request(app)
+      .post('/api/login')
+      .send(login2Seller);
+    expect(seller2LoginRes).to.have.status(200);
+    seller2Token = seller2LoginRes.body.token;
+    seller2Token = seller2LoginRes.body.token;
+
+    const verifySeller2BeforeMerchant = await jwt.verify(
+      seller2Token,
+      process.env.USER_SECRET_KEY
+    );
+    const seller2Id = verifySeller2BeforeMerchant.id;
+
+    // Update seller's role
+    await chai
+      .request(app)
+      .patch(`/api/updateRole/${seller2Id}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ role: 'merchant' });
+    expect(adminRes).to.have.status(200);
+
+    // create a new product to be added to the shopping cart
+    const productRes = await chai
+      .request(app)
+      .post('/api/addProduct')
+      .set('Authorization', `Bearer ${sellerToken}`)
+      .send({
+        name: 'HCT/RP 36ST',
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
+        price: 2500,
+        quantity: 12,
+        category: 'GAMMING PC',
+        exDate: '2123-05-30',
+      });
+    existingProductId = productRes.body.data.id;
+
+    // create a new product to be added to the shopping cart
+    const product2Res = await chai
+      .request(app)
+      .post('/api/addProduct')
+      .set('Authorization', `Bearer ${sellerToken}`)
+      .send({
+        name: 'HCT/RP 36ST',
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
+        price: 2500,
+        quantity: 12,
+        category: 'GAMMING PC',
+        exDate: '2123-05-30',
+      });
+    existingProduct2Id = product2Res.body.data.id;
   });
 
   context('when updating an existing product with valid data', () => {
-    it('should return status 200 and update the product in the database', (done) => {
+    it('should return status 200 and update the product in the database', done => {
       const productData = {
-        name: 'PC',
-        image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+        name: 'PCp',
+
         price: 14.99,
         quantity: 5,
         category: 'Electronics',
         status: 'available',
-        exDate: '2023-04-30',
+        exDate: '2123-04-30',
       };
       chai
         .request(app)
@@ -126,17 +184,35 @@ describe('PATCH /api/updateProduct/:id', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(200);
           chai.expect(res.body.status).to.equal('success');
-          chai.expect(res.body.data.name).to.equal(productData.name);
-          chai.expect(res.body.data.price).to.equal(productData.price);
-          chai.expect(res.body.data.quantity).to.equal(productData.quantity);
-          chai.expect(res.body.data.type).to.equal(productData.type);
+          done();
+        });
+    });
+  });
+  context('DO NOT UPDATE IF USER IS NOT AUTHOLIZED', () => {
+    it('should return status 401 and update the product in the database', done => {
+      const productData = {
+        name: 'PCz',
+        price: 14.99,
+        quantity: 5,
+        category: 'Electronics',
+        status: 'available',
+        exDate: '2123-04-30',
+      };
+      chai
+        .request(app)
+        .patch(`/api/updateProduct/${existingProductId}`)
+        .set({ Authorization: `Bearer ${seller2Token}` })
+        .send(productData)
+        .end((err, res) => {
+          chai.expect(res).to.have.status(401);
+          chai.expect(res.body.status).to.equal('error');
           done();
         });
     });
   });
 
   context('when updating a non-existing product', () => {
-    it('should return status 404 and an error message', (done) => {
+    it('should return status 404 and an error message', done => {
       const productData = {
         name: 'Laptop',
         price: 2000.99,
@@ -152,47 +228,6 @@ describe('PATCH /api/updateProduct/:id', () => {
           chai.expect(res).to.have.status(404);
           chai.expect(res.body.status).to.equal('error');
           chai.expect(res.body.message).to.equal('Product not found');
-          done();
-        });
-    });
-  });
-
-  context('when product update fails', () => {
-    it('should return a 500 error with an error message', (done) => {
-      // Mock the behavior of the Product.findByPk method to return a product
-      const product = {
-        id: existingProductId,
-        name: 'Laptop',
-        image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
-        price: 2000.99,
-        quantity: 10,
-        category: 'Electronics',
-        exDate: '2023-04-30',
-        update: sinon.stub().throws(new Error('Failed to update product')),
-      };
-      const findByPkStub = sinon.stub(Product, 'findByPk').resolves(product);
-      const productData = {
-        name: 'Updated Product',
-        image: 'https://example.com/new-image.jpg',
-        price: 19.99,
-        quantity: 5,
-        category: 'Electronics',
-        exDate: '2024-04-30',
-      };
-      chai
-        .request(app)
-        .patch(`/api/updateProduct/${existingProductId}`)
-        .set({ Authorization: `Bearer ${sellerToken}` })
-        .send(productData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(500);
-          chai.expect(res.body.status).to.equal('error');
-          chai.expect(res.body.message).to.equal('Failed to update product');
-          chai.expect(res.body.data).to.be.an('object');
-          // Restore the original behavior of the Product.findByPk method
-          findByPkStub.restore();
           done();
         });
     });

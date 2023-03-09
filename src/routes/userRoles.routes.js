@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import express from 'express';
 import {
   changeUserRole,
@@ -6,6 +5,7 @@ import {
   RemoveUserPermissions,
 } from '../controllers/userRoles.controller';
 import { authorizeAdmin } from '../middlewares/userRoles.middleware';
+import AuthMiddleware from '../middlewares/login.middleware';
 
 const router = express.Router();
 
@@ -103,6 +103,16 @@ const router = express.Router();
  */
 
 router.patch('/updateRole/:id', authorizeAdmin, changeUserRole);
-router.post('/addPermision/:id', authorizeAdmin, addUserPermissions);
-router.delete('/removePermission/:id', authorizeAdmin, RemoveUserPermissions);
+router.post(
+  '/addPermision/:id',
+  AuthMiddleware.checkAuthentication,
+  authorizeAdmin,
+  addUserPermissions
+);
+router.delete(
+  '/removePermission/:id',
+  AuthMiddleware.checkAuthentication,
+  authorizeAdmin,
+  RemoveUserPermissions
+);
 export default router;

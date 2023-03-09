@@ -1,6 +1,4 @@
 /* eslint-disable linebreak-style */
-/* eslint-disable arrow-parens */
-/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -41,14 +39,13 @@ const createUser = asyncWrapper(async (req, res) => {
     role: JSON.stringify(newRole),
   };
 
-  User.create(user)
-    .then(async (data) => {
-      const token = await generateToken(data);
-      res
-        .status(200)
-        .header('authenticate', token)
-        .json({ message: 'successful signedup', token });
-    });
+  User.create(user).then(async (data) => {
+    const token = await generateToken(data);
+    res
+      .status(200)
+      .header('authenticate', token)
+      .json({ message: 'successful signedup', token });
+  });
 });
 
 export default createUser;

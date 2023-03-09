@@ -1,7 +1,7 @@
-/* eslint-disable linebreak-style */
 import express from 'express';
 import createProduct from '../controllers/create-product.controller';
 import { authorizeMerchant } from '../middlewares/userRoles.middleware';
+import AuthMiddleware from '../middlewares/login.middleware';
 
 const router = express.Router();
 
@@ -27,11 +27,7 @@ const router = express.Router();
  *                      type: number
  *                  quantity:
  *                      type: number
- *                  type:
- *                      type: string
  *                  category:
- *                      type: string
- *                  status:
  *                      type: string
  *                  exDate:
  *                      type: string
@@ -99,6 +95,11 @@ const router = express.Router();
  *                   type: string
  *                   description: error details
  */
-router.post('/addProduct', authorizeMerchant, createProduct);
+router.post(
+  '/addProduct',
+  AuthMiddleware.checkAuthentication,
+  authorizeMerchant,
+  createProduct,
+);
 
 export default router;

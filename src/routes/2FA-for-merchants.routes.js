@@ -1,12 +1,19 @@
 import express from 'express';
 import {
-  verify2FAkey, disable2FAForMerchants, enable2FAForMerchants, resendOTP
+  verify2FAkey,
+  disable2FAForMerchants,
+  enable2FAForMerchants,
 } from '../controllers/two-factor-auth.controller';
 import { authorizeMerchant } from '../middlewares/userRoles.middleware';
+import AuthMiddleware from '../middlewares/login.middleware';
 
 const router = express.Router();
 
-router.post('/2fa/enable2faForMerchant', authorizeMerchant, enable2FAForMerchants);
+router.post(
+  '/2fa/enable2faForMerchant',
+  authorizeMerchant,
+  enable2FAForMerchants
+);
 /**
  * @swagger
  * /api/2fa/enable2faForMerchant:
@@ -23,7 +30,11 @@ router.post('/2fa/enable2faForMerchant', authorizeMerchant, enable2FAForMerchant
  *          409:
  *              description: Two Factor Authentication is already enabled for this user
  */
-router.post('/2fa/disable2faForMerchant', authorizeMerchant, disable2FAForMerchants);
+router.post(
+  '/2fa/disable2faForMerchant',
+  authorizeMerchant,
+  disable2FAForMerchants
+);
 /**
  * @swagger
  * /api/2fa/disable2faForMerchant:
@@ -40,24 +51,8 @@ router.post('/2fa/disable2faForMerchant', authorizeMerchant, disable2FAForMercha
  *          409:
  *              description: Two Factor Authentication is already disabled for this user
  */
-router.post('/2fa/resendOTP', authorizeMerchant, resendOTP);
-/**
- * @swagger
- * /api/2fa/resendOTP:
- *  post:
- *      tags:
- *          - 2FA for Merchants
- *      summary: Turning OFF 2FA for merchants
- *      description: This api is used to turn ON 2FA for merchants
- *      security:
- *          - bearerAuth: []
- *      responses:
- *          200:
- *              description: OTP is resent to user email
- *          500:
- *              description: server error
- */
-router.post('/2fa/verify', authorizeMerchant, verify2FAkey);
+
+router.post('/2fa/verify', AuthMiddleware.checkAuthentication, verify2FAkey);
 /**
  * @swagger
  * /api/2fa/verify:

@@ -8,51 +8,51 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Users',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       products: {
         type: Sequelize.ARRAY(Sequelize.JSONB),
-        allowNull: false
+        allowNull: false,
       },
       deliveryAddress: {
         type: Sequelize.JSONB,
-        allowNull: false
+        allowNull: false,
       },
       paymentMethod: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       status: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: 'pending'
+        defaultValue: 'pending',
       },
       totalPrice: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
       },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn('now')
+        defaultValue: Sequelize.fn('now'),
       },
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn('now')
-      }
+        defaultValue: Sequelize.fn('now'),
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Orders');
-  }
+  },
 };
