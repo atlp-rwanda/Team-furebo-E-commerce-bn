@@ -4,28 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=text mocha src/tests/*.test.js --timeout 60000 --exit",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "start": "nodemon index.js",
-    "format": "prettier --write .",
-    "lint": "eslint . --fix",
-    "lint-staged": "lint-staged"
+    "start": "nodemon --exec babel-node index.js ",
+    "migrate": "npx sequelize-cli db:migrate",
+    "unmigrate": "npx sequelize-cli db:migrate:undo",
+    "cr-seed": "npx sequelize-cli seed:generate --name dummy-user",
+    "seed": "npx sequelize-cli db:seed:all",
+    "unseed": "npx sequelize-cli db:seed:undo",
+    "unseed-all": "npx sequelize-cli db:seed:undo:all",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*": [
-      "npm run lint",
-      "npm run format",
-      "npm test -- --coverage --silent --passWithNoTests --colors --verbose --no-cache"
-    ]
-  },
-  "plugins": [
-    "jest"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlp-rwanda/Team-furebo-E-commerce-bn.git"
@@ -38,19 +25,25 @@
   },
   "homepage": "https://github.com/atlp-rwanda/Team-furebo-E-commerce-bn#readme",
   "dependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/node": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
-    "chai": "^4.3.7",
-    "chai-http": "^4.3.0",
+    "@babel/register": "^7.21.0",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mocha": "^10.2.0",
+    "express-router": "^0.0.1",
+    "express-session": "^1.17.3",
     "nodemon": "^2.0.21",
+    "passport": "^0.6.0",
+    "passport-google-oauth2": "^0.2.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.2"
   },
   "devDependencies": {
-    "coverage": "^0.4.1",
-    "coveralls": "^3.1.1",
+    "@babel/eslint-parser": "^7.21.3",
+    "babel-cli": "^6.26.0",
     "eslint": "^8.36.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-json": "^3.1.0",
