@@ -5,5 +5,3 @@ if [ $? -ne 0 ]; then
   echo "Some of the pre-commit checks failed. Aborting commit."
   exit 1
 fi
-
-

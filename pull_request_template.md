@@ -30,4 +30,3 @@ by running 'npm run test' you can see the coverage
 
 #### What are the relevant pivotal tracker/Trello stories?
 #184651324
-
