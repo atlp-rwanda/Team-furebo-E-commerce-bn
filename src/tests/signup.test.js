@@ -8,14 +8,15 @@ chai.use(chaiHttp);
 
 describe('REGISTRATION', () => {
   // CREATE USER
-  it('should register user and return a response with status code 200', (done) => {
+  it('should register user and return a response with status code 200', done => {
     const User = {
       firstname: 'ABC',
       lastname: 'ABC',
-      email: 'abc@gmail.com',
-      password: 'Abc123456'
+      email: 'abcdef@gmail.com',
+      password: 'Abc123456',
     };
-    chai.request(app)
+    chai
+      .request(app)
       .post('/api/register')
       .send(User)
       .end((err, res) => {

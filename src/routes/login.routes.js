@@ -72,8 +72,12 @@ router.post('/login', PublicController.PublicLogin);
  *         description: Some server error
  */
 
-router.get('/protectedroute', AuthMiddleware.checkAuthentication, (req, res) => {
-  res.send({ message: 'Access Granted' });
-});
+router.get(
+  '/protectedroute',
+  AuthMiddleware.checkAuthentication,
+  (req, res) => {
+    res.send({ message: 'Access Granted' });
+  }
+);
 
 export default router;
