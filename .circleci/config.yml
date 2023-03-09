@@ -19,6 +19,7 @@ jobs:
     steps:
       - checkout
       - run:
+<<<<<<< HEAD
           name: "Team-Furebo - E commerce tests"
           command: "echo Hello, World!"
           
@@ -41,6 +42,9 @@ jobs:
           name: code-coverage
           command: npm run coverage
       - coveralls/upload
+          name: 'Team-Furebo - E commerce tests'
+          command: 'echo Hello, World!'
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -50,3 +54,4 @@ workflows:
   Test_and_Covarage:
     jobs:
       - Test_and_Send_Coverage
+
