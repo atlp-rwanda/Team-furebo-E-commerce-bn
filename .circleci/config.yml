@@ -1,0 +1,33 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+  coveralls: coveralls/coveralls@2.0.0
+jobs:
+  Test_and_Send_Coverage: 
+    executor: node/default 
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm ci
+          name: Install Packages
+      - run:
+          command: npm test
+          name: Run tests
+      - run: 
+          name: code-coverage
+          command: npm run coverage
+      - coveralls/upload
+workflows:
+  Test_and_Coverage:
+    jobs:
+      - Test_and_Send_Coverage
+
+jobs:
+  Test_and_Send_Coverage:
+    docker:
+      - image: cimg/node:19.7.0
+    steps:
+      - checkout
+      - run: node --version
