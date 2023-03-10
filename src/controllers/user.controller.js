@@ -36,19 +36,20 @@ exports.create = (req, res) => {
 
 
 // Delete all Users from the database.
-exports.deleteAll = (req, res) => {
-  User.destroy({
-    where: {},
-    truncate: false
-  })
-    .then(nums => {
-      res.send({ message: `${nums} Users were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while removing all users."
-      });
+// Delete all Users from the database.
+exports.deleteAll = async (req, res) => {
+  try {
+    await User.destroy({
+      where: {},
+      truncate: true
     });
+    res.status(200).send({ message: "All users were deleted successfully!" });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Some error occurred while removing all users."
+    });
+  }
 };
+
+
 

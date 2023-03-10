@@ -9,13 +9,11 @@ chai.should();
 
 describe('Users API', () => {
   // Empty the database before each test
-  beforeEach((done) => {
-    User.destroy({
+  beforeEach(async () => {
+    await User.destroy({
       where: {},
       truncate: true
-    }).then(() => {
-      done();
-    }).catch(err => done(err));
+    });
   });
 
   describe('POST /users', () => {
@@ -27,7 +25,7 @@ describe('Users API', () => {
       };
 
       chai.request(app)
-        .post('/users')
+        .post('/create')
         .send(user)
         .end((err, res) => {
           res.should.have.status(200);
@@ -46,7 +44,7 @@ describe('Users API', () => {
       };
 
       chai.request(app)
-        .post('/users')
+        .post('/create')
         .send(user)
         .end((err, res) => {
           res.should.have.status(400);
@@ -57,23 +55,20 @@ describe('Users API', () => {
     });
   });
 
-  describe('DELETE /users', () => {
-    it('should delete all users', (done) => {
+  // Test case
+  // Test case
+  describe('DELETE /deleteall', () => {
+    it('should delete all users', async () => {
       // Insert some users first
       const users = [
-        { names: "John Doe", email: "johndoe@example.com", password: "mypassword" },
-        { names: "Jane Doe", email: "janedoe@example.com", password: "mypassword" },
+        { names: 'John Doe', email: 'johndoe@example.com', password: 'mypassword' },
+        { names: 'Jane Doe', email: 'janedoe@example.com', password: 'mypassword' }
       ];
-      User.bulkCreate(users).then(() => {
-        chai.request(app)
-          .delete('/users')
-          .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message').eq('2 Users were deleted successfully!');
-            done();
-          });
-      }).catch(err => done(err));
+      await User.bulkCreate(users);
+      
+      const response = await chai.request(app).delete('/deleteall');
+      response.should.have.status(200);
+      response.body.should.be.an('object').that.has.property('message').equal('All users were deleted successfully!');
     });
   });
 });
