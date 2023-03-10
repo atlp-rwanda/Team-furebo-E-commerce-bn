@@ -29,6 +29,9 @@
       "git add"
     ]
   },
+  "plugins": [
+    "jest"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlp-rwanda/Team-furebo-E-commerce-bn.git"
@@ -49,6 +52,7 @@
     "eslint": "^8.35.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "husky": "^8.0.3",
+    "jest": "^29.5.0",
     "lint-staged": "^13.1.2",
     "prettier": "^2.8.4"
   }
