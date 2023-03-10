@@ -1,7 +1,29 @@
-version: 2
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+
 jobs:
-  build:
+  build_and_test:
+    executor: node/default
     steps:
-      - run: npm install
-      - run: npm test
-      - run: npm run coveralls-ci
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run test
+          name: Run tests
+      - run:
+          command: npm run build
+          name: Build app
+      - run:
+          name: Send coverage report to Coveralls
+          command: npm run report-coverage
+
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+workflows:
+  test_my_app:
+    jobs:
+      - build_and_test
