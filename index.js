@@ -1,15 +1,26 @@
-// This code will test that the express server is running successfully and can 
-// fetch data about the current environment correctly via dotenv.
+require("dotenv").config();
+const express = require("express");
+const db = require("./src/models");
+const userRouter = require("./src/routes/user.routes");
 
-const express = require('express')
+const app = express();
 
-const app = express()
+app.use(express.json());
 
-require('dotenv').config();
 
-const port = process.env.PORT;
+db.sequelize
+  .sync()
+  .then(() => {
+    console.log("Synced db.");
+  })
+  .catch((err) => {
+    console.log("Failed to sync db: " + err.message);
+  });
 
+
+app.use("/", userRouter);
+
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}.`);
+  console.log(`Server is running on port ${port}.`);
 });
-
