@@ -1,0 +1,12 @@
+#!/bin/sh
+npm run lint
+npm run format
+npm test -- --coverage --silent --passWithNoTests --colors --verbose --no-cache
+
+# Check if any command failed and exit with an error if so
+if [ $? -ne 0 ]; then
+  echo "Some of the pre-commit checks failed. Aborting commit."
+  exit 1
+fi
+
+

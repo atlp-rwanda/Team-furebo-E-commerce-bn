@@ -1,15 +1,21 @@
-// This code will test that the express server is running successfully and can 
+// This code will test that the express server is running successfully and can
 // fetch data about the current environment correctly via dotenv.
 
-const express = require('express')
+const express = require('express');
 
-const app = express()
+const app = express();
 
 require('dotenv').config();
 
 const port = process.env.PORT;
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}.`);
+app.get('/home', (req, res) => {
+  res.status(200).send('WELCOME!');
 });
 
+app.listen(port, () => {
+  // console.log('Hello, world');
+
+  console.log(`Server is running on port ${port}.`);
+});
+module.exports = app;
