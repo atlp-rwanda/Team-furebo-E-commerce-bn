@@ -7,7 +7,7 @@
     "start": "nodemon index.js ",
     "migrate": "npx sequelize-cli db:migrate",
     "unmigrate": "npx sequelize-cli db:migrate:undo",
-    "cr-seed": "npx sequelize-cli seed:generate --name test-user",
+    "cr-seed": "npx sequelize-cli seed:generate --name new-user",
     "seed": "npx sequelize-cli db:seed:all",
     "unseed": "npx sequelize-cli db:seed:undo",
     "unseed-all": "npx sequelize-cli db:seed:undo:all",

@@ -31,6 +31,13 @@ module.exports = {
         password: 'userthree',
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        names: 'Random user',
+        email: 'randomuser@gmail.com',
+        password: 'randomuser',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ]);
   },
