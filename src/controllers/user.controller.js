@@ -25,7 +25,7 @@ exports.create = (req, res) => {
       // Save User in the database
       User.create(user)
         .then(data => {
-           res.send({msg: "user created successfully", data})
+           res.send({msg: "user created successfully", data});
         })
         .catch(err => {
           return res.status(500).json({
@@ -42,7 +42,7 @@ exports.findAll = (req, res) => {
   
     User.findAll({ where: condition })
       .then(data => {
-        res.send({msg: "users retrieved successfully", data})
+        res.send({msg: "users retrieved successfully", data});
       })
       .catch(err => {
         res.status(500).json({
