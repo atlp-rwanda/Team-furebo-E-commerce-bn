@@ -4,10 +4,11 @@ workflows:
   Test_and_Covarage:
     jobs:
       - Test_and_Send_Coverage
+
 jobs:
   Test_and_Send_Coverage:
     docker:
       - image: cimg/node:19.7.0
     steps:
-      -checkout
-      -run: node --version
+      - checkout
+      - run: node --version
