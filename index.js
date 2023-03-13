@@ -1,5 +1,3 @@
-// This code will test that the express server is running successfully and can 
-// fetch data about the current environment correctly via dotenv.
 
 const express = require('express')
 
@@ -13,4 +11,4 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);
 });
 
-
+module.exports = app;

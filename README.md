@@ -1,2 +1,2 @@
 # Team-furebo-E-commerce-bn
-[![atlp-rwanda](https://circleci.com/gh/atlp-rwanda/Team-furebo-E-commerce-bn.svg?style=svg)](https://app.circleci.com/pipelines/github/atlp-rwanda)
+[![Coverage Status](https://coveralls.io/repos/github/coverallscircleci/coveralls-circleci/badge.svg)](https://coveralls.io/github/coverallscircleci/coveralls-circleci)
