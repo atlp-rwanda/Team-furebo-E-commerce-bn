@@ -10,8 +10,6 @@ const userRouter = require('./src/routes/route');  // Exposes routes to the serv
 const dotenv = require('dotenv');
 dotenv.config();
 
-
-
 // parse requests of content-type - application/json
 app.use(express.json());
 
