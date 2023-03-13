@@ -7,6 +7,9 @@ const express = require('express')
 const app = express()
 const db = require('./src/models'); // Exposes the db configurations
 const userRouter = require('./src/routes/route');  // Exposes routes to the server
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 
 // parse requests of content-type - application/json
@@ -28,7 +31,7 @@ db.sequelize.sync()
 app.use('/', userRouter);
 
 // set port for listening to the requests
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);
 });
