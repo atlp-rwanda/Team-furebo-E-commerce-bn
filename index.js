@@ -39,7 +39,6 @@ app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs));
  *              description: successful request
  */
 
-require('dotenv').config();
 
 const port = process.env.PORT;
 
