@@ -1,10 +1,9 @@
 // This code will test that the express server is running successfully and can 
 // fetch data about the current environment correctly via dotenv.
 
+require('dotenv').config();
 const express = require('express')
-
 const app = express()
-
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express')
 
