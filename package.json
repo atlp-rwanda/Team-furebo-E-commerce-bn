@@ -4,17 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD
-<<<<<<< HEAD
     "test": "nyc --reporter=lcov --reporter=text mocha src/tests/*.test.js --timeout 60000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
-=======
-    "test": "mocha"
->>>>>>> 8a9cd06 (Installing required dependencies)
-=======
-    "test": "nyc --reporter=lcov --reporter=text mocha src/tests/*.test.js --timeout 60000 --exit",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
->>>>>>> 49641b0 (circleci-initialization)
+
   },
   "repository": {
     "type": "git",
