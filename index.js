@@ -1,53 +1,33 @@
-// This code will test that the express server is running successfully and can
+/* jshint esversion: 6 */
+
+// This code will test that the express server is running successfully and can 
 // fetch data about the current environment correctly via dotenv.
 
 const express = require('express');
+const app = express()
+require('dotenv').config()
 
-const app = express();
 
-const swaggerJsDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+// parse requests of content-type - application/json
+app.use(express.json());
 
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      title: 'E-commerce API',
-      description: 'E-commerce API Information',
-      servers: [
-        {
-          url: 'http://localhost:3000',
-        },
-      ],
-    },
-  },
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+const db = require("./src/models");
 
-  apis: ['index.js'],
-};
+db.sequelize.sync()
+  .then(() => {
+    console.log('Synced db.');
+  })
+  .catch((err) => {
+    console.log('Failed to sync db: ' + err.message);
+  });
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-/**
- * @swagger
- * /home:
- *  get:
- *      description: Display homepage
- *      responses:
- *          '200':
- *              description: successful request
- */
-
-require('dotenv').config();
-
-const port = process.env.PORT;
-
-app.get('/home', (req, res) => {
-  res.status(200).send('WELCOME!');
-});
-
+// set port for listening to the requests
+const port = process.env.PORT; 
 app.listen(port, () => {
-  // console.log('Hello, world');
-
-  console.log(`Server is running on port ${port}.`);
+    console.log(`Server is running on port ${port}.`);
 });
-module.exports = app;
+
+
