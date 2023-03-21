@@ -65,5 +65,10 @@ const router = express.Router();
  *                 message: Failed to delete product
  *
  */
-router.delete('/deleteProduct/:id', authorizeUser, RoleCheck(['merchant', 'admin']), deleteProduct);
+router.delete(
+  '/deleteProduct/:id',
+  authorizeUser,
+  RoleCheck(['merchant', 'admin']),
+  deleteProduct
+);
 export default router;

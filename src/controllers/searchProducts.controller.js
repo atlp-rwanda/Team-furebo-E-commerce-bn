@@ -4,9 +4,7 @@ import db from '../Database/models';
 const { Product } = db;
 
 const searchProduct = async (req, res) => {
-  const {
-    name, category, minPrice, maxPrice
-  } = req.query;
+  const { name, category, minPrice, maxPrice } = req.query;
 
   // Define the where object with the search conditions
   const where = {};
@@ -32,7 +30,11 @@ const searchProduct = async (req, res) => {
   // return res.status(404)
   //  .send({ message: 'Product not found' });
   // }
-  return res.status(200).json({ status: 200, message: 'successfully Products found.', data: items });
+  return res.status(200).json({
+    status: 200,
+    message: 'successfully Products found.',
+    data: items,
+  });
 };
 
 export default searchProduct;

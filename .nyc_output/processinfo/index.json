@@ -1,0 +1,164 @@
+{
+  "processes": {
+    "5299ef61-52bb-452f-8348-367ce7a83be3": { "parent": null, "children": [] }
+  },
+  "files": {
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\Database\\models\\index.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\Database\\config\\config.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\Database\\models\\product.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\Database\\models\\shopping-cart.model.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\Database\\models\\user.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\index.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\routesCalls.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\reset-password.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\reset-password.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\signup.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\signup.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\validation\\signup.validator.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\utils\\userRoles.util.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\utils\\user.util.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\test.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\middlewares\\userRoles.middleware.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\signupAdmin.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\signupAdmin.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\login.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\middlewares\\login.middleware.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\login.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\userRoles.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\userRoles.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\disable-account.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\disableAccount.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\google-auth.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\google-auth-controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\create-product.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\create-product.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\validation\\product.validator.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\update-product.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\update-product.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\getItems.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\middlewares\\user.Checkrole.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\getItems.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\searchProducts.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\searchProducts.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\shopping-cart.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\shopping-cart.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\update-shopping-cart.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\update-shopping-cart.contoller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\deleteProduct.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\deleteProduct.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\view-cart-items.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\view-cart-items.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\utils\\handlingTryCatchBlocks.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\middlewares\\view-cart-items.middleware.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\routes\\change-password.routes.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\controllers\\change-password.controller.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\middlewares\\change-password.middleware.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\swagger.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ],
+    "D:\\CODING STAFF\\ANDELA\\TEAM PROJECT\\ft-password-modification\\Team-furebo-E-commerce-bn\\src\\services\\auth.js": [
+      "5299ef61-52bb-452f-8348-367ce7a83be3"
+    ]
+  },
+  "externalIds": {}
+}

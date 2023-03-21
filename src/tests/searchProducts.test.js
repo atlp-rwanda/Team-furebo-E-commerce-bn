@@ -93,12 +93,15 @@ describe('SEARCH PRODUCTS', async () => {
   });
 
   context('CREATE PRODUCT WITH valid Data', () => {
-    it('should return status 201 and add the product to the database', (done) => {
+    it('should return status 201 and add the product to the database', done => {
       const productData = {
         name: 'Screen',
-        image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
         price: 900.99,
         quantity: 10,
         category: 'Electronics',
@@ -120,8 +123,9 @@ describe('SEARCH PRODUCTS', async () => {
   });
 
   // Define a test for searching by name
-  it('should return products that match the name query', (done) => {
-    chai.request(app)
+  it('should return products that match the name query', done => {
+    chai
+      .request(app)
       .get('/api/search?name=Screen')
       .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
       .end((err, res) => {
@@ -131,8 +135,9 @@ describe('SEARCH PRODUCTS', async () => {
   });
 
   // Define a test for searching by price range
-  it('should return products that match the price range query', (done) => {
-    chai.request(app)
+  it('should return products that match the price range query', done => {
+    chai
+      .request(app)
       .get('/api/search?minPrice=100&maxPrice=1000')
       .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
       .end((err, res) => {
@@ -142,8 +147,9 @@ describe('SEARCH PRODUCTS', async () => {
   });
 
   // Define a test for searching by category
-  it('should return products that match the category query', (done) => {
-    chai.request(app)
+  it('should return products that match the category query', done => {
+    chai
+      .request(app)
       .get('/api/search?category=Electronics')
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
@@ -153,9 +159,12 @@ describe('SEARCH PRODUCTS', async () => {
   });
 
   // Define a test for searching with a combination of queries
-  it('should return products that match the combination of queries', (done) => {
-    chai.request(app)
-      .get('/api/search?name=Screen&category=Electronics&minPrice=100&maxPrice=1000')
+  it('should return products that match the combination of queries', done => {
+    chai
+      .request(app)
+      .get(
+        '/api/search?name=Screen&category=Electronics&minPrice=100&maxPrice=1000'
+      )
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
@@ -163,7 +172,7 @@ describe('SEARCH PRODUCTS', async () => {
       });
   });
 
-/**   // Define a test for searching with unavailable product
+  /**   // Define a test for searching with unavailable product
   it('should return error of 404 and a message of product not found ', (done) => {
     chai.request(app)
       .get('/api/search?name=Lion')

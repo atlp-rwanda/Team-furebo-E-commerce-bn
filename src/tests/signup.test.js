@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 
 describe('REGISTRATION', () => {
   // CREATE USER
-  it('should register user and return a response with status code 200', (done) => {
+  it('should register user and return a response with status code 200', done => {
     const User = {
       firstname: 'ABC',
       lastname: 'ABC',

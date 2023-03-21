@@ -90,10 +90,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
     sellerId = verifyCustomerBeforeMerchant.id;
 
     // ========= BUYER ACCOUNT
-    await chai
-      .request(app)
-      .post('/api/register')
-      .send(buyerData);
+    await chai.request(app).post('/api/register').send(buyerData);
 
     const buyerLoginRes = await chai
       .request(app)
@@ -126,9 +123,12 @@ describe('UPDATING SHOPPING CART TEST', () => {
       .set('Authorization', `Bearer ${sellerToken}`)
       .send({
         name: 'HCT/RP 360ST 2222',
-        image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
@@ -144,7 +144,9 @@ describe('UPDATING SHOPPING CART TEST', () => {
         quantity: 2,
       });
 
-    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS '].ID;
+    CART_ITEM_ID =
+      addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
+        .ID;
   });
   context('IT SHOULD UPATE ITEM IN SHOPPING CART ', () => {
     it('should add item to the shopping cart and return status 200', async () => {
@@ -158,7 +160,9 @@ describe('UPDATING SHOPPING CART TEST', () => {
       // assert response
       expect(res).to.have.status(200);
       const actualVal = res.body.message;
-      expect(actualVal).to.be.equal('THE ITEM IN THE CART WAS UPDATED SUCCESSFULLY!!!');
+      expect(actualVal).to.be.equal(
+        'THE ITEM IN THE CART WAS UPDATED SUCCESSFULLY!!!'
+      );
     });
   });
   context('WHEN PRODUCT WITH THAT ID, ID NOT IN PRODUCT', () => {
@@ -178,7 +182,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
   });
 
   context('WHEN TOKEN IS NOT VALID', () => {
-    it('should return status 401 and an error message', (done) => {
+    it('should return status 401 and an error message', done => {
       const itemData = {
         quantity: 2,
       };
@@ -197,7 +201,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
     });
   });
   context('WHEN NO TOKEN IS GIVEN', () => {
-    it('should return status 401 and an error message', (done) => {
+    it('should return status 401 and an error message', done => {
       const itemData = {
         quantity: 2,
       };
@@ -215,7 +219,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
   });
 
   context('WHEN QUANTITY GIVEN IS NOT A NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         quantity: 'two',
       };
@@ -228,13 +232,15 @@ describe('UPDATING SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]');
+          expect(actualVal).to.be.equal(
+            'QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]'
+          );
           done();
         });
     });
   });
   context('WHEN QUANTITY GIVEN HAS A NEGATIVE NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         quantity: -2,
       };
@@ -247,14 +253,16 @@ describe('UPDATING SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]');
+          expect(actualVal).to.be.equal(
+            'PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]'
+          );
           done();
         });
     });
   });
 
   context('WHEN QUANTITY GIVEN IS GREATER THAN STOCK', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         quantity: 98765,
       };
@@ -273,7 +281,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
     });
   });
   context('WHEN FAILED TO ADD ITEM TO THE CART', () => {
-    it('should return status 500 and an error message', (done) => {
+    it('should return status 500 and an error message', done => {
       let FAKE_ID;
       const itemData = {
         quantity: 2,

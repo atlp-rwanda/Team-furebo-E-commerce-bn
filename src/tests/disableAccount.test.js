@@ -16,7 +16,7 @@ describe('DISABLE ACCOUNT', async () => {
   let adminId;
   const loginAdmin = {
     email: 'admin19@gmail.com',
-    password: 'Admin1912'
+    password: 'Admin1912',
   };
 
   const adminData = {
@@ -39,10 +39,13 @@ describe('DISABLE ACCOUNT', async () => {
       .send(loginAdmin);
     expect(adminRes).to.have.status(200);
     adminToken = adminRes.body.token;
-    const verifyAdminToken = await jwt.verify(adminToken, process.env.USER_SECRET_KEY);
+    const verifyAdminToken = await jwt.verify(
+      adminToken,
+      process.env.USER_SECRET_KEY
+    );
     adminId = verifyAdminToken.id;
   });
-  it('Should disable an account', (done) => {
+  it('Should disable an account', done => {
     chai
       .request(app)
       .patch(`/api/disableAccount/${adminId}`)
@@ -53,7 +56,7 @@ describe('DISABLE ACCOUNT', async () => {
         done();
       });
   });
-  it('Should fail to disable an account if the user ID does not exist', (done) => {
+  it('Should fail to disable an account if the user ID does not exist', done => {
     chai
       .request(app)
       .patch(`/api/disableAccount/${adminId}`)
@@ -64,7 +67,7 @@ describe('DISABLE ACCOUNT', async () => {
         done();
       });
   });
-  it('Should fail to disable an account if the user ID does not exist', (done) => {
+  it('Should fail to disable an account if the user ID does not exist', done => {
     chai
       .request(app)
       .patch('/api/disableAccount/10')

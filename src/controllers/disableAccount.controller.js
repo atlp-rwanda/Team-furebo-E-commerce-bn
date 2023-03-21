@@ -5,7 +5,7 @@ const update = (req, res) => {
   User.update(req.body, {
     where: { id },
   })
-    .then((num) => {
+    .then(num => {
       // eslint-disable-next-line eqeqeq
       if (num == 1) {
         res.send({

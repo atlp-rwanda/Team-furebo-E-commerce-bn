@@ -58,10 +58,9 @@ const updateShoppingCart = async (req, res) => {
       include: Product,
     });
 
-    const newCartTotalPrice = cartItems.reduce(
-      (total, item) => total + parseFloat(item.totalPrice),
-      0
-    ).toFixed(2);
+    const newCartTotalPrice = cartItems
+      .reduce((total, item) => total + parseFloat(item.totalPrice), 0)
+      .toFixed(2);
 
     await ShoppingCart.update(
       { cartTotalPrice: newCartTotalPrice },

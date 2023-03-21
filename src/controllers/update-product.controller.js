@@ -3,9 +3,7 @@ import { Product } from '../Database/models';
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      name, image, price, quantity, category, exDate
-    } = req.body;
+    const { name, image, price, quantity, category, exDate } = req.body;
 
     // find the product to update
     const product = await Product.findByPk(id);

@@ -22,10 +22,10 @@ export const getAllBuyerItems = async (req, res) => {
 
     const items = await Product.findAndCountAll({
       where: {
-        status: 'available'
+        status: 'available',
       },
       limit: size,
-      offset
+      offset,
     });
 
     // Returning paginated results
@@ -65,10 +65,10 @@ export const getAllSellerItems = async (req, res) => {
 
     const items = await Product.findAndCountAll({
       where: {
-        userId: `${user.id}`
+        userId: `${user.id}`,
       },
       limit: size,
-      offset
+      offset,
     });
 
     // Returning paginated results
