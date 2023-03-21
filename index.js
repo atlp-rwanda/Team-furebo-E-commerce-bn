@@ -18,7 +18,7 @@ const swaggerOptions = {
       description: 'E-commerce API Information',
       servers: [
         {
-          url: 'http://localhost:3000',
+          url: 'https://team-furebo-e-commerce-bn.onrender.com',
         },
       ],
     },
