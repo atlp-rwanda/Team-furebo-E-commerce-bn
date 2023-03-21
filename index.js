@@ -8,6 +8,15 @@ const app = express()
 require('dotenv').config()
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const passport = require("passport")
+require("./src/middleware/auth")
+const isLoggedIn = require("./src/middleware/isLoggedIn")
+const session = require('express-session');
+app.use(session({ secret: "cats" }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 const swaggerOptions = {
   swaggerDefinition: {
