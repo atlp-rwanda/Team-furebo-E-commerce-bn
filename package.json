@@ -25,7 +25,6 @@
   },
   "homepage": "https://github.com/atlp-rwanda/Team-furebo-E-commerce-bn#readme",
   "dependencies": {
-    "@babel/core": "^7.21.0",
     "@babel/node": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
     "@babel/register": "^7.21.0",
@@ -42,6 +41,7 @@
     "swagger-ui-express": "^4.6.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.21.3",
     "@babel/eslint-parser": "^7.21.3",
     "babel-cli": "^6.26.0",
     "eslint": "^8.36.0",
