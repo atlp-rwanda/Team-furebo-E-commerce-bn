@@ -13,7 +13,7 @@ describe('REGISTRATION', () => {
       firstname: 'ABC',
       lastname: 'ABC',
       email: 'abc@gmail.com',
-      password: 'ABC'
+      password: 'Abc123456'
     };
     chai.request(app)
       .post('/api/register')

@@ -3,19 +3,26 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import db from '../Database/models';
-import validateSignup from '../validation/validator';
+import validateSignup from '../validation/signup.validator';
+
+require('dotenv').config();
 
 const { User } = db;
 
 // create and save new user
 const createUser = async (req, res) => {
+  const { email } = req.body;
   const { error } = validateSignup(req.body);
 
   if (error) {
-    return res.status(500).send(error.details[0].message);
+    return res.status(406).send(error.details[0].message);
   }
 
-  const hashedPassword = await bcrypt.hash(req.body.password, 12);
+  const existingUser = await User.findOne({ where: { email } });
+
+  if (existingUser) return res.status(401).json({ message: 'Email allready used, please use different email.' });
+
+  const hashedPassword = await bcrypt.hash(req.body.password, Number(process.env.BCRYPT_KEY));
 
   const user = {
     fullname: `${req.body.firstname} ${req.body.lastname}`,
