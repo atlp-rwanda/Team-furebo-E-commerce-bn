@@ -19,6 +19,18 @@ const router = express.Router();
  *                      type: string
  *                  password:
  *                      type: string
+ *                  confirmPassword:
+ *                      type: string
+ */
+
+/**
+ * @swagger
+ * /api/home:
+ *  get:
+ *      description: Display homepage
+ *      responses:
+ *          '200':
+ *              description: successful request
  */
 
 /**
@@ -27,8 +39,7 @@ const router = express.Router();
  *  post:
  *      summary: registering a user
  *      description: This api is used to register a user
- *      tags:
- *        - User
+ *      tags: [User]
  *      requestBody:
  *          required: true
  *          content:
@@ -46,7 +57,7 @@ const router = express.Router();
  *                              $ref: '#components/schemas/User'
  */
 
-// Create a new Tutorial
+// Create a new User
 router.post('/register', createUser);
 
 /**
@@ -59,6 +70,6 @@ router.post('/register', createUser);
  *      responses:
  *          '200':
  *              description: successful request
- */
+*/
 
 export default router;
