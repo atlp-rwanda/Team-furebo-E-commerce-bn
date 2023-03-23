@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
       password: 'dummypassword',
       createdAt: new Date(),
       updatedAt: new Date()
-    }]);
+    }])
   },
 
   async down (queryInterface, Sequelize) {
@@ -20,4 +20,4 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
   }
-};
+}
