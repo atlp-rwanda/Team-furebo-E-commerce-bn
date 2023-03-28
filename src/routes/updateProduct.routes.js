@@ -1,10 +1,8 @@
 /* eslint-disable linebreak-style */
 import express from 'express';
+import updateProduct from '../controllers/updateProduct.controller';
 
 const router = express.Router();
-
-router.get('/sample_test', (req, res) => {
-  res.status(200).json({ message: 'Hello, world!' });
-});
+router.patch('/updateProduct/:id', updateProduct);
 
 export default router;

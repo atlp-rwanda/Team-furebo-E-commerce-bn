@@ -1,10 +1,8 @@
 /* eslint-disable linebreak-style */
 import express from 'express';
+import createProduct from '../controllers/createProduct.controller';
 
 const router = express.Router();
-
-router.get('/sample_test', (req, res) => {
-  res.status(200).json({ message: 'Hello, world!' });
-});
+router.post('/addProduct', createProduct);
 
 export default router;

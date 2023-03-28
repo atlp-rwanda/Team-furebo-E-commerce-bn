@@ -1,17 +1,36 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/newline-after-import */
+/* eslint-disable linebreak-style */
 import 'dotenv/config';
 
 import express from 'express';
-
-import swaggerJsDoc from 'swagger-jsdoc';
+import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
+import swaggerJsDoc from 'swagger-jsdoc';
 
-import db from './src/models';
+import db from './src/Database/models';
+
+import resetPassword from './src/routes/reset-password.routes';
+
+import signupRouter from './src/routes/signup.routes';
 
 import testRouter from './src/routes/test.routes';
 
-import userRouter from './src/routes/user.routes';
+import createProduct from './src/routes/createProduct.routes';
+
+import updateProduct from './src/routes/updateProduct.routes';
 
 const app = express();
+
+// parse requests of content-type - application/json
+app.use(express.json());
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+// parse application/json
+app.use(bodyParser.json());
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -33,12 +52,6 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// parse requests of content-type - application/json
-app.use(express.json());
-
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
-
 db.sequelize.sync()
   .then(() => {
     console.log('Synced db.');
@@ -51,8 +64,12 @@ app.get('/home', (req, res) => {
   res.status(200).send('WELCOME!');
 });
 
-app.use('/', testRouter);
-app.use('/api', userRouter);
+app.use('/api', testRouter);
+app.use('/api', resetPassword);
+app.use('/api', signupRouter);
+app.use('/api', createProduct);
+app.use('/api', updateProduct);
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

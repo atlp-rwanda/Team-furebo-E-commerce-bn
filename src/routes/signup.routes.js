@@ -1,5 +1,6 @@
+/* eslint-disable linebreak-style */
 import express from 'express';
-import createUser from '../controllers/user.controller';
+import createUser from '../controllers/signup.controller';
 
 const router = express.Router();
 
@@ -18,18 +19,6 @@ const router = express.Router();
  *                      type: string
  *                  password:
  *                      type: string
- *                  confirmPassword:
- *                      type: string
- */
-
-/**
- * @swagger
- * /home:
- *  get:
- *      description: Display homepage
- *      responses:
- *          '200':
- *              description: successful request
  */
 
 /**
@@ -38,6 +27,8 @@ const router = express.Router();
  *  post:
  *      summary: registering a user
  *      description: This api is used to register a user
+ *      tags:
+ *        - User
  *      requestBody:
  *          required: true
  *          content:
@@ -57,5 +48,17 @@ const router = express.Router();
 
 // Create a new Tutorial
 router.post('/register', createUser);
+
+/**
+ * @swagger
+ * /api/home:
+ *  get:
+ *      description: Display homepage
+ *      tags:
+ *        - Sample
+ *      responses:
+ *          '200':
+ *              description: successful request
+ */
 
 export default router;
