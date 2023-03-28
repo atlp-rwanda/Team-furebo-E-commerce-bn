@@ -1,8 +1,12 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/newline-after-import */
+/* eslint-disable linebreak-style */
 import 'dotenv/config';
 
 import express from 'express';
 
-import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
 import db from './src/models';
@@ -13,25 +17,8 @@ import userRouter from './src/routes/user.routes';
 
 const app = express();
 
-const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'E-commerce API',
-      description: 'E-commerce API Information',
-      servers: [
-        {
-          url: process.env.DEPLOYED_API_URL,
-        },
-      ],
-    },
-  },
-
-  apis: ['./src/routes/*.js'],
-};
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('src/swagger/Password-Reset.swagger.yaml');
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -52,7 +39,8 @@ app.get('/home', (req, res) => {
 });
 
 app.use('/', testRouter);
-app.use('/api', userRouter);
+app.use('/', userRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

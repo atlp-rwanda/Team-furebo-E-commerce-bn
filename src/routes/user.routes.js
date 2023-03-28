@@ -1,5 +1,10 @@
+/* eslint-disable linebreak-style */
 import express from 'express';
-import createUser from '../controllers/user.controller';
+import {
+  createUser,
+  requestPasswordReset,
+  resetPassword
+} from '../controllers/user.controller';
 
 const router = express.Router();
 
@@ -57,5 +62,8 @@ const router = express.Router();
 
 // Create a new Tutorial
 router.post('/register', createUser);
+// router.post('/login', login);
+router.post('/requestPasswordReset', requestPasswordReset);
+router.post('/reset-password', resetPassword);
 
 export default router;

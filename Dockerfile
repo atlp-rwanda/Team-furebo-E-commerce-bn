@@ -1,5 +1,5 @@
 
-FROM node:16
+FROM node:16;
 
 # We have to install nodemon globally before moving into the working directory
 RUN npm install -g nodemon

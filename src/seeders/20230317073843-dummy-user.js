@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /**
  * @param {data} queryInterface .
  * @returns {data} .
