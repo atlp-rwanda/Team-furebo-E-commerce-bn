@@ -35,6 +35,3 @@ Resources CircleCI documentation: https://circleci.com/docs/
 Coveralls documentation: https://docs.coveralls.io/
 
 In case you prefer videos, here is one to start with on circleci https://www.youtube.com/watch?v=lMKDkS8uATc
-
-[![atlp-rwanda](https://circleci.com/gh/atlp-rwanda/Team-furebo-E-commerce-bn.svg?style=svg)](https://app.circleci.com/pipelines/github/atlp-rwanda)
-
