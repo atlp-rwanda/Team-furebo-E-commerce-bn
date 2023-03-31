@@ -1,8 +1,10 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Dummy', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,13 +12,17 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       fullname: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -28,7 +34,8 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface) {
-    await queryInterface.dropTable('Dummy');
+
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('Users');
   }
 };
