@@ -5,14 +5,9 @@
 [![](https://img.shields.io/badge/Checked_by-Hound-a873d1.svg)](https://houndci.com)
 
 ### **What does this PR do?**
-A User should be able to view a specific item
+a seller will be able to update products
 ##### **Description of Task to be completed?**
-As a User
-I should be able to retrieve a given item.
-  **As a Seller** I should be able to see an item if it is from my 
-   collection
-
-  **As a Buyer**, I should be able to see any item from the available items.
+As a Seller
 
 #### How should this be manually tested?
 - First Clone the repository  
