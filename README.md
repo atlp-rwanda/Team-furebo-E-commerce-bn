@@ -4,9 +4,16 @@
 
 [![](https://img.shields.io/badge/Checked_by-Hound-a873d1.svg)](https://houndci.com)
 
+<<<<<<< HEAD
 SHORT DESCRIPTION OF THIS BRANCH
 
 This branch contains instructions for Integrating Coveralls code coverage service with CircleCI and express with sample mocha test
+=======
+### **What does this PR do?**
+a seller will be able to update products
+##### **Description of Task to be completed?**
+As a Seller
+>>>>>>> e73b1840c48d63b017e55ea11fa115bf9881b022
 
 
 GitHub: 
