@@ -6,25 +6,51 @@
 import 'dotenv/config';
 
 import express from 'express';
-
+import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
+import swaggerJsDoc from 'swagger-jsdoc';
 
-import db from './src/models';
+import db from './src/Database/models';
+
+import resetPassword from './src/routes/reset-password.routes';
+
+import signupRouter from './src/routes/signup.routes';
 
 import testRouter from './src/routes/test.routes';
 
-import userRouter from './src/routes/user.routes';
+import createProduct from './src/routes/createProduct.routes';
+
+import updateProduct from './src/routes/updateProduct.routes';
 
 const app = express();
-
-const YAML = require('yamljs');
-const swaggerDocument = YAML.load('src/swagger/Password-Reset.swagger.yaml');
 
 // parse requests of content-type - application/json
 app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+// parse application/json
+app.use(bodyParser.json());
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'E-commerce API',
+      description: 'E-commerce API Information',
+      servers: [
+        {
+          url: process.env.DEPLOYED_API_URL,
+        },
+      ],
+    },
+  },
+
+  apis: ['./src/routes/*.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 db.sequelize.sync()
   .then(() => {
@@ -38,9 +64,12 @@ app.get('/home', (req, res) => {
   res.status(200).send('WELCOME!');
 });
 
-app.use('/', testRouter);
-app.use('/', userRouter);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api', testRouter);
+app.use('/api', resetPassword);
+app.use('/api', signupRouter);
+app.use('/api', createProduct);
+app.use('/api', updateProduct);
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

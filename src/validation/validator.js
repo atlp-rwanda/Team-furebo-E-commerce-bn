@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Joi from 'joi';
 
 const validator = (schema) => (payload) => schema.validate(payload, { abortEarly: false });
@@ -7,7 +8,6 @@ const signupSchema = Joi.object({
   lastname: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().max(8).alphanum().required(),
-  confirmPassword: Joi.ref('password'),
 });
 
 validator(signupSchema);
