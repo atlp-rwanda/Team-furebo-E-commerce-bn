@@ -4,16 +4,18 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../index';
 import 'dotenv/config';
+import { User } from '../Database/models';
+import { addToken } from '../controllers/addToWishList.controller';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
 describe('addToWishList', async () => {
-  //GET INITIAL DATA
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2ODAyNTA2NTEsImV4cCI6MTY4MDI2NTA1MX0.NuDQZebayNtrtC-uXAmHcSDazWWptYEVykIB4zj23xw";
+  // Create a new user and get their authentication token
+  const v = await User.findOne();
   const data = {
-    token: token,
+    token: addToken({ id: v.id }, process.env.USER_SECRET_KEY),
     productId: 1
   };
   context('check availablity of the user', () => {
