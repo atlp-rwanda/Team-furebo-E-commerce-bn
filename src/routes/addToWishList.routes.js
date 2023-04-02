@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable import/named */
 /* eslint-disable linebreak-style */
 import express from 'express';
@@ -10,35 +11,35 @@ const router = express.Router();
  * @swagger
  *  components:
  *      schemas:
- *          modifyPassword:
+ *          addtowishlist:
  *                      type: object
  *                      properties:
- *                          token:
+ *                          productId:
  *                              type: string
- *                          product:
+ *                          token:
  *                              type: string
  */
 /**
  * @swagger
- * /modify-password:
+ * /api/add-to-wishlist:
  *  post:
- *      summary: modifying a user's password
- *      description: This api is used to modify the password for the user
+ *      summary: modifying a users wishlist and creating a new one
+ *      description: This api is used to modifying a users wishlist and creating a new one
  *      requestBody:
  *          required: true
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#components/schemas/addTowishList'
+ *                      $ref: '#components/schemas/addtowishlist'
  *      responses:
  *          200:
- *              description: This api is used to modify the password for the user
+ *              description: This api is used to modifying a users wishlist and creating a new one
  *              content:
  *                  application/json:
  *                      schema:
  *                          type: array
  *                          items:
- *                              $ref: '#components/schemas/addTowishList'
+ *                              $ref: '#components/schemas/addtowishlist'
  */
 router.post('/add-to-wishlist', addToWishList);
 export default router;

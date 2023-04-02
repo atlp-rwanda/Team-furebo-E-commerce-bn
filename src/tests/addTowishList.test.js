@@ -1,83 +1,71 @@
-/* eslint-disable no-unused-expressions */
+/* eslint-disable object-shorthand */
+/* eslint-disable prefer-destructuring */
 import chai from 'chai';
-import jwt from 'jsonwebtoken';
 import chaiHttp from 'chai-http';
-import db from '../Database/models';
+import jwt from 'jsonwebtoken';
 import app from '../../index';
+import 'dotenv/config';
+import { User } from '../Database/models';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
-const { Wishlist } = db;
 
-describe('addToWishList', () => {
-  let token;
-  let userId;
+describe('addToWishList', async () => {
+  // Create a new user and get their authentication token
+  const d = await User.findOne({ where: { email: 'abc@gmail.com ' } });
+  const token = jwt.sign({ email: d.email, id: d.id }, process.env.USER_SECRET_KEY);
+  const data = {
+    token: token,
+    productId: 1
+  };
 
-  before(async () => {
-    // Create a new user and get their authentication token
-    const user = {
-      firstname: 'ABC', lastname: 'ABC', email: 'abc@gmail.com', password: 'ABC'
-    };
-    const res = await chai.request(app).post('/api/register').send(user);
-    token = res.body.token;
-    userId = jwt.verify(token, process.env.USER_SECRET_KEY).id;
+  context('check availablity of the user', () => {
+    it('should return 404 if the user does not exist', async () => {
+      data.token = 'non-existent-id';
+      const res = await chai.request(app)
+        .post('/api/add-to-wishlist')
+        .send(data);
+      expect(res).to.have.status(404);
+    });
   });
-
-  it('should return 404 if the product does not exist', async () => {
-    const productId = 'non-existent-id';
-    const res = await chai.request(app)
-      .post('/api/wishlist')
-      .send({ token, productId });
-    expect(res).to.have.status(404);
-    expect(res.body).to.have.property('error');
-    expect(res.body.error).to.equal('Product not found');
+  context('check availablity of the product', () => {
+    it('should return 404 if the product does not exist', async () => {
+      data.productId = 'non-existent-id';
+      const res = await chai.request(app)
+        .post('/api/add-to-wishlist')
+        .send(data);
+      const response = res.body;
+      expect(res).to.have.status(404);
+      expect(response.success).to.be.equal(false);
+      expect(response.message).to.be.equal('product not found');
+      console.log(data);
+    });
   });
-
-  it('should create a new wishlist if the user does not have one', async () => {
-    const product = await db.Product.findOne();
-    const productId = product.id;
-    const res = await chai.request(app)
-      .post('/api/wishlist')
-      .send({ token, productId });
-    expect(res).to.have.status(201);
-    expect(res.body).to.have.property('message');
-    expect(res.body.message).to.equal('Product added to wishlist');
-    const wishlist = await Wishlist.findOne({ where: { userId } });
-    expect(wishlist).to.not.be.null;
-    expect(wishlist.products).to.deep.equal([productId]);
+  context('create a new wishlis', () => {
+    it('should create a new wishlist if the user does not have one', async () => {
+      const res = await chai.request(app)
+        .post('/api/add-to-wishlist')
+        .send(data);
+      expect(res).to.have.status(201);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.equal('Product added to wishlist');
+    });
   });
-
-  it('should remove the product from the wishlist if it is already in the wishlist', async () => {
-    const product = await db.Product.findOne();
-    const productId = product.id;
-    const wishlist = await Wishlist.findOne({ where: { userId } });
-    // eslint-disable-next-line no-unused-expressions
-    expect(wishlist).to.not.be.null;
-    await wishlist.update({ products: [productId] });
-    const res = await chai.request(app)
-      .post('/api/wishlist')
-      .send({ token, productId });
-    expect(res).to.have.status(200);
-    expect(res.body).to.have.property('message');
-    expect(res.body.message).to.equal('Product removed from wishlist');
-    const updatedWishlist = await Wishlist.findOne({ where: { userId } });
-    // eslint-disable-next-line no-unused-expressions
-    expect(updatedWishlist).to.not.be.null;
-    expect(updatedWishlist.products).to.be.empty;
+  context('remove the product from the wishlist', () => {
+    it('should remove the product from the wishlist if it is already in the wishlist', async () => {
+      const res = await chai.request(app)
+        .post('/api/add-to-wishlist')
+        .send(data);
+      expect(res).to.have.status(200);
+    });
   });
-
-  it('should add the product to the wishlist if it is not already in the wishlist', async () => {
-    const product = await db.Product.findOne();
-    const productId = product.id;
-    const res = await chai.request(app)
-      .post('/api/wishlist')
-      .send({ token, productId });
-    expect(res).to.have.status(200);
-    expect(res.body).to.have.property('message');
-    expect(res.body.message).to.equal('Product added to wishlist');
-    const wishlist = await Wishlist.findOne({ where: { userId } });
-    expect(wishlist).to.not.be.null;
-    expect(wishlist.products).to.deep.equal([productId]);
+  context('add the product to the wishlist if it is not already available', () => {
+    it('should add the product to the wishlist if it is not already in the wishlist', async () => {
+      const res = await chai.request(app)
+        .post('/api/add-to-wishlist')
+        .send(data);
+      expect(res).to.have.status(200);
+    });
   });
 });

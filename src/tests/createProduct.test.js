@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable max-len */
 /* eslint-disable linebreak-style */
-/* eslint-disable no-unused-expressions */
 // import request from 'supertest';
 import chai from 'chai';
 import chaiHttp from 'chai-http';

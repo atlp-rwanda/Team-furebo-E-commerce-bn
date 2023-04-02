@@ -19,8 +19,10 @@ module.exports = (sequelize, DataTypes) => {
   Wishlist.init(
     {
       id: {
-        type: DataTypes.STRING,
-        primaryKey: true
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
       },
       user: DataTypes.STRING,
       products: DataTypes.ARRAY(DataTypes.STRING)

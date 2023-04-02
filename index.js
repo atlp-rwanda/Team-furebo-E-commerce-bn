@@ -21,6 +21,7 @@ import testRouter from './src/routes/test.routes';
 import createProduct from './src/routes/createProduct.routes';
 
 import updateProduct from './src/routes/updateProduct.routes';
+import addToWishList from './src/routes/addToWishList.routes';
 
 const app = express();
 
@@ -69,6 +70,8 @@ app.use('/api', resetPassword);
 app.use('/api', signupRouter);
 app.use('/api', createProduct);
 app.use('/api', updateProduct);
+app.use('/api', addToWishList);
+
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const port = process.env.PORT || 3000;
