@@ -11,6 +11,7 @@ export const addToWishList = async (req, res) => {
   const { token, productId } = req.body;
   // eslint-disable-next-line no-use-before-define
   let userId = (authenticateToken(token).success) ? authenticateToken(token).token.id : null;
+  console.log(token);
   try {
     // Check if the user exists in the database
     userId = await User.findOne({ where: { id: userId } });
