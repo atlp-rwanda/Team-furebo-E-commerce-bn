@@ -10,15 +10,8 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe('addToWishList', async () => {
-  // Create a new user and get their authentication token
-  const User = {
-    firstname: 'dummy',
-    lastname: 'dummy',
-    email: 'dummy@gmail.com',
-    password: 'dummy'
-  };
-  const rea = await chai.request(app).post('/api/register').send(User);
-  const token = rea.body.token;
+  //GET INITIAL DATA
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2ODAyNTA2NTEsImV4cCI6MTY4MDI2NTA1MX0.NuDQZebayNtrtC-uXAmHcSDazWWptYEVykIB4zj23xw";
   const data = {
     token: token,
     productId: 1
