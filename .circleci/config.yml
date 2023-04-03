@@ -6,11 +6,15 @@ orbs:
 
 jobs:
   Test_and_Send_Coverage:
+
     environment:
       CC_TEST_REPOTER_ID: "9c02531d1fcfe9fa66072979b242743ed13cee52ff85f31d928e87bfd353f6f3"
+    
     docker:
       - image: node:18.15
+
     executor: node/default
+    
     steps:
       - checkout
       - node/install-packages:
@@ -46,6 +50,8 @@ jobs:
             ./cc-test-reporter upload-coverage
 
 workflows:
+  
   Test_and_Coverage:
     jobs:
       - Test_and_Send_Coverage
+

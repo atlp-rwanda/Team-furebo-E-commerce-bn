@@ -25,7 +25,7 @@ const createUser = async (req, res) => {
   if (existingUser) {
     return res
       .status(401)
-      .json({ message: 'Email allready used, please use different email.' });
+      .json({ message: 'Email already used, please use different email.' });
   }
 
   const hashedPassword = await hashPassword(req.body.password);

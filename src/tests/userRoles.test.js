@@ -1,22 +1,12 @@
-/* eslint-disable no-unused-expressions */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import app from '../../index';
 
 const { expect } = chai;
 
 chai.use(chaiHttp);
 describe('User permissions and roles', () => {
-  // before(async () => {
-  //   await db.sequelize.sync({ force: true });
-  // });
-
-  // afterEach(async () => {
-  //   await db.User.destroy({ where: {} });
-  // });
-
   describe(' Admin can update user role', () => {
     it('should update the user role and return a response with status code of 200', (done) => {
       const user = {

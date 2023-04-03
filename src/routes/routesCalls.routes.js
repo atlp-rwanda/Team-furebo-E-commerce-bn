@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import express from 'express';
 import resetPassword from './reset-password.routes';
 import signupRouter from './signup.routes';
@@ -14,6 +13,7 @@ import getItemsRouter from './getItems.routes';
 import searchRouter from './searchProducts.routes';
 import ShoppingCart from './shopping-cart.routes';
 import updateShoppingCart from './update-shopping-cart.routes';
+import deleteProductRouter from './deleteProduct.routes';
 
 const routes = express();
 
@@ -31,5 +31,6 @@ routes.use('/api', getItemsRouter);
 routes.use('/api', searchRouter);
 routes.use('/api', ShoppingCart);
 routes.use('/api', updateShoppingCart);
+routes.use('/api', deleteProductRouter);
 
 export default routes;

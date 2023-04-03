@@ -125,15 +125,16 @@ describe('UPDATING SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${sellerToken}`)
       .send({
-        name: 'HCT/RP 360ST',
-        image: 'HCT',
+        name: 'HCT/RP 360ST 2222',
+        image:
+        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
         price: 2500,
         quantity: 12,
-        type: 'GAMMING PC',
+        category: 'GAMMING PC',
         exDate: '2023-05-30',
       });
     productId = productRes.body.data.id;
-
     const addItemInCart = await chai
       .request(app)
       .post('/api/addItemToCart')

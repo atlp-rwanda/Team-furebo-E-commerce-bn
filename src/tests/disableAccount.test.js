@@ -39,7 +39,6 @@ describe('DISABLE ACCOUNT', async () => {
       .send(loginAdmin);
     expect(adminRes).to.have.status(200);
     adminToken = adminRes.body.token;
-    console.log(`Login token ${adminToken}`);
     const verifyAdminToken = await jwt.verify(adminToken, process.env.USER_SECRET_KEY);
     adminId = verifyAdminToken.id;
   });

@@ -94,7 +94,6 @@ const updateShoppingCart = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error(err);
     res.status(500).json({
       status: 'error',
       message: 'FAILED TO UPDATE THE CART',

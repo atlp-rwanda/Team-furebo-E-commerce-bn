@@ -26,8 +26,6 @@ app.get('/home', (req, res) => {
 });
 app.use(routes);
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}.`);
-});
+app.listen(port, () => {});
 
 export default app;
