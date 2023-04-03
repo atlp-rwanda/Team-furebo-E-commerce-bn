@@ -6,7 +6,9 @@
 import 'dotenv/config';
 
 import express from 'express';
-import bodyParser from 'body-parser';
+
+import cors from 'cors';
+
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 
@@ -18,15 +20,22 @@ import signupRouter from './src/routes/signup.routes';
 
 import testRouter from './src/routes/test.routes';
 
+import loginRouter from './src/routes/login.routes';
+
 const app = express();
+
+app.use(
+  cors({
+    origin: '*',
+    credentials: true,
+  })
+);
 
 // parse requests of content-type - application/json
 app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-// parse application/json
-app.use(bodyParser.json());
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -63,11 +72,12 @@ app.get('/home', (req, res) => {
 app.use('/api', testRouter);
 app.use('/api', resetPassword);
 app.use('/api', signupRouter);
+app.use('/api/', loginRouter);
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  // console.log('Hello, world');
+  console.log('Hello, world');
 
   console.log(`Server is running on port ${port}.`);
 });
