@@ -49,6 +49,7 @@ export const authorizeCustomer = async (req, res, next) => {
     const userRole = JSON.parse(user.role);
 
     if (userRole.name === 'customer') {
+      req.user = user;
       next();
     } else {
       return res.status(403).send({ message: 'Customer access only' });

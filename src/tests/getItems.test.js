@@ -20,31 +20,31 @@ describe('Retrieve list of items', () => {
   const adminData = {
     firstname: 'admin',
     lastname: 'admin',
-    email: 'admin21@gmail.com',
-    password: 'Abc123456'
+    email: 'admin@gmail.com',
+    password: 'Test123456'
   };
   const sellerData = {
-    firstname: 'Seller',
+    firstname: 'Jana',
     lastname: 'Seller',
-    email: 'seller21@gmail.com',
-    password: 'Abc123456'
+    email: 'seller19@gmail.com',
+    password: 'Seller1912'
   };
   const buyerData = {
-    firstname: 'Seller',
+    firstname: 'Buyer',
     lastname: 'Seller',
-    email: 'seller211@gmail.com',
+    email: 'buyer211@gmail.com',
     password: 'Abc123456'
   };
   const loginAdmin = {
-    email: 'admin21@gmail.com',
-    password: 'Abc123456'
+    email: 'admin19@gmail.com',
+    password: 'Admin1912'
   };
   const loginSeller = {
-    email: 'seller21@gmail.com',
-    password: 'Abc123456'
+    email: 'seller19@gmail.com',
+    password: 'Seller1912'
   };
   const loginBuyer = {
-    email: 'seller211@gmail.com',
+    email: 'buyer211@gmail.com',
     password: 'Abc123456'
   };
   before(async () => {
@@ -65,7 +65,7 @@ describe('Retrieve list of items', () => {
     const buyerRes = await chai.request(app)
       .post('/api/register')
       .send(buyerData);
-
+    UserId = buyerRes.body.id;
     // Login as buyer and get token
     const buyerLoginRes = await chai.request(app)
       .post('/api/login')

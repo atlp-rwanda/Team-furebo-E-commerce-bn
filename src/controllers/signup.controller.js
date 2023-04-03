@@ -39,14 +39,14 @@ const createUser = async (req, res) => {
   };
 
   User.create(user)
-    .then(async data => {
+    .then(async (data) => {
       const token = await generateToken(data);
       res
         .status(200)
         .header('authenticate', token)
         .json({ message: 'successful signedup', token });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message: err.message || 'Some error occurred while creating User.',
       });

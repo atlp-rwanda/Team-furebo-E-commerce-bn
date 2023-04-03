@@ -6,6 +6,7 @@
 // import login from '../controllers/login.controller';
 import express from 'express';
 import { json } from 'body-parser';
+// eslint-disable-next-line import/no-unresolved
 import AuthMiddleware from '../middlewares/login.middleware';
 import { PublicController } from '../controllers/login.controller';
 
