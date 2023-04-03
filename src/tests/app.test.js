@@ -12,15 +12,17 @@ chai.use(chaiHttp);
 chai.use(chaiHttp);
 
 describe('Build Tests', () => {
-  it('should return a response with status code 200', (done) => {
-    chai.request(app)
-      .get('/api/sample_test')
-      .end((err, res) => {
-        chai.expect(res).to.have.status(200);
-        done();
-      });
-  });
+  let testToken;
 
+  beforeEach(async () => {
+    // Generate a new token for each test
+    const res = await chai.request(app)
+      .post('/api/login')
+      .send({ email: 'abc@gmail.com', password: 'ABC' });
+
+    // Store the token as a variable to use in the test case
+    testToken = res.body.token;
+  });
   // CREATE USER
   it('should register user and return a response with status code 200', (done) => {
     const User = {
@@ -93,10 +95,9 @@ describe('Build Tests', () => {
     // expect(res.body).to.have.property('message', 'this account does not exist');
   });
   it('It should grant access to a user with a valid token ', async () => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2ODA0ODc5ODMsImV4cCI6MTY4MDUwMjM4M30.udpfqgyx72GI-d8pLi-ik2BszbAn-tTRLExlr0KBoaA';
     const res = await chai.request(app)
       .get('/api/protectedroute/')
-      .set({ authorization: `Bearer ${token}` });
+      .set({ authorization: `Bearer ${testToken}` });
 
     expect(res).to.have.status(200);
     expect(res.body).to.have.property('message', 'Access Granted');

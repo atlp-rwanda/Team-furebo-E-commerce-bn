@@ -34,7 +34,6 @@ describe('Reset Password Via Email', () => {
         const res = await chai.request(app)
           .post('/api/requestPasswordReset')
           .send({ email: 'ruberwa33@gmail.com' });
-
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('message', 'Password reset email sent');
       });

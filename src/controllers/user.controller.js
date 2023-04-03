@@ -5,7 +5,8 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { Sequelize } from 'sequelize';
 import sgMail from '@sendgrid/mail';
-import db from '../Database/models';
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import db from '../models';
 import validateSignup from '../validation/validator';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -21,16 +22,17 @@ export const createUser = async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(req.body.password, 12);
+  console.log(`=>=>=>=> Hashed password ${req.body.password}`);
 
   const user = {
     fullname: `${req.body.firstname} ${req.body.lastname}`,
     email: req.body.email,
-    password: hashedPassword,
+    password: hashedPassword
   };
 
   User.create(user)
     .then((data) => {
-      const token = jwt.sign({ email: data.email, id: data.id }, process.env.USER_SECRET_KEY);
+      const token = jwt.sign({ email: data.email, id: data.id }, process.env.USER_SCREET_KEY);
       res.status(200).json({ message: 'successful signedup', token });
     })
     .catch((err) => {
@@ -109,5 +111,3 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
-
-// export default {createUser,login,requestPasswordReset,resetPassword};

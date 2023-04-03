@@ -4,20 +4,17 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  /**
-   * @class
-   */
+  // eslint-disable-next-line require-jsdoc
   class User extends Model {
-    /**
-     * @returns {number}.
-     */
+    // eslint-disable-next-line require-jsdoc
     static associate() {
+      // define association here
     }
   }
   User.init({
     fullname: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     email: {
       type: DataTypes.STRING,
@@ -27,7 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    isEnabled: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
   }, {
     sequelize,
     modelName: 'User',
