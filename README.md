@@ -92,21 +92,12 @@ In case you wish to contribute, raise a discussion first about what you would li
 
 ### Branches <a name="branches"> </a>
 
-<<<<<<< HEAD
-
--   main
--   develop
--   ch-Integrate-CircleCI-with-badge
--   ch-codeclimate-code-coverage
--   ft-login-api-endpoint
--   # ft-app-logout
-
-*   main
-*   develop
-*   ch-Integrate-CircleCI-with-badge
-*   ch-codeclimate-code-coverage
-*   ft-login-api-endpoint
-*   ft-app-logout
-    > > > > > > > 2e31a89 (ft-clear-cart)
+* main
+* develop
+* ch-Integrate-CircleCI-with-badge
+* ch-codeclimate-code-coverage
+* ft-login-api-endpoint
+* ft-app-logout
+* ft-Two-Factor-Authentication-184651335
 
 ## License

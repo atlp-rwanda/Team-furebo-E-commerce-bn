@@ -132,7 +132,7 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
     it('should return status 200 and set product availability', done => {
       const productData = {
         quantity: 5,
-        exDate: '2020-05-30',
+        exDate: '2020-04-30',
       };
       chai
         .request(app)
@@ -150,7 +150,7 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
     it('should return status 403 and an error message', done => {
       const productData = {
         quantity: 5,
-        exDate: '2020-05-30',
+        exDate: '2020-04-30',
       };
       chai
         .request(app)
@@ -168,7 +168,7 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
     it('should return status 404 and an error message', done => {
       const productData = {
         quantity: 5,
-        exDate: '2020-05-30',
+        exDate: '2020-04-30',
       };
       chai
         .request(app)

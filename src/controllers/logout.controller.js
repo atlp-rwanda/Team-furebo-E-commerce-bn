@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
 import jwt from 'jsonwebtoken';
 import AuthMiddleware from '../middlewares/login.middleware';
+import { User } from '../Database/models';
 
 const verifyToken = (token, secretKey) => {
   try {
@@ -22,6 +23,13 @@ const logout = async (req, res) => {
   if (!decoded) {
     return res.status(401).json({ msg: 'Invalid token' });
   }
+  await User.update({
+    checkTwoFactor: false
+  }, {
+    where: {
+      id: decoded.id
+    }
+  });
   AuthMiddleware.blacklist.push(token);
   return res.status(200).json({ msg: 'Logged out successfully' });
 };

@@ -2,7 +2,8 @@
 import express from 'express';
 import { authorizeMerchant } from '../middlewares/userRoles.middleware';
 import setProductAvailability from '../controllers/mark-availability.controller';
-import markProductAvailabilityMiddleware from '../middlewares/mark-availability.middleware';
+import checkUserAndProductMiddleware from '../middlewares/check-user-and-product.middleware.js';
+
 const router = express.Router();
 
 /**
@@ -93,7 +94,7 @@ const router = express.Router();
 router.patch(
   '/mark-product-availability/:id',
   authorizeMerchant,
-  markProductAvailabilityMiddleware,
+  checkUserAndProductMiddleware,
   setProductAvailability
 );
 

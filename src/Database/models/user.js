@@ -15,34 +15,35 @@ module.exports = (sequelize, DataTypes) => {
     {
       fullname: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: true
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       isEnabled: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: true,
+        defaultValue: true
       },
       role: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       enable2FA: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: false
       },
-      twoFactorAuthKey: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      checkTwoFactor: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
       isExpired: {
         type: DataTypes.BOOLEAN,
@@ -54,16 +55,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       createdAt: {
         allowNull: false,
-        type: DataTypes.DATE,
+        type: DataTypes.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: DataTypes.DATE,
-      },
+        type: DataTypes.DATE
+      }
     },
     {
       sequelize,
-      modelName: 'User',
+      modelName: 'User'
     }
   );
   return User;
