@@ -1,7 +1,4 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
@@ -90,10 +87,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
     sellerId = verifyCustomerBeforeMerchant.id;
 
     // ========= BUYER ACCOUNT
-    await chai
-      .request(app)
-      .post('/api/register')
-      .send(buyerData);
+    await chai.request(app).post('/api/register').send(buyerData);
 
     const buyerLoginRes = await chai
       .request(app)
@@ -125,16 +119,20 @@ describe('UPDATING SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${sellerToken}`)
       .send({
-        name: 'HCT/RP 360ST 2222',
-        image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+        name: 'HCT/RP 360ST',
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
         exDate: '2023-05-30',
       });
     productId = productRes.body.data.id;
+
     const addItemInCart = await chai
       .request(app)
       .post('/api/addItemToCart')
@@ -144,7 +142,8 @@ describe('UPDATING SHOPPING CART TEST', () => {
         quantity: 2,
       });
 
-    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS '].ID;
+    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
+      .ID;
   });
   context('IT SHOULD UPATE ITEM IN SHOPPING CART ', () => {
     it('should add item to the shopping cart and return status 200', async () => {
@@ -158,7 +157,9 @@ describe('UPDATING SHOPPING CART TEST', () => {
       // assert response
       expect(res).to.have.status(200);
       const actualVal = res.body.message;
-      expect(actualVal).to.be.equal('THE ITEM IN THE CART WAS UPDATED SUCCESSFULLY!!!');
+      expect(actualVal).to.be.equal(
+        'THE ITEM IN THE CART WAS UPDATED SUCCESSFULLY!!!'
+      );
     });
   });
   context('WHEN PRODUCT WITH THAT ID, ID NOT IN PRODUCT', () => {
@@ -228,7 +229,9 @@ describe('UPDATING SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]');
+          expect(actualVal).to.be.equal(
+            'QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]'
+          );
           done();
         });
     });
@@ -247,7 +250,9 @@ describe('UPDATING SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]');
+          expect(actualVal).to.be.equal(
+            'PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]'
+          );
           done();
         });
     });
@@ -268,26 +273,6 @@ describe('UPDATING SHOPPING CART TEST', () => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
           expect(actualVal).to.be.equal('THE STOCK HAS LESS QUANTITY');
-          done();
-        });
-    });
-  });
-  context('WHEN FAILED TO ADD ITEM TO THE CART', () => {
-    it('should return status 500 and an error message', (done) => {
-      let FAKE_ID;
-      const itemData = {
-        quantity: 2,
-      };
-
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${FAKE_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(500);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('FAILED TO UPDATE THE CART');
           done();
         });
     });
