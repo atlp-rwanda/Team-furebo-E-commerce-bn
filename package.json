@@ -8,13 +8,14 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "nodemon -L --exec babel-node index.js",
     "migrate": "npx sequelize-cli db:migrate",
-    "unmigrate": "npx sequelize-cli db:migrate:undo",
+    "unmigrate": "npx sequelize-cli db:migrate:undo:all",
     "seed": "npx sequelize-cli db:seed:all",
     "unseed": "npx sequelize-cli db:seed:undo",
     "unseed-all": "npx sequelize-cli db:seed:undo:all",
     "format": "prettier --write .",
     "lint": "eslint . --fix",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "reset-database": "npm run unmigrate && npm run migrate"
   },
   "husky": {
     "hooks": {
@@ -59,10 +60,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "joi": "^17.9.0",
     "jsonwebtoken": "^9.0.0",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.21",
+    "passport": "^0.6.0",
+    "passport-google-oauth2": "^0.2.0",
     "path": "^0.12.7",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
