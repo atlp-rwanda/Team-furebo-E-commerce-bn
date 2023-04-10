@@ -31,7 +31,7 @@ export class PublicController {
         { id: doesExist._id, email: doesExist.email },
         process.env.USER_SECRET_KEY,
 
-        { expiresIn: 14400, }
+        { expiresIn: process.env.EXPIRATION_TIME || '7h', }
       );
       return res.status(200).json({ msg: 'Logged in succesfully', token });
     } catch (error) {

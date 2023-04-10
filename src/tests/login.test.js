@@ -18,7 +18,7 @@ describe('Build Tests', () => {
     // Generate a new token for each test
     const res = await chai.request(app)
       .post('/api/login')
-      .send({ email: 'abc@gmail.com', password: 'ABC' });
+      .send({ email: 'abc@gmail.com', password: 'Abc123456' });
 
     // Store the token as a variable to use in the test case
     testToken = res.body.token;
@@ -29,7 +29,7 @@ describe('Build Tests', () => {
       firstname: 'ABC',
       lastname: 'ABC',
       email: 'abc@gmail.com',
-      password: 'ABC'
+      password: 'Abc123456'
     };
     chai.request(app)
       .post('/api/register')
@@ -41,20 +41,18 @@ describe('Build Tests', () => {
         done();
       });
   });
-  it('should throw an error and return a response with status code 500 if the credentails are not validated', (done) => {
+  it('should throw an error and return a response with status code 406 if the credentails are not validated', (done) => {
     const User = {
       firstname: 'ABC',
       lastname: 'ABC',
       email: 'abc@gmail.com',
-      password: 'ABC'
+      password: 'Abc'
     };
     chai.request(app)
       .post('/api/register')
       .send(User)
       .end((err, res) => {
-        chai.expect(res).to.have.status(500);
-        const actualVal = res.body.message;
-        expect(actualVal).to.be.equal('Validation error');
+        chai.expect(res).to.have.status(406);
         done();
       });
   });
@@ -65,17 +63,11 @@ describe('Build Tests', () => {
   });
 
   it('should login user return status 200 and send token', async () => {
-    /** const user = await db.User.create({
-      fullname: 'Admin',
-      email: 'admin@gmail.com',
-      password: 'admin'
-    }); */
-
     const res = await chai.request(app)
       .post('/api/login')
       .send({
         email: 'abc@gmail.com',
-        password: 'ABC'
+        password: 'Abc123456'
       });
 
     expect(res).to.have.status(200);
@@ -83,16 +75,40 @@ describe('Build Tests', () => {
     expect(res.body).to.have.property('token');
   });
 
+  it('should return status 400 and request for the credentials to be filled if all is empty', async () => {
+    const res = await chai.request(app)
+      .post('/api/login')
+      .send({
+        email: '',
+        password: ''
+      });
+
+    expect(res).to.have.status(400);
+    expect(res.body).to.have.property('msg', 'Please Fiil in blank fields');
+  });
+
+  it('should return status 401 and deny access if the password is invalid', async () => {
+    const res = await chai.request(app)
+      .post('/api/login')
+      .send({
+        email: 'abc@gmail.com',
+        password: 'ABC'
+      });
+
+    expect(res).to.have.status(401);
+    expect(res.body).to.have.property('msg', 'Invalid password');
+  });
+
   it('should return status 404 when user does not exist', async () => {
     const res = await chai.request(app)
       .post('/api/login')
       .send({
         email: 'nonexistentuser@gmail.com',
-        password: 'admin'
+        password: 'Abc123456'
       });
 
     expect(res).to.have.status(404);
-    // expect(res.body).to.have.property('message', 'this account does not exist');
+    expect(res.body).to.have.property('msg', 'User doesn\'t exist');
   });
   it('It should grant access to a user with a valid token ', async () => {
     const res = await chai.request(app)
