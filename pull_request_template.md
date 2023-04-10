@@ -1,5 +1,4 @@
 #### What does this PR do?
-
 Integrate Coveralls code coverage service
 
 #### Description of Task to be completed?
