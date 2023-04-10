@@ -6,29 +6,17 @@ orbs:
 
 jobs:
   say-hello:
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
     docker:
       - image: cimg/base:stable
 
     steps:
       - checkout
       - run:
-<<<<<<< HEAD
           name: 'Team-Furebo - E commerce tests'
           command: 'echo Hello, World!'
 
   Test_and_Send_Coverage:
     executor: node/default
-=======
-          name: "Team-Furebo - E commerce tests"
-          command: "echo Hello, World!"
-          
-  Test_and_Send_Coverage: 
-    executor: node/default 
->>>>>>> develop
     steps:
       - checkout
       - node/install-packages:
@@ -42,11 +30,7 @@ jobs:
       - run:
           command: npm test
           name: Run tests
-<<<<<<< HEAD
       - run:
-=======
-      - run: 
->>>>>>> develop
           name: code-coverage
           command: npm run coverage
       - coveralls/upload
