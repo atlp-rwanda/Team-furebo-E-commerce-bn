@@ -1,6 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import bcrypt from 'bcryptjs';
 import sgMail from '@sendgrid/mail';
 import db from '../Database/models';
@@ -36,7 +33,6 @@ export const requestPasswordReset = async (req, res) => {
 
     res.json({ message: 'Password reset email sent' });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
@@ -57,11 +53,13 @@ export const resetPassword = async (req, res) => {
 
     // Update password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await db.User.update({ password: hashedPassword }, { where: { id: user.id } });
+    await db.User.update(
+      { password: hashedPassword },
+      { where: { id: user.id } }
+    );
 
     res.json({ message: 'Password reset successfully' });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };

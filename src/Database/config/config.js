@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+
 require('dotenv').config();
 
 module.exports = {
@@ -7,6 +8,13 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    dialect: 'postgres'
-  }
+    dialect: 'postgres',
+  },
+  development: {
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    dialect: 'postgres',
+  },
 };

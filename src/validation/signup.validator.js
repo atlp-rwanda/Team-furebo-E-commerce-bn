@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import joi from 'joi';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { joiPasswordExtendCore } from 'joi-password';
 
 const joiPassword = joi.extend(joiPasswordExtendCore);
 
-const validator = (schema) => (payload) => schema.validate(payload, { abortEarly: false });
+const validator = schema => payload =>
+  schema.validate(payload, { abortEarly: false });
 
 const signupSchema = joi.object({
   firstname: joi.string().required(),

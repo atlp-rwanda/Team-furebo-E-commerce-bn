@@ -1,9 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-unused-vars */
-/* eslint-disable import/named */
-/* eslint-disable import/extensions */
-/* eslint-disable import/first */
-// import login from '../controllers/login.controller';
 import express from 'express';
 import { json } from 'body-parser';
 import AuthMiddleware from '../middlewares/login.middleware';
@@ -16,6 +10,8 @@ const router = express.Router();
  * @swagger
  * /api/login:
  *   post:
+ *      security:
+ *        - bearerAuth: []
  *      summary: "Logs in user with email and password and returns token"
  *      description: "Authorizes default user with valid email and password to use the endpoints"
  *      tags:
@@ -53,6 +49,8 @@ router.post('/login', PublicController.PublicLogin);
  * @swagger
  * /api/protectedroute:
  *   get:
+ *     security:
+ *         - bearerAuth: []
  *     summary: after successful login the user is redirected here
  *              where his credentials will be verified
  *     tags: [User]
@@ -72,8 +70,12 @@ router.post('/login', PublicController.PublicLogin);
  *         description: Some server error
  */
 
-router.get('/protectedroute', AuthMiddleware.checkAuthentication, (req, res) => {
-  res.send({ message: 'Access Granted' });
-});
+router.get(
+  '/protectedroute',
+  AuthMiddleware.checkAuthentication,
+  (req, res) => {
+    res.send({ message: 'Access Granted' });
+  }
+);
 
 export default router;

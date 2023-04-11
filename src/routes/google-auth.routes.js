@@ -1,27 +1,25 @@
 import express from 'express';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import passport from 'passport';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import session from 'express-session';
-// eslint-disable-next-line import/no-duplicates
-// import jwt from 'jsonwebtoken';
-// eslint-disable-next-line import/no-duplicates
 import googleAuth from '../controllers/google-auth-controller';
-// eslint-disable-next-line import/no-duplicates
 import googleFailure from '../controllers/google-auth-controller';
-// eslint-disable-next-line import/no-duplicates
 import googleProtected from '../controllers/google-auth-controller';
 import 'dotenv/config';
+// eslint-disable-next-line import/no-duplicates
+import logout from '../controllers/google-auth-controller';
 
 const router = express.Router();
 
-const isLoggedIn = ({ user }, res, next) => (user ? next() : res.sendStatus(401));
-router.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
-}));
+const isLoggedIn = ({ user }, res, next) =>
+  user ? next() : res.sendStatus(401);
+router.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
 router.use(passport.initialize());
 router.use(passport.session());
 
@@ -31,11 +29,12 @@ router.get(
   '/google/callback',
   passport.authenticate('google', {
     successRedirect: '/protected',
-    failureRedirect: '/auth/failure'
+    failureRedirect: '/auth/failure',
   })
 );
 router.get('/auth/failure', googleFailure.googleFailure);
 router.get('/protected', isLoggedIn, googleProtected.googleProtected);
+router.get('/logout', logout.logout);
 /**
  * @swagger
  * tags:
@@ -66,10 +65,12 @@ router.get('/protected', isLoggedIn, googleProtected.googleProtected);
  *       302:
  *         description: Found
  */
-router.get('/auth/google', passport.authenticate('google', {
-  scope: ['email', 'profile']
-}));
-
+router.get(
+  '/auth/google',
+  passport.authenticate('google', {
+    scope: ['email', 'profile'],
+  })
+);
 /**
  * @swagger
  * /google/callback:
@@ -96,7 +97,7 @@ router.get(
   '/google/callback',
   passport.authenticate('google', {
     successRedirect: '/protected',
-    failureRedirect: '/auth/failure'
+    failureRedirect: '/auth/failure',
   })
 );
 

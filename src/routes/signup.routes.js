@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import express from 'express';
 import createUser from '../controllers/signup.controller';
 
@@ -18,8 +17,6 @@ const router = express.Router();
  *                  email:
  *                      type: string
  *                  password:
- *                      type: string
- *                  confirmPassword:
  *                      type: string
  */
 
@@ -70,6 +67,6 @@ router.post('/register', createUser);
  *      responses:
  *          '200':
  *              description: successful request
-*/
+ */
 
 export default router;

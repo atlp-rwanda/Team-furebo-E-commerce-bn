@@ -7,7 +7,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - "3000:3000"
+      - '3000:3000'
 
   postgres:
     container_name: postgres_db
@@ -17,11 +17,10 @@ services:
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
-       - postgres-db:/data/postgres
+      - postgres-db:/data/postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
 volumes:
   postgres-db:
     driver: local
-    
