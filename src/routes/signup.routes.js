@@ -68,6 +68,6 @@ router.post('/register', createUser);
  *      responses:
  *          '200':
  *              description: successful request
-*/
+ */
 
 export default router;
