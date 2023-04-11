@@ -16,7 +16,8 @@ describe('Build Tests', () => {
 
   beforeEach(async () => {
     // Generate a new token for each test
-    const res = await chai.request(app)
+    const res = await chai
+      .request(app)
       .post('/api/login')
       .send({ email: 'abc@gmail.com', password: 'Abc123456' });
 
@@ -24,14 +25,15 @@ describe('Build Tests', () => {
     testToken = res.body.token;
   });
   // CREATE USER
-  it('should register user and return a response with status code 200', (done) => {
+  it('should register user and return a response with status code 200', done => {
     const User = {
       firstname: 'ABC',
       lastname: 'ABC',
       email: 'abc@gmail.com',
-      password: 'Abc123456'
+      password: 'Abc123456',
     };
-    chai.request(app)
+    chai
+      .request(app)
       .post('/api/register')
       .send(User)
       .end((err, res) => {
@@ -41,14 +43,15 @@ describe('Build Tests', () => {
         done();
       });
   });
-  it('should throw an error and return a response with status code 406 if the credentails are not validated', (done) => {
+  it('should throw an error and return a response with status code 406 if the credentails are not validated', done => {
     const User = {
       firstname: 'ABC',
       lastname: 'ABC',
       email: 'abc@gmail.com',
-      password: 'Abc'
+      password: 'Abc',
     };
-    chai.request(app)
+    chai
+      .request(app)
       .post('/api/register')
       .send(User)
       .end((err, res) => {
@@ -63,12 +66,10 @@ describe('Build Tests', () => {
   });
 
   it('should login user return status 200 and send token', async () => {
-    const res = await chai.request(app)
-      .post('/api/login')
-      .send({
-        email: 'abc@gmail.com',
-        password: 'Abc123456'
-      });
+    const res = await chai.request(app).post('/api/login').send({
+      email: 'abc@gmail.com',
+      password: 'Abc123456',
+    });
 
     expect(res).to.have.status(200);
     expect(res.body).to.have.property('msg', 'Logged in succesfully');
@@ -76,42 +77,37 @@ describe('Build Tests', () => {
   });
 
   it('should return status 400 and request for the credentials to be filled if all is empty', async () => {
-    const res = await chai.request(app)
-      .post('/api/login')
-      .send({
-        email: '',
-        password: ''
-      });
+    const res = await chai.request(app).post('/api/login').send({
+      email: '',
+      password: '',
+    });
 
     expect(res).to.have.status(400);
     expect(res.body).to.have.property('msg', 'Please Fiil in blank fields');
   });
 
   it('should return status 401 and deny access if the password is invalid', async () => {
-    const res = await chai.request(app)
-      .post('/api/login')
-      .send({
-        email: 'abc@gmail.com',
-        password: 'ABC'
-      });
+    const res = await chai.request(app).post('/api/login').send({
+      email: 'abc@gmail.com',
+      password: 'ABC',
+    });
 
     expect(res).to.have.status(401);
     expect(res.body).to.have.property('msg', 'Invalid password');
   });
 
   it('should return status 404 when user does not exist', async () => {
-    const res = await chai.request(app)
-      .post('/api/login')
-      .send({
-        email: 'nonexistentuser@gmail.com',
-        password: 'Abc123456'
-      });
+    const res = await chai.request(app).post('/api/login').send({
+      email: 'nonexistentuser@gmail.com',
+      password: 'Abc123456',
+    });
 
     expect(res).to.have.status(404);
-    expect(res.body).to.have.property('msg', 'User doesn\'t exist');
+    expect(res.body).to.have.property('msg', "User doesn't exist");
   });
   it('It should grant access to a user with a valid token ', async () => {
-    const res = await chai.request(app)
+    const res = await chai
+      .request(app)
       .get('/api/protectedroute')
       .set({ authorization: `Bearer ${testToken}` });
 
@@ -120,8 +116,10 @@ describe('Build Tests', () => {
     // response.should.have.property("title");
   });
   it('It should deny access to a user with an invalid token ', async () => {
-    const token = '.eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2ODA0MzIzMDZ9.1-JRsNPQIX0wIc3OEcZyFe__gyy07de1PMmaIPo4_zQ';
-    const res = await chai.request(app)
+    const token =
+      '.eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2ODA0MzIzMDZ9.1-JRsNPQIX0wIc3OEcZyFe__gyy07de1PMmaIPo4_zQ';
+    const res = await chai
+      .request(app)
       .get('/api/protectedroute')
       .set({ authorization: `Bearer ${token}` });
 
@@ -130,7 +128,8 @@ describe('Build Tests', () => {
   });
   it('It should return a vlue of 400 if no token is provided', async () => {
     const token = '';
-    const res = await chai.request(app)
+    const res = await chai
+      .request(app)
       .get('/api/protectedroute')
       .set({ authorization: `Bearer ${token}` });
 

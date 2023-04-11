@@ -1,3 +1,4 @@
+/* eslint-disable arrow-parens */
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-expressions */
 import chai from 'chai';
@@ -10,7 +11,7 @@ chai.use(chaiHttp);
 chai.use(chaiHttp);
 
 describe('Sample Test', () => {
-  it('should return a response with status code 200', (done) => {
+  it('should return a response with status code 200', done => {
     chai
       .request(app)
       .get('/api/sample_test')

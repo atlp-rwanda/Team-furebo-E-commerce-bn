@@ -1,4 +1,6 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable require-jsdoc */
+
 import { verifyToken } from '../utils/user.util';
 
 class AuthMiddleware {
