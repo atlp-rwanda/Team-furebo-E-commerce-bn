@@ -14,7 +14,10 @@ const createAdminAccount = async (req, res) => {
   }
   const existingUser = await User.findOne({ where: { email } });
 
-  if (existingUser) return res.status(401).json({ message: 'Email already used, please use different email.' });
+  if (existingUser)
+    return res
+      .status(401)
+      .json({ message: 'Email already used, please use different email.' });
 
   const hashedPassword = await hashPassword(req.body.password);
   const userRole = 'admin';
@@ -26,11 +29,14 @@ const createAdminAccount = async (req, res) => {
     role: JSON.stringify(newRole),
   };
   User.create(user)
-    .then(async (data) => {
+    .then(async data => {
       const token = await generateToken(data);
-      res.status(200).header('authenticate', token).json({ message: 'Admin successfully signed up', token });
+      res
+        .status(200)
+        .header('authenticate', token)
+        .json({ message: 'Admin successfully signed up', token });
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(500).send({
         message:
           err.message || 'Some error occurred while creating Admin account.',

@@ -1,6 +1,9 @@
 /* eslint-disable linebreak-style */
 import express from 'express';
-import { authorizeCustomer, authorizeMerchant } from '../middlewares/userRoles.middleware';
+import {
+  authorizeCustomer,
+  authorizeMerchant,
+} from '../middlewares/userRoles.middleware';
 
 const router = express.Router();
 

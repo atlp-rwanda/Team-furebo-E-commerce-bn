@@ -1,8 +1,9 @@
+/* eslint-disable linebreak-style */
 import express from 'express';
 import {
   changeUserRole,
   addUserPermissions,
-  RemoveUserPermissions
+  RemoveUserPermissions,
 } from '../controllers/userRoles.controller';
 import { authorizeAdmin } from '../middlewares/userRoles.middleware';
 

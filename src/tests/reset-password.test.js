@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sgMail from '@sendgrid/mail';
+import jwt from 'jsonwebtoken';
 import app from '../../index';
 import db from '../Database/models';
 
@@ -14,27 +15,49 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 describe('Reset Password Via Email', () => {
+  let userToken;
+  let userId;
+  const registerUser = {
+    firstname: 'RUBERWA',
+    lastname: 'RUBERWA',
+    email: 'ruberwa3@gmail.com',
+    password: 'Ruberwa12',
+  };
+  const loginUser = {
+    email: 'ruberwa3@gmail.com',
+    password: 'Ruberwa12',
+  };
+
   before(async () => {
-    await db.sequelize.sync({ force: true });
+    // Register seller
+    await chai.request(app).post('/api/register').send(registerUser);
+
+    const loginResetUser = await chai
+      .request(app)
+      .post('/api/login')
+      .send(loginUser);
+    expect(loginResetUser).to.have.status(200);
+    userToken = loginResetUser.body.token;
+
+    const verifyUserToken = await jwt.verify(
+      userToken,
+      process.env.USER_SECRET_KEY
+    );
+    userId = verifyUserToken.id;
   });
 
-  afterEach(async () => {
-    await db.User.destroy({ where: {} });
-  });
+  // afterEach(async () => {
+  //   await db.User.destroy({ where: {} });
+  // });
 
   describe('POST /api/requestPasswordReset', () => {
     context('when a valid email is provided', () => {
       it('should return status 200 and send password reset email', async () => {
-        const user = await db.User.create({
-          fullname: 'RUBERWA',
-          email: 'ruberwa33@gmail.com',
-          password: 'Ruberwa',
-        });
-
         const res = await chai
           .request(app)
           .post('/api/requestPasswordReset')
-          .send({ email: 'ruberwa33@gmail.com' });
+          .send({ email: 'ruberwa3@gmail.com' });
+
         expect(res).to.have.status(200);
         expect(res.body).to.have.property(
           'message',
@@ -71,17 +94,10 @@ describe('Reset Password Via Email', () => {
   describe('POST /api/reset-password', () => {
     context('when a valid userId and newPassword are provided', () => {
       it('should return status 200 and update the user password', async () => {
-        const hashedPassword = await bcrypt.hash('oldPassword', 10);
-        const user = await db.User.create({
-          fullname: 'Test User',
-          email: 'testuser@example.com',
-          password: hashedPassword,
-        });
-
         const res = await chai
           .request(app)
           .post('/api/reset-password')
-          .send({ userId: user.id, newPassword: 'newPassword' });
+          .send({ userId, newPassword: 'Rbr12' });
 
         expect(res).to.have.status(200);
         expect(res.body).to.have.property(
@@ -89,10 +105,10 @@ describe('Reset Password Via Email', () => {
           'Password reset successfully'
         );
 
-        const updatedUser = await db.User.findOne({ where: { id: user.id } });
+        const updatedUser = await db.User.findOne({ where: { id: userId } });
         expect(updatedUser).to.not.be.null;
         const passwordMatch = await bcrypt.compare(
-          'newPassword',
+          'Rbr12',
           updatedUser.password
         );
         expect(passwordMatch).to.be.true;
@@ -104,7 +120,7 @@ describe('Reset Password Via Email', () => {
         const res = await chai
           .request(app)
           .post('/api/reset-password')
-          .send({ userId: 999, newPassword: 'newPassword' });
+          .send({ userId: 999, newPassword: 'Rbr12' });
 
         expect(res).to.have.status(404);
         expect(res.body).to.have.property('message', 'User not found');
@@ -116,7 +132,7 @@ describe('Reset Password Via Email', () => {
         const res = await chai
           .request(app)
           .post('/api/reset-password')
-          .send({ newPassword: 'newPassword' });
+          .send({ newPassword: 'Rbr12' });
 
         expect(res).to.have.status(500);
         expect(res.body).to.have.property('message', 'Internal server error');
@@ -125,18 +141,11 @@ describe('Reset Password Via Email', () => {
 
     context('when no newPassword is provided', () => {
       it('should return status 500 and an error message', async () => {
-        // Create a new user
-        const user = await db.User.create({
-          fullname: 'Test User',
-          email: 'test@example.com',
-          password: 'password',
-        });
-
         // Send the reset password request without providing a new password
         const res = await chai
           .request(app)
           .post('/api/reset-password')
-          .send({ userId: user.id });
+          .send({ userId });
 
         // Expect the response to have a status of 500 and an error message
         expect(res).to.have.status(500);

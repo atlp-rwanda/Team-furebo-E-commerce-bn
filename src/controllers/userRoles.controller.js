@@ -16,7 +16,9 @@ export const addUserPermissions = async (req, res) => {
     const existingRole = JSON.parse(existingUser.role);
     const index = existingRole.permissions.indexOf(newPermission);
     if (index > -1) {
-      return res.status(409).json({ message: 'User already has this permission' });
+      return res
+        .status(409)
+        .json({ message: 'User already has this permission' });
     }
     existingRole.permissions.push(newPermission);
     existingUser.role = JSON.stringify(existingRole);
@@ -78,7 +80,9 @@ export const changeUserRole = async (req, res) => {
       return res.status(422).json({ message: 'Invalid role' });
     }
     if (JSON.stringify(updatedRole) === existingUser.role) {
-      return res.status(409).json({ message: 'Conflict - User already has this role' });
+      return res
+        .status(409)
+        .json({ message: 'Conflict - User already has this role' });
     }
     existingUser.role = JSON.stringify(updatedRole);
     await existingUser.save();
