@@ -20,7 +20,7 @@ const signupSchema = joi.object({
     .noWhiteSpaces()
     .min(8)
     .alphanum()
-    .required(),
+    .required()
 });
 
 validator(signupSchema);

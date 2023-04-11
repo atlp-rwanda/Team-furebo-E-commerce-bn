@@ -112,7 +112,7 @@ describe('Build Tests', () => {
   });
   it('It should grant access to a user with a valid token ', async () => {
     const res = await chai.request(app)
-      .get('/api/protectedroute/')
+      .get('/api/protectedroute')
       .set({ authorization: `Bearer ${testToken}` });
 
     expect(res).to.have.status(200);
@@ -122,7 +122,7 @@ describe('Build Tests', () => {
   it('It should deny access to a user with an invalid token ', async () => {
     const token = '.eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2ODA0MzIzMDZ9.1-JRsNPQIX0wIc3OEcZyFe__gyy07de1PMmaIPo4_zQ';
     const res = await chai.request(app)
-      .get('/api/protectedroute/')
+      .get('/api/protectedroute')
       .set({ authorization: `Bearer ${token}` });
 
     expect(res).to.have.status(500);
@@ -131,7 +131,7 @@ describe('Build Tests', () => {
   it('It should return a vlue of 400 if no token is provided', async () => {
     const token = '';
     const res = await chai.request(app)
-      .get('/api/protectedroute/')
+      .get('/api/protectedroute')
       .set({ authorization: `Bearer ${token}` });
 
     expect(res).to.have.status(400);

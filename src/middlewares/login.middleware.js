@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import { verify } from 'jsonwebtoken';
+import { verifyToken } from '../utils/user.util';
 
 class AuthMiddleware {
   static async checkAuthentication(req, res, next) {
@@ -9,7 +9,7 @@ class AuthMiddleware {
       if (!token) {
         return res.status(400).json({ msg: 'Please sign in!' });
       }
-      const data = verify(token, process.env.USER_SECRET_KEY);
+      const data = await verifyToken(token);
       if (!data) {
         return res.status(500).json({ msg: 'Invalid token, Please sign in!' });
       }

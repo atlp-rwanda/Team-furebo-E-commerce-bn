@@ -3,7 +3,7 @@ const {resolve} = require('path')
 
 module.exports={
   'config': resolve('src/Database/config', 'config.js'),
-  'models-path': resolve('src/Database', 'models'),
+  'models-path': resolve('src/Database/', 'models'),
   'seeders-path': resolve('src/Database', 'seeders'),
   'migrations-path': resolve('src/Database', 'migrations')
 };  

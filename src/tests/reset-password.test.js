@@ -28,20 +28,25 @@ describe('Reset Password Via Email', () => {
         const user = await db.User.create({
           fullname: 'RUBERWA',
           email: 'ruberwa33@gmail.com',
-          password: 'Ruberwa'
+          password: 'Ruberwa',
         });
 
-        const res = await chai.request(app)
+        const res = await chai
+          .request(app)
           .post('/api/requestPasswordReset')
           .send({ email: 'ruberwa33@gmail.com' });
         expect(res).to.have.status(200);
-        expect(res.body).to.have.property('message', 'Password reset email sent');
+        expect(res.body).to.have.property(
+          'message',
+          'Password reset email sent'
+        );
       });
     });
 
     context('when an invalid email is provided', () => {
       it('should return status 404 and an error message', async () => {
-        const res = await chai.request(app)
+        const res = await chai
+          .request(app)
           .post('/api/requestPasswordReset')
           .send({ email: 'nonexistentuser@gmail.com' });
 
@@ -52,7 +57,8 @@ describe('Reset Password Via Email', () => {
 
     context('when no email is provided', () => {
       it('should return status 400 and an error message', async () => {
-        const res = await chai.request(app)
+        const res = await chai
+          .request(app)
           .post('/api/requestPasswordReset')
           .send({});
 
@@ -69,26 +75,34 @@ describe('Reset Password Via Email', () => {
         const user = await db.User.create({
           fullname: 'Test User',
           email: 'testuser@example.com',
-          password: hashedPassword
+          password: hashedPassword,
         });
 
-        const res = await chai.request(app)
+        const res = await chai
+          .request(app)
           .post('/api/reset-password')
           .send({ userId: user.id, newPassword: 'newPassword' });
 
         expect(res).to.have.status(200);
-        expect(res.body).to.have.property('message', 'Password reset successfully');
+        expect(res.body).to.have.property(
+          'message',
+          'Password reset successfully'
+        );
 
         const updatedUser = await db.User.findOne({ where: { id: user.id } });
         expect(updatedUser).to.not.be.null;
-        const passwordMatch = await bcrypt.compare('newPassword', updatedUser.password);
+        const passwordMatch = await bcrypt.compare(
+          'newPassword',
+          updatedUser.password
+        );
         expect(passwordMatch).to.be.true;
       });
     });
 
     context('when an invalid userId is provided', () => {
       it('should return status 404 and an error message', async () => {
-        const res = await chai.request(app)
+        const res = await chai
+          .request(app)
           .post('/api/reset-password')
           .send({ userId: 999, newPassword: 'newPassword' });
 
@@ -99,7 +113,8 @@ describe('Reset Password Via Email', () => {
 
     context('when no userId is provided', () => {
       it('should return status 500 and an error message', async () => {
-        const res = await chai.request(app)
+        const res = await chai
+          .request(app)
           .post('/api/reset-password')
           .send({ newPassword: 'newPassword' });
 
@@ -114,17 +129,21 @@ describe('Reset Password Via Email', () => {
         const user = await db.User.create({
           fullname: 'Test User',
           email: 'test@example.com',
-          password: 'password'
+          password: 'password',
         });
 
         // Send the reset password request without providing a new password
-        const res = await chai.request(app)
+        const res = await chai
+          .request(app)
           .post('/api/reset-password')
           .send({ userId: user.id });
 
         // Expect the response to have a status of 500 and an error message
         expect(res).to.have.status(500);
-        expect(res.body).to.have.property('message', 'New password is required');
+        expect(res.body).to.have.property(
+          'message',
+          'New password is required'
+        );
       });
     });
   });

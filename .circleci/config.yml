@@ -6,18 +6,17 @@ orbs:
 
 jobs:
   say-hello:
-
     docker:
       - image: cimg/base:stable
 
     steps:
       - checkout
       - run:
-          name: "Team-Furebo - E commerce tests"
-          command: "echo Hello, World!"
-          
-  Test_and_Send_Coverage: 
-    executor: node/default 
+          name: 'Team-Furebo - E commerce tests'
+          command: 'echo Hello, World!'
+
+  Test_and_Send_Coverage:
+    executor: node/default
     steps:
       - checkout
       - node/install-packages:
@@ -31,7 +30,7 @@ jobs:
       - run:
           command: npm test
           name: Run tests
-      - run: 
+      - run:
           name: code-coverage
           command: npm run coverage
       - coveralls/upload

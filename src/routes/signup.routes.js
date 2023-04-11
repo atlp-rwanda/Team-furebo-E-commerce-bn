@@ -19,8 +19,6 @@ const router = express.Router();
  *                      type: string
  *                  password:
  *                      type: string
- *                  confirmPassword:
- *                      type: string
  */
 
 /**

@@ -1,8 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable require-jsdoc */
-import { compare } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
 import db from '../Database/models';
+import { comparePassword, generateToken } from '../utils/user.util';
 
 const { User } = db;
 
@@ -22,18 +21,16 @@ export class PublicController {
         return res.status(404).json({ msg: "User doesn't exist", error: '' });
       }
 
-      const isValid = await compare(password, doesExist.password);
+      const isValid = await comparePassword(password, doesExist.password);
       if (!isValid) {
         return res.status(401).json({ msg: 'Invalid password' });
       }
 
-      const token = sign(
-        { id: doesExist._id, email: doesExist.email },
-        process.env.USER_SECRET_KEY,
-
-        { expiresIn: process.env.EXPIRATION_TIME || '7h', }
-      );
-      return res.status(200).json({ msg: 'Logged in succesfully', token });
+      const token = await generateToken(doesExist);
+      return res
+        .status(200)
+        .header('authenticate', token)
+        .json({ msg: 'Logged in succesfully', token });
     } catch (error) {
       throw new Error(error);
     }

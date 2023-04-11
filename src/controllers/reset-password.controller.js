@@ -57,7 +57,10 @@ export const resetPassword = async (req, res) => {
 
     // Update password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await db.User.update({ password: hashedPassword }, { where: { id: user.id } });
+    await db.User.update(
+      { password: hashedPassword },
+      { where: { id: user.id } }
+    );
 
     res.json({ message: 'Password reset successfully' });
   } catch (error) {

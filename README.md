@@ -8,8 +8,7 @@ SHORT DESCRIPTION OF THIS BRANCH
 
 This branch contains instructions for Integrating Coveralls code coverage service with CircleCI and express with sample mocha test
 
-
-GitHub: 
+GitHub:
 Clone this repo to your machine
 
 INSTALLATION:
