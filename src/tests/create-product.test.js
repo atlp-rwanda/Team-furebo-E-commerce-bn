@@ -94,7 +94,7 @@ describe('POST PRODUCT', async () => {
   });
 
   context('CREATE PRODUCT WITH valid Data', () => {
-    it('should return status 201 and add the product to the database', done => {
+    it('should return status 201 and add the product to the database', (done) => {
       const productData = {
         name: 'Screen',
         image:
@@ -120,7 +120,7 @@ describe('POST PRODUCT', async () => {
   });
 
   context('when a required field is missing', () => {
-    it('should return status 400 and an error message', done => {
+    it('should return status 400 and an error message', (done) => {
       const productData = {
         name: 'Laptop',
         image:
@@ -146,7 +146,7 @@ describe('POST PRODUCT', async () => {
   });
 
   context('when the price value is invalid', () => {
-    it('should return status 400 and an error message', done => {
+    it('should return status 400 and an error message', (done) => {
       const productData = {
         name: 'Laptop',
         image:
@@ -172,7 +172,7 @@ describe('POST PRODUCT', async () => {
   });
 
   context('when product creation fails', () => {
-    it('should return status 500 and an error message', done => {
+    it('should return status 500 and an error message', (done) => {
       // Mock the behavior of the Product.create method to always throw an error
       const createStub = sinon
         .stub(Product, 'create')
@@ -203,7 +203,7 @@ describe('POST PRODUCT', async () => {
   });
 
   context('when the quantity is not a positive number', () => {
-    it('should return status 400 and an error message', done => {
+    it('should return status 400 and an error message', (done) => {
       const productData = {
         name: 'Laptop',
         image:
@@ -229,7 +229,7 @@ describe('POST PRODUCT', async () => {
   });
 
   context('when product creation fails', () => {
-    it('should return status 500 and an error message', done => {
+    it('should return status 500 and an error message', (done) => {
       // Mock the behavior of the Product.create method to always throw an error
       const createStub = sinon
         .stub(Product, 'create')

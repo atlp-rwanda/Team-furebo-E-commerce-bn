@@ -17,6 +17,7 @@ import googleAuth from './google-auth.routes';
 
 import createProduct from './create-product.routes';
 import updateProduct from './update-product.routes';
+import getItemsRouter from './getItems.routes';
 
 const routes = express();
 
@@ -30,5 +31,6 @@ routes.use('/api', userRoles);
 
 routes.use('/api', createProduct);
 routes.use('/api', updateProduct);
+routes.use('/api', getItemsRouter);
 
 export default routes;
