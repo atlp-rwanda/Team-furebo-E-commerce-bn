@@ -23,13 +23,16 @@ const logout = async (req, res) => {
   if (!decoded) {
     return res.status(401).json({ msg: 'Invalid token' });
   }
-  await User.update({
-    checkTwoFactor: false
-  }, {
-    where: {
-      id: decoded.id
+  await User.update(
+    {
+      checkTwoFactor: false,
+    },
+    {
+      where: {
+        id: decoded.id,
+      },
     }
-  });
+  );
   AuthMiddleware.blacklist.push(token);
   return res.status(200).json({ msg: 'Logged out successfully' });
 };

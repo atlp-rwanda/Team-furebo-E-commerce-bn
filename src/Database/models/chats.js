@@ -1,8 +1,6 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable no-unused-vars */
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Chats extends Model {
@@ -10,12 +8,15 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Chats.init({
-    message: DataTypes.STRING,
-    sender: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Chats'
-  });
+  Chats.init(
+    {
+      message: DataTypes.STRING,
+      sender: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'Chats',
+    }
+  );
   return Chats;
 };

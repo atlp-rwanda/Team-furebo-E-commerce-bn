@@ -81,9 +81,9 @@ export const authorizeMerchant = async (req, res, next) => {
         req.user = user;
         next();
       } else {
-        return res
-          .status(403)
-          .json({ msg: 'Incomplete Two-Factor Authentication (2FA) verification process' });
+        return res.status(403).json({
+          msg: 'Incomplete Two-Factor Authentication (2FA) verification process',
+        });
       }
     } else {
       req.user = user;
