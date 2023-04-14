@@ -7,6 +7,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sgMail from '@sendgrid/mail';
 import jwt from 'jsonwebtoken';
+// eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import app from '../../index';
 import db from '../Database/models';
 
