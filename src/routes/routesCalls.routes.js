@@ -11,7 +11,7 @@ import googleAuth from './google-auth.routes';
 import createProduct from './create-product.routes';
 import updateProduct from './update-product.routes';
 import getItemsRouter from './getItems.routes';
-import ShoppingCart from './shopping-cart.routes';
+import searchRouter from './searchProducts.routes';
 
 const routes = express();
 
@@ -26,6 +26,6 @@ routes.use('/api', adminDisable);
 routes.use('/api', createProduct);
 routes.use('/api', updateProduct);
 routes.use('/api', getItemsRouter);
-routes.use('/api', ShoppingCart);
+routes.use('/api', searchRouter);
 
 export default routes;
