@@ -1,0 +1,164 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
+import 'dotenv/config';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import sinon from 'sinon';
+import jwt from 'jsonwebtoken';
+import { Product } from '../Database/models';
+import app from '../../index';
+
+const { expect } = chai;
+chai.use(chaiHttp);
+
+describe('SEARCH PRODUCTS', async () => {
+  let sellerToken;
+  let adminToken;
+  let sellerId;
+  let adminRegResToken;
+  let customerTokenBeforeMechant;
+
+  const adminData = {
+    firstname: 'James',
+    lastname: 'admin',
+    email: 'admin19@gmail.com',
+    password: 'Admin1912',
+  };
+  const sellerData = {
+    firstname: 'Jana',
+    lastname: 'Seller',
+    email: 'seller19@gmail.com',
+    password: 'Seller1912',
+  };
+  const loginAdmin = {
+    email: 'admin19@gmail.com',
+    password: 'Admin1912',
+  };
+  const loginSeller = {
+    email: 'seller19@gmail.com',
+    password: 'Seller1912',
+  };
+
+  before(async () => {
+    // Register admin
+    const adminRegRes = await chai
+      .request(app)
+      .post('/api/registerAdmin')
+      .send(adminData);
+    adminRegResToken = adminRegRes.body.token;
+    // Register seller
+    const sellerRes = await chai
+      .request(app)
+      .post('/api/register')
+      .send(sellerData);
+
+    // Login as admin and get token
+    const adminRes = await chai
+      .request(app)
+      .post('/api/login')
+      .send(loginAdmin);
+    expect(adminRes).to.have.status(200);
+    adminToken = adminRes.body.token;
+
+    // Login as Login Seller before updted and get token
+    const customerTokenBeforeMechantRes = await chai
+      .request(app)
+      .post('/api/login')
+      .send(loginSeller);
+    expect(customerTokenBeforeMechantRes).to.have.status(200);
+    customerTokenBeforeMechant = customerTokenBeforeMechantRes.body.token;
+
+    const verifyCustomerBeforeMerchant = await jwt.verify(
+      customerTokenBeforeMechant,
+      process.env.USER_SECRET_KEY
+    );
+    sellerId = verifyCustomerBeforeMerchant.id;
+
+    // Update seller's role
+    await chai
+      .request(app)
+      .patch(`/api/updateRole/${sellerId}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ role: 'merchant' });
+    expect(adminRes).to.have.status(200);
+
+    // Login as seller and get token
+    const sellerLoginRes = await chai
+      .request(app)
+      .post('/api/login')
+      .send(loginSeller);
+    expect(sellerLoginRes).to.have.status(200);
+    sellerToken = sellerLoginRes.body.token;
+  });
+
+  context('CREATE PRODUCT WITH valid Data', () => {
+    it('should return status 201 and add the product to the database', (done) => {
+      const productData = {
+        name: 'Screen',
+        image:
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        price: 900.99,
+        quantity: 10,
+        type: 'televison',
+        exDate: '2023-04-30',
+      };
+
+      chai
+        .request(app)
+        .post('/api/addProduct')
+        .set({ Authorization: `Bearer ${sellerToken}` })
+        .send(productData)
+        .end((err, res) => {
+          chai.expect(res).to.have.status(201);
+          const actualVal = res.body.message;
+          expect(actualVal).to.be.equal('Product created successfully');
+          done();
+        });
+    });
+  });
+
+  // Define a test for searching by name
+  it('should return products that match the name query', (done) => {
+    chai.request(app)
+      .get('/api/search?name=Screen')
+      .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  // Define a test for searching by price range
+  it('should return products that match the price range query', (done) => {
+    chai.request(app)
+      .get('/api/search?minPrice=100&maxPrice=1000')
+      .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  // Define a test for searching by category
+  it('should return products that match the type query', (done) => {
+    chai.request(app)
+      .get('/api/search?type=televison')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  // Define a test for searching with a combination of queries
+  it('should return products that match the combination of queries', (done) => {
+    chai.request(app)
+      .get('/api/search?name=Screen&type=televison&minPrice=100&maxPrice=1000')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(200);
+        done();
+      });
+  });
+});

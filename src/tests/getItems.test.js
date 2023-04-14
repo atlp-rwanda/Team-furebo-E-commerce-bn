@@ -20,14 +20,14 @@ describe('Retrieve list of items', () => {
   const adminData = {
     firstname: 'admin',
     lastname: 'admin',
-    email: 'admin21@gmail.com',
-    password: 'Abc123456'
+    email: 'admin@gmail.com',
+    password: 'Test123456'
   };
   const sellerData = {
-    firstname: 'Seller',
+    firstname: 'Jana',
     lastname: 'Seller',
-    email: 'seller21@gmail.com',
-    password: 'Abc123456'
+    email: 'seller19@gmail.com',
+    password: 'Seller1912'
   };
   const buyerData = {
     firstname: 'Seller',
@@ -36,12 +36,12 @@ describe('Retrieve list of items', () => {
     password: 'Abc123456'
   };
   const loginAdmin = {
-    email: 'admin21@gmail.com',
-    password: 'Abc123456'
+    email: 'admin19@gmail.com',
+    password: 'Admin1912'
   };
   const loginSeller = {
-    email: 'seller21@gmail.com',
-    password: 'Abc123456'
+    email: 'seller19@gmail.com',
+    password: 'Seller1912'
   };
   const loginBuyer = {
     email: 'seller211@gmail.com',
