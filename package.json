@@ -7,6 +7,7 @@
     "test": "nyc --reporter=lcov --reporter=text mocha src/tests/*.test.js --timeout 60000 --require @babel/register --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "nodemon -L --exec babel-node index.js",
+    "reset-test": "npm run unmigrate && npm run migrate && npm run test",
     "migrate": "npx sequelize-cli db:migrate",
     "unmigrate": "npx sequelize-cli db:migrate:undo:all",
     "seed": "npx sequelize-cli db:seed:all",

@@ -28,6 +28,12 @@ jobs:
           command: npm ci
           name: Install Packages
       - run:
+          name: Run unmigration
+          command: npm run unmigrate
+      - run:
+          name: Run migration
+          command: npm run migrate
+      - run:
           command: npm test
           name: Run tests
       - run:
