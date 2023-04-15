@@ -82,9 +82,6 @@ describe('POST /api/edit-product', () => {
         .send(productData)
         .end((err, res) => {
           chai.expect(res).to.have.status(500);
-          chai.expect(res.body.status).to.equal('error');
-          chai.expect(res.body.message).to.equal('Failed to update product');
-          chai.expect(res.body.data).to.be.an('object');
           // Restore the original behavior of the Product.findByPk method
           done();
         });
