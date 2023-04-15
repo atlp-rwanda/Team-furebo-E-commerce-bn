@@ -22,6 +22,7 @@ import createProduct from './src/routes/createProduct.routes';
 
 import updateProduct from './src/routes/updateProduct.routes';
 import addToWishList from './src/routes/addToWishList.routes';
+import editProduct from './src/routes/edit-product.routes';
 
 const app = express();
 
@@ -71,6 +72,7 @@ app.use('/api', signupRouter);
 app.use('/api', createProduct);
 app.use('/api', updateProduct);
 app.use('/api', addToWishList);
+app.use('/api', editProduct);
 
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
