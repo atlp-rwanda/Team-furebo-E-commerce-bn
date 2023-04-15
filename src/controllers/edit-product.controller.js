@@ -5,7 +5,7 @@ const editProduct = async (req, res) => {
   try {
     const { id } = req.body;
     if (!id) {
-      return res.staus(500).send('internal server error');
+      return res.status(500).send('internal server error');
     }
     const {
       name, image, price, quantity, type, exDate
