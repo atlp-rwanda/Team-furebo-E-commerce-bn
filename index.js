@@ -11,17 +11,6 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 
 import db from './src/Database/models';
-
-import resetPassword from './src/routes/reset-password.routes';
-
-import signupRouter from './src/routes/signup.routes';
-
-import testRouter from './src/routes/test.routes';
-
-import createProduct from './src/routes/createProduct.routes';
-
-import updateProduct from './src/routes/updateProduct.routes';
-import addToWishList from './src/routes/addToWishList.routes';
 import editProduct from './src/routes/edit-product.routes';
 
 const app = express();
@@ -66,12 +55,6 @@ app.get('/home', (req, res) => {
   res.status(200).send('WELCOME!');
 });
 
-app.use('/api', testRouter);
-app.use('/api', resetPassword);
-app.use('/api', signupRouter);
-app.use('/api', createProduct);
-app.use('/api', updateProduct);
-app.use('/api', addToWishList);
 app.use('/api', editProduct);
 
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
