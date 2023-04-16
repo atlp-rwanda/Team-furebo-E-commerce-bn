@@ -1,53 +1,43 @@
 import { Product } from '../Database/models';
+import validateProduct from '../validation/product.validator';
 
 const createProduct = async (req, res) => {
   try {
     const {
-      name, image, price, quantity, type, exDate
+      name, image, price, quantity, category, exDate
     } = req.body;
 
-    // Check for missing required fields
-    if (!name || !image || !price || !quantity || !type || !exDate) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Missing required fields',
+    const { error } = validateProduct(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    // Get userId from logged in user
+    const userId = req.user.id;
+
+    // Verify if product already exists in the user's collection
+    const productExists = await Product.findOne({
+      where: { name, userId },
+    });
+    if (productExists) {
+      return res.status(409).json({
+        message: 'The product already exist, You can update its details only',
+        data: productExists,
       });
     }
 
-    // Check if price is positive
-    if (price <= 0) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Price must be a positive number',
-      });
-    }
-
-    // Check if quantity is positive
-    if (quantity <= 0) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Quantity must be a positive number',
-      });
-    }
-
-    // create new product record
+    // Round the price
     const parsedPrice = parseFloat(price);
-    if (Number.isNaN(parsedPrice)) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Invalid price value',
-      });
-    }
 
     const product = await Product.create({
       name,
       image,
       price: parsedPrice,
       quantity,
-      type,
+      category,
       status: quantity > 1 ? 'available' : 'unavailable',
       exDate,
-      userId: req.user.id, // set the userId field to the current user's ID
+      userId, // set the userId field to the current user's ID
     });
 
     res.status(201).json({

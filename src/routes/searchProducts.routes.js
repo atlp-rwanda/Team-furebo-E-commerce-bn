@@ -17,8 +17,8 @@ const router = express.Router();
  *          schema:
  *              type: string
  *        - in: query
- *          name: type
- *          description: type of products you want to retrieve
+ *          name: category
+ *          description: category of products you want to retrieve
  *          schema:
  *              type: string
  *        - in: query

@@ -20,31 +20,31 @@ describe('Retrieve list of items', () => {
   const adminData = {
     firstname: 'admin',
     lastname: 'admin',
-    email: 'admin@gmail.com',
+    email: 'john@gmail.com',
     password: 'Test123456'
   };
   const sellerData = {
     firstname: 'Jana',
     lastname: 'Seller',
-    email: 'seller19@gmail.com',
+    email: 'pacifique@gmail.com',
     password: 'Seller1912'
   };
   const buyerData = {
     firstname: 'Buyer',
     lastname: 'Seller',
-    email: 'buyer211@gmail.com',
+    email: 'shimwa@gmail.com',
     password: 'Abc123456'
   };
   const loginAdmin = {
-    email: 'admin19@gmail.com',
-    password: 'Admin1912'
+    email: 'john@gmail.com',
+    password: 'Test123456'
   };
   const loginSeller = {
-    email: 'seller19@gmail.com',
+    email: 'pacifique@gmail.com',
     password: 'Seller1912'
   };
   const loginBuyer = {
-    email: 'buyer211@gmail.com',
+    email: 'shimwa@gmail.com',
     password: 'Abc123456'
   };
   before(async () => {
@@ -117,10 +117,12 @@ describe('Retrieve list of items', () => {
     const productData = {
       name: 'Screen',
       image:
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+      ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
       price: 2000.99,
       quantity: 10,
-      type: 'DELL',
+      type: 'Television',
+      category: 'Electronics',
       exDate: '2023-04-30',
     };
 

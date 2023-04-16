@@ -17,6 +17,8 @@ const router = express.Router();
  * @swagger
  * /api/login:
  *   post:
+ *      security:
+ *        - bearerAuth: []
  *      summary: "Logs in user with email and password and returns token"
  *      description: "Authorizes default user with valid email and password to use the endpoints"
  *      tags:
@@ -54,6 +56,8 @@ router.post('/login', PublicController.PublicLogin);
  * @swagger
  * /api/protectedroute:
  *   get:
+ *     security:
+ *         - bearerAuth: []
  *     summary: after successful login the user is redirected here
  *              where his credentials will be verified
  *     tags: [User]
