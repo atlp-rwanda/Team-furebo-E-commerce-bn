@@ -1,3 +1,5 @@
+/* eslint-disable arrow-parens */
+
 import { User } from '../Database/models';
 
 const update = (req, res) => {

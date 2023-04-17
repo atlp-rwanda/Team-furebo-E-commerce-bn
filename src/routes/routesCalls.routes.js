@@ -12,6 +12,7 @@ import createProduct from './create-product.routes';
 import updateProduct from './update-product.routes';
 import getItemsRouter from './getItems.routes';
 import searchRouter from './searchProducts.routes';
+import ShoppingCart from './shopping-cart.routes';
 
 const routes = express();
 
@@ -27,5 +28,6 @@ routes.use('/api', createProduct);
 routes.use('/api', updateProduct);
 routes.use('/api', getItemsRouter);
 routes.use('/api', searchRouter);
+routes.use('/api', ShoppingCart);
 
 export default routes;

@@ -41,6 +41,7 @@ export const authorizeCustomer = async (req, res, next) => {
     }
     const token = req.headers.authorization.split(' ')[1];
     const decoded = await verifyToken(token);
+    console.log(`TOKEN FROM MIDDWARE : ${decoded}`);
     const user = await User.findByPk(decoded.id);
     if (!user) {
       return res.status(404).send({ message: 'account not found' });

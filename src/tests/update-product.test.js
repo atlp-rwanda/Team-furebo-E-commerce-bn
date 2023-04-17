@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
@@ -103,7 +105,7 @@ describe('PATCH /api/updateProduct/:id', () => {
   });
 
   context('when updating an existing product with valid data', () => {
-    it('should return status 200 and update the product in the database', done => {
+    it('should return status 200 and update the product in the database', (done) => {
       const productData = {
         name: 'PC',
         price: 14.99,
@@ -128,7 +130,7 @@ describe('PATCH /api/updateProduct/:id', () => {
   });
 
   context('when updating a non-existing product', () => {
-    it('should return status 404 and an error message', done => {
+    it('should return status 404 and an error message', (done) => {
       const productData = {
         name: 'Laptop',
         price: 2000.99,
@@ -150,7 +152,7 @@ describe('PATCH /api/updateProduct/:id', () => {
   });
 
   context('when product update fails', () => {
-    it('should return a 500 error with an error message', done => {
+    it('should return a 500 error with an error message', (done) => {
       // Mock the behavior of the Product.findByPk method to return a product
       const product = {
         id: existingProductId,
