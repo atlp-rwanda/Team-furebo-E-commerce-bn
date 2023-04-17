@@ -4,8 +4,8 @@
   "description": "[![atlp-rwanda](https://circleci.com/gh/atlp-rwanda/Team-furebo-E-commerce-bn.svg?style=svg)](https://app.circleci.com/pipelines/github/atlp-rwanda)",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=text mocha src/tests/*.test.js --timeout 60000 --require @babel/register --exit",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "test": "nyc --reporter=lcov --reporter=text mocha src/tests/*.test.js --timeout 60000 --require @babel/register --exit && codeclimate-test-reporter < coverage/lcov.info",
+    "coverage": "nyc report --reporter=text-lcov | tee coverage.lcov | coveralls && ./node_modules/.bin/codeclimate-test-reporter < coverage/lcov.info",
     "start": "nodemon -L --exec babel-node index.js",
     "reset-test": "npm run unmigrate && npm run migrate && npm run test",
     "migrate": "npx sequelize-cli db:migrate",
@@ -83,6 +83,7 @@
     "@babel/core": "^7.21.3",
     "@babel/eslint-parser": "^7.21.3",
     "@babel/node": "^7.20.7",
+    "codeclimate-test-reporter": "^0.5.1",
     "coverage": "^0.4.1",
     "coveralls": "^3.1.1",
     "eslint": "^8.36.0",
