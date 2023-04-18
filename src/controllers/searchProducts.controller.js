@@ -5,7 +5,7 @@ const { Product } = db;
 
 const searchProduct = async (req, res) => {
   const {
-    name, type, minPrice, maxPrice
+    name, category, minPrice, maxPrice
   } = req.query;
 
   // Define the where object with the search conditions
@@ -15,8 +15,8 @@ const searchProduct = async (req, res) => {
     where.name = { [Op.iLike]: `%${name}%` };
   }
 
-  if (type) {
-    where.type = { [Op.iLike]: `%${type}%` };
+  if (category) {
+    where.category = { [Op.iLike]: `%${category}%` };
   }
 
   if (minPrice && maxPrice) {
@@ -28,7 +28,10 @@ const searchProduct = async (req, res) => {
   }
 
   const items = await Product.findAll({ where });
-
+  // if (items.length === 0) {
+  // return res.status(404)
+  //  .send({ message: 'Product not found' });
+  // }
   return res.status(200).json({ status: 200, message: 'successfully Products found.', data: items });
 };
 

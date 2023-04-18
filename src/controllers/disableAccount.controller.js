@@ -14,7 +14,7 @@ const update = (req, res) => {
           message: 'User is disabled successfully.',
         });
       } else {
-        res.send({
+        res.status(500).send({
           message: `Cannot update User with id=${id}. User was not found !`,
         });
       }

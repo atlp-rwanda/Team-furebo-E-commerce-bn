@@ -11,7 +11,7 @@ const { expect } = chai;
 chai.use(chaiHttp);
 chai.use(chaiHttp);
 
-describe('Build Tests', () => {
+describe('LOGIN USER', () => {
   let testToken;
 
   beforeEach(async () => {

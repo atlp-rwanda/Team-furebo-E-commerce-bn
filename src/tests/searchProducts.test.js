@@ -22,21 +22,21 @@ describe('SEARCH PRODUCTS', async () => {
   const adminData = {
     firstname: 'James',
     lastname: 'admin',
-    email: 'admin19@gmail.com',
+    email: 'laura@gmail.com',
     password: 'Admin1912',
   };
   const sellerData = {
     firstname: 'Jana',
     lastname: 'Seller',
-    email: 'seller19@gmail.com',
+    email: 'idole@gmail.com',
     password: 'Seller1912',
   };
   const loginAdmin = {
-    email: 'admin19@gmail.com',
+    email: 'laura@gmail.com',
     password: 'Admin1912',
   };
   const loginSeller = {
-    email: 'seller19@gmail.com',
+    email: 'idole@gmail.com',
     password: 'Seller1912',
   };
 
@@ -97,10 +97,11 @@ describe('SEARCH PRODUCTS', async () => {
       const productData = {
         name: 'Screen',
         image:
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
         price: 900.99,
         quantity: 10,
-        type: 'televison',
+        category: 'Electronics',
         exDate: '2023-04-30',
       };
 
@@ -141,9 +142,9 @@ describe('SEARCH PRODUCTS', async () => {
   });
 
   // Define a test for searching by category
-  it('should return products that match the type query', (done) => {
+  it('should return products that match the category query', (done) => {
     chai.request(app)
-      .get('/api/search?type=televison')
+      .get('/api/search?category=Electronics')
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
@@ -154,11 +155,24 @@ describe('SEARCH PRODUCTS', async () => {
   // Define a test for searching with a combination of queries
   it('should return products that match the combination of queries', (done) => {
     chai.request(app)
-      .get('/api/search?name=Screen&type=televison&minPrice=100&maxPrice=1000')
+      .get('/api/search?name=Screen&category=Electronics&minPrice=100&maxPrice=1000')
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
         done();
       });
   });
+
+/**   // Define a test for searching with unavailable product
+  it('should return error of 404 and a message of product not found ', (done) => {
+    chai.request(app)
+      .get('/api/search?name=Lion')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(404);
+        const actualVal = res.body.message;
+        expect(actualVal).to.be.equal('Product not found');
+        done();
+      });
+  }); */
 });

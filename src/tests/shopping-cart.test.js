@@ -20,11 +20,11 @@ describe('SHOPPING CART TEST', () => {
   const sellerData = {
     firstname: 'KALISA',
     lastname: 'MUSONI',
-    email: 'musoni@gmail.com',
+    email: 'albert@gmail.com',
     password: 'Seller1912',
   };
   const loginSeller = {
-    email: 'musoni@gmail.com',
+    email: 'albert@gmail.com',
     password: 'Seller1912',
   };
 
@@ -47,12 +47,13 @@ describe('SHOPPING CART TEST', () => {
   before(async () => {
     const productData = {
       name: 'Laptop',
-      image:
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+      image: ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
       price: 2000.99,
       quantity: 10,
       status: 'available',
       type: 'HP',
+      category: 'Electronics',
       exDate: '2023-04-30',
     };
     const product = await Product.create(productData);
@@ -60,12 +61,13 @@ describe('SHOPPING CART TEST', () => {
 
     const noAvailableProduct = {
       name: 'Unvailable Laptop',
-      image:
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+      image: ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
       price: 2000.99,
       quantity: 10,
       status: 'unavailable',
       type: 'HP',
+      category: 'Electronics',
       exDate: '2023-04-30',
     };
     const unvailableProduct = await Product.create(noAvailableProduct);

@@ -98,10 +98,11 @@ describe('POST PRODUCT', async () => {
       const productData = {
         name: 'Screen',
         image:
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
         price: 2000.99,
         quantity: 10,
-        type: 'DELL',
+        category: 'Electronics',
         exDate: '2023-04-30',
       };
 
@@ -119,15 +120,43 @@ describe('POST PRODUCT', async () => {
     });
   });
 
+  context('WHEN A PRODUCT ALREADY EXISTS in the seller collection', () => {
+    it('should return status 409 and return an adequate message', (done) => {
+      const productData = {
+        name: 'Screen',
+        image:
+          ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+        price: 2000.99,
+        quantity: 10,
+        category: 'Electronics',
+        exDate: '2023-04-30',
+      };
+
+      chai
+        .request(app)
+        .post('/api/addProduct')
+        .set({ Authorization: `Bearer ${sellerToken}` })
+        .send(productData)
+        .end((err, res) => {
+          chai.expect(res).to.have.status(409);
+          const actualVal = res.body.message;
+          expect(actualVal).to.be.equal('The product already exist, You can update its details only');
+          done();
+        });
+    });
+  });
+
   context('when a required field is missing', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message detailing the missing field', (done) => {
       const productData = {
         name: 'Laptop',
         image:
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
         price: 2000.99,
         quantity: 10,
-        type: 'HP',
+        category: 'Electronics',
         // exDate is missing
       };
 
@@ -139,7 +168,6 @@ describe('POST PRODUCT', async () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Missing required fields');
           done();
         });
     });
@@ -150,10 +178,11 @@ describe('POST PRODUCT', async () => {
       const productData = {
         name: 'Laptop',
         image:
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
         price: 'invalid_price_value',
         quantity: 10,
-        type: 'example',
+        category: 'example',
         exDate: '2023-04-30',
       };
 
@@ -165,7 +194,7 @@ describe('POST PRODUCT', async () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Invalid price value');
+          expect(actualVal).to.be.equal('"price" must be a number');
           done();
         });
     });
@@ -180,10 +209,11 @@ describe('POST PRODUCT', async () => {
       const productData = {
         name: 'Laptop',
         image:
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
         price: 2000.99,
         quantity: 10,
-        type: 'HP',
+        category: 'Electronics',
         exDate: '2023-04-30',
       };
       chai
@@ -207,10 +237,11 @@ describe('POST PRODUCT', async () => {
       const productData = {
         name: 'Laptop',
         image:
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        price: 2000.99,
+        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
         quantity: -12,
-        type: 'example',
+        price: 200,
+        category: 'example',
         exDate: '2023-04-30',
       };
 
@@ -222,7 +253,7 @@ describe('POST PRODUCT', async () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Quantity must be a positive number');
+          expect(actualVal).to.be.equal('"quantity" must be greater than or equal to 0');
           done();
         });
     });
@@ -236,11 +267,11 @@ describe('POST PRODUCT', async () => {
         .rejects(new Error('Failed to create product'));
       const productData = {
         name: 'Laptop',
-        image:
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        image: ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
         price: 2000.99,
         quantity: 10,
-        type: 'HP',
+        category: 'HP',
         exDate: '2023-04-30',
       };
       chai

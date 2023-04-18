@@ -54,4 +54,26 @@ describe('DISABLE ACCOUNT', async () => {
         done();
       });
   });
+  it('Should fail to disable an account if the user ID does not exist', (done) => {
+    chai
+      .request(app)
+      .patch(`/api/disableAccount/${adminId}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ role: 'merchant' })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(500);
+        done();
+      });
+  });
+  it('Should fail to disable an account if the user ID does not exist', (done) => {
+    chai
+      .request(app)
+      .patch('/api/disableAccount/10')
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ role: 'merchant' })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(500);
+        done();
+      });
+  });
 });
