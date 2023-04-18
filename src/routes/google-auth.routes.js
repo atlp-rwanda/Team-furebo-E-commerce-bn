@@ -1,10 +1,10 @@
+/* eslint-disable implicit-arrow-linebreak */
 import express from 'express';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import passport from 'passport';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import session from 'express-session';
 // eslint-disable-next-line import/no-duplicates
-// import jwt from 'jsonwebtoken';
 // eslint-disable-next-line import/no-duplicates
 import googleAuth from '../controllers/google-auth-controller';
 // eslint-disable-next-line import/no-duplicates
@@ -15,8 +15,7 @@ import 'dotenv/config';
 
 const router = express.Router();
 
-const isLoggedIn = ({ user }, res, next) =>
-  user ? next() : res.sendStatus(401);
+const isLoggedIn = ({ user }, res, next) => (user ? next() : res.sendStatus(401));
 router.use(
   session({
     secret: 'keyboard cat',
@@ -75,7 +74,6 @@ router.get(
     scope: ['email', 'profile'],
   })
 );
-
 /**
  * @swagger
  * /google/callback:

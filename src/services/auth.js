@@ -1,9 +1,13 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import passport from 'passport';
-
+import ROLES_LIST from '../utils/userRoles.util';
 // eslint-disable-next-line import/no-extraneous-dependencies
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 require('dotenv').config();
+
+const userRole = 'customer';
+
+const newRole = ROLES_LIST[userRole];
 
 const { GOOGLE_CLIENT_ID } = process.env;
 const { GOOGLE_CLIENT_SECRET } = process.env;
@@ -28,6 +32,7 @@ passport.use(new GoogleStrategy(
           fullname: profile.displayName,
           email: profile.email,
           password: bcrypt.hashSync(profile.id, 10),
+          role: JSON.stringify(newRole)
         };
         User.create(newUser)
           .then((createdUser) => done(null, createdUser))

@@ -11,7 +11,7 @@ const { expect } = chai;
 chai.use(chaiHttp);
 chai.use(chaiHttp);
 
-describe('Build Tests', () => {
+describe('LOGIN USER', () => {
   let testToken;
 
   beforeEach(async () => {
@@ -25,7 +25,7 @@ describe('Build Tests', () => {
     testToken = res.body.token;
   });
   // CREATE USER
-  it('should register user and return a response with status code 200', done => {
+  it('should register user and return a response with status code 200', (done) => {
     const User = {
       firstname: 'ABC',
       lastname: 'ABC',
@@ -43,7 +43,7 @@ describe('Build Tests', () => {
         done();
       });
   });
-  it('should throw an error and return a response with status code 406 if the credentails are not validated', done => {
+  it('should throw an error and return a response with status code 406 if the credentails are not validated', (done) => {
     const User = {
       firstname: 'ABC',
       lastname: 'ABC',
@@ -83,7 +83,7 @@ describe('Build Tests', () => {
     });
 
     expect(res).to.have.status(400);
-    expect(res.body).to.have.property('msg', 'Please Fiil in blank fields');
+    expect(res.body).to.have.property('msg', 'Please Fill in blank fields');
   });
 
   it('should return status 401 and deny access if the password is invalid', async () => {
@@ -116,8 +116,7 @@ describe('Build Tests', () => {
     // response.should.have.property("title");
   });
   it('It should deny access to a user with an invalid token ', async () => {
-    const token =
-      '.eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2ODA0MzIzMDZ9.1-JRsNPQIX0wIc3OEcZyFe__gyy07de1PMmaIPo4_zQ';
+    const token = '.eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE2ODA0MzIzMDZ9.1-JRsNPQIX0wIc3OEcZyFe__gyy07de1PMmaIPo4_zQ';
     const res = await chai
       .request(app)
       .get('/api/protectedroute')

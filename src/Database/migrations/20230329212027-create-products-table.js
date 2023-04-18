@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.STRING,
+        type: Sequelize.ARRAY(Sequelize.STRING),
       },
       price: {
         type: Sequelize.DECIMAL(10, 2),
@@ -21,7 +21,7 @@ module.exports = {
       quantity: {
         type: Sequelize.INTEGER,
       },
-      type: {
+      category: {
         type: Sequelize.STRING,
       },
       status: {

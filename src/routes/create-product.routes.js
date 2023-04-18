@@ -20,12 +20,16 @@ const router = express.Router();
  *                  name:
  *                      type: string
  *                  image:
- *                      type: string
+ *                      type: array
+ *                      items:
+ *                          type: string
  *                  price:
  *                      type: number
  *                  quantity:
  *                      type: number
  *                  type:
+ *                      type: string
+ *                  category:
  *                      type: string
  *                  status:
  *                      type: string

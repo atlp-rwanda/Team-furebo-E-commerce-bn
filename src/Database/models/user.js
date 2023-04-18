@@ -35,6 +35,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      enable2FA: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      twoFactorAuthKey: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

@@ -20,31 +20,31 @@ describe('Retrieve list of items', () => {
   const adminData = {
     firstname: 'admin',
     lastname: 'admin',
-    email: 'admin21@gmail.com',
-    password: 'Abc123456'
+    email: 'john@gmail.com',
+    password: 'Test123456'
   };
   const sellerData = {
-    firstname: 'Seller',
+    firstname: 'Jana',
     lastname: 'Seller',
-    email: 'seller21@gmail.com',
-    password: 'Abc123456'
+    email: 'pacifique@gmail.com',
+    password: 'Seller1912'
   };
   const buyerData = {
-    firstname: 'Seller',
+    firstname: 'Buyer',
     lastname: 'Seller',
-    email: 'seller211@gmail.com',
+    email: 'shimwa@gmail.com',
     password: 'Abc123456'
   };
   const loginAdmin = {
-    email: 'admin21@gmail.com',
-    password: 'Abc123456'
+    email: 'john@gmail.com',
+    password: 'Test123456'
   };
   const loginSeller = {
-    email: 'seller21@gmail.com',
-    password: 'Abc123456'
+    email: 'pacifique@gmail.com',
+    password: 'Seller1912'
   };
   const loginBuyer = {
-    email: 'seller211@gmail.com',
+    email: 'shimwa@gmail.com',
     password: 'Abc123456'
   };
   before(async () => {
@@ -65,7 +65,7 @@ describe('Retrieve list of items', () => {
     const buyerRes = await chai.request(app)
       .post('/api/register')
       .send(buyerData);
-
+    UserId = buyerRes.body.id;
     // Login as buyer and get token
     const buyerLoginRes = await chai.request(app)
       .post('/api/login')
@@ -117,10 +117,12 @@ describe('Retrieve list of items', () => {
     const productData = {
       name: 'Screen',
       image:
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+      ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
       price: 2000.99,
       quantity: 10,
-      type: 'DELL',
+      type: 'Television',
+      category: 'Electronics',
       exDate: '2023-04-30',
     };
 
@@ -195,7 +197,7 @@ describe('Retrieve list of items', () => {
   it('should set size to default value if sizeAsNumber is NaN', (done) => {
     const req = {
       query: {
-        page: 2,
+        page: 1,
         size: 'not a number'
       }
     };
@@ -211,7 +213,7 @@ describe('Retrieve list of items', () => {
   it('should set size to default value if sizeAsNumber is not under 10', (done) => {
     const req = {
       query: {
-        page: 2,
+        page: 1,
         size: 200
       }
     };
@@ -291,6 +293,39 @@ describe('Retrieve list of items', () => {
         chai.expect(res).to.have.status(200);
         chai.expect(res.body.data).to.have.property('itemsPerPage').to.equal(5);
         chai.expect(res.body.data).to.have.property('currentPage').to.equal(1);
+        done();
+      });
+  });
+  it('getListOfSellerItems should return the status of 404 when no items found on specified page', (done) => {
+    const req = {
+      query: {
+        page: 5,
+        size: 200
+      }
+    };
+    chai.request(app)
+      .get('/api/sellerCollection')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .query(req.query)
+      .end((err, res) => {
+        chai.expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+  it('getListOfBuyerItems should return the status of 404 when no items found on specified page', (done) => {
+    const req = {
+      query: {
+        page: 5,
+        size: 200
+      }
+    };
+    chai.request(app)
+      .get('/api')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .query(req.query)
+      .end((err, res) => {
+        chai.expect(res).to.have.status(404);
         done();
       });
   });

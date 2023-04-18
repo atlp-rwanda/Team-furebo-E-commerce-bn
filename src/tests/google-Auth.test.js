@@ -1,10 +1,11 @@
 import chai from 'chai';
+// eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import app from '../../index';
 
 const { expect } = chai;
 
 describe('Authenticate with google', () => {
-  it('should return a response with status code 200', done => {
+  it('should return a response with status code 200', (done) => {
     chai
       .request(app)
       .get('/')
@@ -15,7 +16,7 @@ describe('Authenticate with google', () => {
   });
 });
 describe('Google credentials', () => {
-  it('should return a response with status code 200', done => {
+  it('should return a response with status code 200', (done) => {
     chai
       .request(app)
       .get('/auth/google')
@@ -26,7 +27,7 @@ describe('Google credentials', () => {
   });
 });
 describe('Google callback', () => {
-  it('should return a response with status code 200', done => {
+  it('should return a response with status code 200', (done) => {
     chai
       .request(app)
       .get('/google/callback')
