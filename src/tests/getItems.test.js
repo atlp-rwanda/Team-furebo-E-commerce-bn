@@ -21,31 +21,31 @@ describe('Retrieve list of items', () => {
     firstname: 'admin',
     lastname: 'admin',
     email: 'john@gmail.com',
-    password: 'Test123456',
+    password: 'Test123456'
   };
   const sellerData = {
     firstname: 'Jana',
     lastname: 'Seller',
     email: 'pacifique@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
   const buyerData = {
     firstname: 'Buyer',
     lastname: 'Seller',
     email: 'shimwa@gmail.com',
-    password: 'Abc123456',
+    password: 'Abc123456'
   };
   const loginAdmin = {
     email: 'john@gmail.com',
-    password: 'Test123456',
+    password: 'Test123456'
   };
   const loginSeller = {
     email: 'pacifique@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
   const loginBuyer = {
     email: 'shimwa@gmail.com',
-    password: 'Abc123456',
+    password: 'Abc123456'
   };
   before(async () => {
     // Register admin
@@ -124,20 +124,20 @@ describe('Retrieve list of items', () => {
     sellerToken = sellerLoginRes.body.token;
   });
 
-  it('should return status 201 and add the product to the database', done => {
+  it('should return status 201 and add the product to the database', (done) => {
     const productData = {
       name: 'Screen',
       image: [
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'
       ],
       price: 2000.99,
       quantity: 10,
       type: 'Television',
       category: 'Electronics',
-      exDate: '2123-05-30',
+      exDate: '2123-05-30'
     };
 
     chai
@@ -153,7 +153,7 @@ describe('Retrieve list of items', () => {
       });
   });
 
-  it('should retrive a list of all items with status code 200', done => {
+  it('should retrive a list of all items with status code 200', (done) => {
     chai
       .request(app)
       .get('/api')
@@ -163,7 +163,7 @@ describe('Retrieve list of items', () => {
       });
   });
 
-  it('should retrive a list of all items in the collection of seller with status code 200', done => {
+  it('should retrive a list of all items in the collection of seller with status code 200', (done) => {
     chai
       .request(app)
       .get('/api/sellerCollection')
@@ -173,7 +173,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should return a status code 401 when user has no access', done => {
+  it('should return a status code 401 when user has no access', (done) => {
     chai
       .request(app)
       .get('/api/sellerCollection')
@@ -183,9 +183,8 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should return a status code 401 when token is invalid', done => {
-    const token =
-      '.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imp1bGVzMjJAZ21haWwuY29tIiwiaWQiOjIsImlhdCI6MTY4MTE5ODg4MiwiZXhwIjoxNjgxMzcxNjgyfQ.Ffk2vqJUTerxMCECkJtLHV4SrZq3kP3ppbo4mDZg8MM';
+  it('should return a status code 401 when token is invalid', (done) => {
+    const token = '.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imp1bGVzMjJAZ21haWwuY29tIiwiaWQiOjIsImlhdCI6MTY4MTE5ODg4MiwiZXhwIjoxNjgxMzcxNjgyfQ.Ffk2vqJUTerxMCECkJtLHV4SrZq3kP3ppbo4mDZg8MM';
     chai
       .request(app)
       .get('/api/sellerCollection')
@@ -195,7 +194,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should return a status code 401 when token is invalid', done => {
+  it('should return a status code 401 when token is invalid', (done) => {
     chai
       .request(app)
       .get('/api/sellerCollection')
@@ -204,9 +203,8 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should return a status code 401 when token is expired', done => {
-    const token =
-      'eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpY8XQiOjE2ODA0MzIzMDZ9.1-JRsNPQIX0wIc3OEcZyFe__gyy07de1PMmaIPo4_zQ';
+  it('should return a status code 401 when token is expired', (done) => {
+    const token = 'eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpY8XQiOjE2ODA0MzIzMDZ9.1-JRsNPQIX0wIc3OEcZyFe__gyy07de1PMmaIPo4_zQ';
     chai
       .request(app)
       .get('/api/sellerCollection')
@@ -216,12 +214,12 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size to default value if sizeAsNumber is NaN', done => {
+  it('should set size to default value if sizeAsNumber is NaN', (done) => {
     const req = {
       query: {
         page: 1,
-        size: 'not a number',
-      },
+        size: 'not a number'
+      }
     };
     chai
       .request(app)
@@ -233,12 +231,12 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size to default value if sizeAsNumber is not under 10', done => {
+  it('should set size to default value if sizeAsNumber is not under 10', (done) => {
     const req = {
       query: {
         page: 1,
-        size: 200,
-      },
+        size: 200
+      }
     };
     chai
       .request(app)
@@ -250,12 +248,12 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size and page to default value if sizeAsNumber is NaN and number of page is less than 1', done => {
+  it('should set size and page to default value if sizeAsNumber is NaN and number of page is less than 1', (done) => {
     const req = {
       query: {
         page: -2,
-        size: 'not a number',
-      },
+        size: 'not a number'
+      }
     };
     chai
       .request(app)
@@ -268,12 +266,12 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size and page to default value if sizeAsNumber is NaN and number of page is less than 1 then retrive all items in collection of seller', done => {
+  it('should set size and page to default value if sizeAsNumber is NaN and number of page is less than 1 then retrive all items in collection of seller', (done) => {
     const req = {
       query: {
         page: -2,
-        size: 'not a number',
-      },
+        size: 'not a number'
+      }
     };
     chai
       .request(app)
@@ -287,12 +285,12 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size to default value if sizeAsNumber is not under 10 and then return all items in collection of seller', done => {
+  it('should set size to default value if sizeAsNumber is not under 10 and then return all items in collection of seller', (done) => {
     const req = {
       query: {
         page: 1,
-        size: 200,
-      },
+        size: 200
+      }
     };
     chai
       .request(app)
@@ -305,12 +303,12 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size and page to default value if sizeAsNumber is not under 10 and pageAsNumber is under 1 and then return all items in collection of seller', done => {
+  it('should set size and page to default value if sizeAsNumber is not under 10 and pageAsNumber is under 1 and then return all items in collection of seller', (done) => {
     const req = {
       query: {
         page: -2,
-        size: 200,
-      },
+        size: 200
+      }
     };
     chai
       .request(app)
@@ -324,12 +322,12 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('getListOfSellerItems should return the status of 404 when no items found on specified page', done => {
+  it('getListOfSellerItems should return the status of 404 when no items found on specified page', (done) => {
     const req = {
       query: {
         page: 5,
-        size: 200,
-      },
+        size: 200
+      }
     };
     chai
       .request(app)
@@ -342,12 +340,12 @@ describe('Retrieve list of items', () => {
       });
   });
 
-  it('getListOfBuyerItems should return the status of 404 when no items found on specified page', done => {
+  it('getListOfBuyerItems should return the status of 404 when no items found on specified page', (done) => {
     const req = {
       query: {
         page: 5,
-        size: 200,
-      },
+        size: 200
+      }
     };
     chai
       .request(app)

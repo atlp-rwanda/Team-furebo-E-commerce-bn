@@ -14,6 +14,7 @@ let merchantToken;
 let customerToken;
 let adminToken;
 let customer2Token;
+let orderId;
 
 const merchantData = {
   firstname: 'Jane',
@@ -63,7 +64,7 @@ const loginAdmin = {
   password: 'Password1234'
 };
 
-describe('POST /api/checkout', async () => {
+describe('MAKING PAYMENT', async () => {
   before(async () => {
     // Register user
     await chai
@@ -154,15 +155,13 @@ describe('POST /api/checkout', async () => {
         productId,
         quantity: 5
       });
-  });
 
-  // after(async () => {
-  //     await sequelize.sync({ force: true });
-  // });
-
-  context('It should create a new order', () => {
-    it('should retrive user information with status code 200', (done) => {
-      const requestBody = {
+    // working on checkout
+    const chechout = await chai
+      .request(app)
+      .post('/api/checkout')
+      .set({ Authorization: `Bearer ${customerToken}` })
+      .send({
         deliveryAddress: {
           street: 'KN 55 st',
           city: 'Kigali',
@@ -177,100 +176,116 @@ describe('POST /api/checkout', async () => {
             cvv: '346'
           }
         }
+      });
+    orderId = chechout.body.data.id;
+  });
+
+  context('It should fail to make payment because there is a missing input', () => {
+    it('should return a status of 406 when you entered an invalid data', (done) => {
+      const requestBody = {
+        card: {
+          exp_month: 5,
+          exp_year: 2025,
+          cvc: '123'
+        }
       };
       chai.request(app)
-        .post('/api/checkout')
+        .post(`/api/payment/${orderId}`)
         .set({ Authorization: `Bearer ${customerToken}` })
         .send(requestBody)
         .end((err, res) => {
-          chai.expect(res).to.have.status(200);
-          chai.expect(res.body.status).to.equal('success');
+          chai.expect(res).to.have.status(406);
           done();
         });
     });
   });
-
-  context('when trying to checkout with invalid input', () => {
-    it('should return status 400 and an error message', (done) => {
+  context('It should make payment', () => {
+    it('should make payment and return status of 201', (done) => {
       const requestBody = {
-        deliveryAddress: {
-          city: 'Kigali',
-          country: 'Rwanda',
-          zipCode: '3853'
-        },
-        paymentInformation: {
-          method: 'credit card'
+        card: {
+          number: '5555 5555 5555 4444',
+          exp_month: 5,
+          exp_year: 2025,
+          cvc: '123'
         }
       };
-      chai
-        .request(app)
-        .post('/api/checkout')
+      chai.request(app)
+        .post(`/api/payment/${orderId}`)
         .set({ Authorization: `Bearer ${customerToken}` })
         .send(requestBody)
         .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          chai.expect(res.body.status).to.equal('error');
-          chai.expect(res.body.message).to.equal('Invalid Input');
+          chai.expect(res).to.have.status(201);
           done();
         });
     });
   });
-
-  context('When the cart is empty, User is notified ', () => {
-    it(' should return 404 status when cart is empty', (done) => {
+  context('It should fail to make payment because order does not exist', () => {
+    it('should return a status of 404 when order not found', (done) => {
       const requestBody = {
-        deliveryAddress: {
-          street: 'KN 55 st',
-          city: 'Kigali',
-          country: 'Rwanda',
-          zipCode: '3853'
-        },
-        paymentInformation: {
-          method: 'credit card',
-          details: {
-            cardNumber: '5555 5555 5555 4444',
-            expirationDate: '10/23',
-            cvv: '346'
-          }
+        card: {
+          number: '5555 5555 5555 4444',
+          exp_month: 5,
+          exp_year: 2025,
+          cvc: '123'
         }
       };
       chai.request(app)
-        .post('/api/checkout')
-        .set({ Authorization: `Bearer ${customer2Token}` })
+        .post('/api/payment/999')
+        .set({ Authorization: `Bearer ${customerToken}` })
         .send(requestBody)
         .end((err, res) => {
           chai.expect(res).to.have.status(404);
-          chai.expect(res.body.status).to.equal('error');
           done();
         });
     });
   });
-
-  context('Return error message requesting the user to login to proceed with checkout', () => {
-    it('should return 400 when user/token is not provided', (done) => {
+  context('It should fail to make payment because user does not own the order', () => {
+    it('should return a status of 403 when user does not own order', (done) => {
       const requestBody = {
-        deliveryAddress: {
-          street: 'KN 55 st',
-          city: 'Kigali',
-          country: 'Rwanda',
-          zipCode: '3853'
-        },
-        paymentInformation: {
-          method: 'credit card',
-          details: {
-            cardNumber: '5555 5555 5555 4444',
-            expirationDate: '10/23',
-            cvv: '346'
-          }
+        card: {
+          number: '5555 5555 5555 4444',
+          exp_month: 5,
+          exp_year: 2025,
+          cvc: '123'
         }
       };
       chai.request(app)
-        .post('/api/checkout')
-        .set({ Authorization: 'Bearer ' })
+        .post(`/api/payment/${orderId}`)
+        .set({ Authorization: `Bearer ${customer2Token}` })
         .send(requestBody)
         .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          // chai.expect(res.body.status).to.include('error');
+          chai.expect(res).to.have.status(403);
+          done();
+        });
+    });
+  });
+  context('It should fail to make payment because the order have been allready paid', () => {
+    it('should return a status of 409 when the order have been allready paid', (done) => {
+      const requestBody = {
+        card: {
+          number: '5555 5555 5555 4444',
+          exp_month: 5,
+          exp_year: 2025,
+          cvc: '123'
+        }
+      };
+      chai.request(app)
+        .post(`/api/payment/${orderId}`)
+        .set({ Authorization: `Bearer ${customerToken}` })
+        .send(requestBody)
+        .end((err, res) => {
+          chai.expect(res).to.have.status(409);
+          done();
+        });
+    });
+  });
+  context('It should get all payments history of specific user', () => {
+    it('should return a status of 200 with the payment history of specific user', (done) => {
+      chai.request(app)
+        .get('/api/getAllPayment')
+        .set({ Authorization: `Bearer ${customerToken}` })
+        .end((err, res) => {
+          chai.expect(res).to.have.status(200);
           done();
         });
     });
