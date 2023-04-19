@@ -92,38 +92,67 @@ describe('SEARCH PRODUCTS', async () => {
     sellerToken = sellerLoginRes.body.token;
   });
 
-  context('CREATE PRODUCT WITH valid Data', () => {
-    it('should return status 201 and add the product to the database', (done) => {
-      const productData = {
-        name: 'Screen',
-        image:
+  it('should return status 201 and add first product to the database', (done) => {
+    const productData = {
+      name: 'Screen',
+      image:
         ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
-        price: 900.99,
-        quantity: 10,
-        category: 'Electronics',
-        exDate: '2023-04-30',
-      };
+      price: 900.99,
+      quantity: 10,
+      category: 'Electronics',
+      exDate: '2023-04-30',
+    };
 
-      chai
-        .request(app)
-        .post('/api/addProduct')
-        .set({ Authorization: `Bearer ${sellerToken}` })
-        .send(productData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(201);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Product created successfully');
-          done();
-        });
-    });
+    chai
+      .request(app)
+      .post('/api/addProduct')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .send(productData)
+      .end((err, res) => {
+        chai.expect(res).to.have.status(201);
+        const actualVal = res.body.message;
+        expect(actualVal).to.be.equal('Product created successfully');
+        done();
+      });
+  });
+
+  it('should return status 201 and add second product to the database', (done) => {
+    const productData = {
+      name: 'lenovo',
+      image:
+        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+      price: 900.99,
+      quantity: 10,
+      category: 'Electronics',
+      exDate: '2023-04-30',
+    };
+
+    chai
+      .request(app)
+      .post('/api/addProduct')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .send(productData)
+      .end((err, res) => {
+        chai.expect(res).to.have.status(201);
+        const actualVal = res.body.message;
+        expect(actualVal).to.be.equal('Product created successfully');
+        done();
+      });
   });
 
   // Define a test for searching by name
   it('should return products that match the name query', (done) => {
+    const req = {
+      query: {
+        name: 'lenovo'
+      }
+    };
     chai.request(app)
-      .get('/api/search?name=Screen')
+      .get('/api/search')
       .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
+      .query(req.query)
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
         done();
@@ -132,9 +161,16 @@ describe('SEARCH PRODUCTS', async () => {
 
   // Define a test for searching by price range
   it('should return products that match the price range query', (done) => {
+    const req = {
+      query: {
+        minPrice: 100,
+        maxPrice: 1000
+      }
+    };
     chai.request(app)
-      .get('/api/search?minPrice=100&maxPrice=1000')
+      .get('/api/search')
       .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
+      .query(req.query)
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
         done();
@@ -163,7 +199,7 @@ describe('SEARCH PRODUCTS', async () => {
       });
   });
 
-/**   // Define a test for searching with unavailable product
+  // Define a test for searching with unavailable product
   it('should return error of 404 and a message of product not found ', (done) => {
     chai.request(app)
       .get('/api/search?name=Lion')
@@ -174,5 +210,37 @@ describe('SEARCH PRODUCTS', async () => {
         expect(actualVal).to.be.equal('Product not found');
         done();
       });
-  }); */
+  });
+
+  it('should return error with status 406 when you entered an invalid credentials', (done) => {
+    chai.request(app)
+      .get('/api/search?minPrice=1000&maxPrice=100')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(406);
+        done();
+      });
+  });
+
+  it('should return error with status 406 when you entered an invalid credentials', (done) => {
+    chai.request(app)
+      .get('/api/search?name=')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(406);
+        done();
+      });
+  });
+
+  it('should return error with status 406 when you entered no query', (done) => {
+    chai.request(app)
+      .get('/api/search')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(406);
+        const actualVal = res.body.message;
+        expect(actualVal).to.be.equal('you should provide at least one query');
+        done();
+      });
+  });
 });

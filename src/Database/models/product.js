@@ -13,7 +13,15 @@ module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     static associate(models) {
       // Define associations here, if any
-      this.belongsTo(models.User, { foreignKey: 'userId' });
+      this.belongsTo(models.User, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
+    }
+
+    static async beforeDestroy(options) {
+      await this.sequelize.getQueryInterface().removeConstraint('Products', 'Products_userId_fkey');
     }
   }
 

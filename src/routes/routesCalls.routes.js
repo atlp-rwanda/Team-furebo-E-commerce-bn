@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import express from 'express';
 import resetPassword from './reset-password.routes';
 import signupRouter from './signup.routes';

@@ -6,7 +6,7 @@ const RoleCheck = (acceptedRoles) => (req, res, next) => {
     } else {
       return res.status(401).json({
         status: 401,
-        message: `you are not allowed to access this collection, only ${acceptedRoles[0]} and ${acceptedRoles[1]} are accepted`
+        message: `you are not allowed to access this collection, only merchant is accepted`
       });
     }
   } catch (error) {
