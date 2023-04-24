@@ -1,5 +1,3 @@
-/* eslint-disable arrow-parens */
-
 import { User } from '../Database/models';
 
 const update = (req, res) => {
@@ -14,8 +12,8 @@ const update = (req, res) => {
           message: 'User is disabled successfully.',
         });
       } else {
-        res.status(500).send({
-          message: `Cannot update User with id=${id}. User was not found !`,
+        res.status(404).send({
+          message: `Cannot disable an account with id=${id}. User was not found !`,
         });
       }
     })
