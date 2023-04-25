@@ -2,6 +2,7 @@
 import express from 'express';
 import updateShoppingCart from '../controllers/update-shopping-cart.contoller';
 import { authorizeCustomer } from '../middlewares/userRoles.middleware';
+import updateShoppingCartMiddleware from '../middlewares/update-shopping-cart.middleware';
 
 const router = express.Router();
 
@@ -94,6 +95,11 @@ const router = express.Router();
  *                   example: 'Internal Server Error'
  */
 
-router.patch('/updateShoppingCart/:id', authorizeCustomer, updateShoppingCart);
+router.patch(
+  '/updateShoppingCart/:id',
+  authorizeCustomer,
+  updateShoppingCartMiddleware,
+  updateShoppingCart
+);
 
 export default router;

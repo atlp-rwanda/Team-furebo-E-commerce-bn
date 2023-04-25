@@ -1,18 +1,16 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
+
 import 'dotenv/config';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import jwt from 'jsonwebtoken';
-import { Product } from '../Database/models';
+import {Product, User} from '../Database/models';
 import app from '../../index';
-
 const { expect } = chai;
 chai.use(chaiHttp);
 
 describe('POST PRODUCT', async () => {
+
   let sellerToken;
   let adminToken;
   let sellerId;
@@ -40,7 +38,9 @@ describe('POST PRODUCT', async () => {
     password: 'Seller1912',
   };
 
-  before(async () => {
+  beforeEach(async () => {
+ 
+
     // Register admin
     const adminRegRes = await chai
       .request(app)
@@ -93,6 +93,15 @@ describe('POST PRODUCT', async () => {
     sellerToken = sellerLoginRes.body.token;
   });
 
+  after(async () => {
+    // Delete all the products from the Products table
+    await Product.destroy({ truncate: true, cascade: true });
+  
+    // Delete all the users from the Users table
+    await User.destroy({ truncate: true, cascade: true });
+  });
+
+  
   context('CREATE PRODUCT WITH valid Data', () => {
     it('should return status 201 and add the product to the database', (done) => {
       const productData = {
