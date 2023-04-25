@@ -197,7 +197,7 @@ describe('Retrieve list of items', () => {
   it('should set size to default value if sizeAsNumber is NaN', (done) => {
     const req = {
       query: {
-        page: 2,
+        page: 1,
         size: 'not a number'
       }
     };
@@ -213,7 +213,7 @@ describe('Retrieve list of items', () => {
   it('should set size to default value if sizeAsNumber is not under 10', (done) => {
     const req = {
       query: {
-        page: 2,
+        page: 1,
         size: 200
       }
     };
@@ -293,6 +293,39 @@ describe('Retrieve list of items', () => {
         chai.expect(res).to.have.status(200);
         chai.expect(res.body.data).to.have.property('itemsPerPage').to.equal(5);
         chai.expect(res.body.data).to.have.property('currentPage').to.equal(1);
+        done();
+      });
+  });
+  it('getListOfSellerItems should return the status of 404 when no items found on specified page', (done) => {
+    const req = {
+      query: {
+        page: 5,
+        size: 200
+      }
+    };
+    chai.request(app)
+      .get('/api/sellerCollection')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .query(req.query)
+      .end((err, res) => {
+        chai.expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+  it('getListOfBuyerItems should return the status of 404 when no items found on specified page', (done) => {
+    const req = {
+      query: {
+        page: 5,
+        size: 200
+      }
+    };
+    chai.request(app)
+      .get('/api')
+      .set({ Authorization: `Bearer ${sellerToken}` })
+      .query(req.query)
+      .end((err, res) => {
+        chai.expect(res).to.have.status(404);
         done();
       });
   });

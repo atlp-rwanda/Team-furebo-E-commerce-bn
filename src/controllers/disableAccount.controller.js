@@ -1,6 +1,7 @@
 import { User } from '../Database/models';
+import asyncWrapper from '../utils/handlingTryCatchBlocks';
 
-const update = (req, res) => {
+const update = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   User.update(req.body, {
     where: { id },
@@ -16,12 +17,7 @@ const update = (req, res) => {
           message: `Cannot disable an account with id=${id}. User was not found !`,
         });
       }
-    })
-    .catch(() => {
-      res.status(500).send({
-        message: `Error disable User with id=${id}`,
-      });
     });
-};
+});
 
 export default update;

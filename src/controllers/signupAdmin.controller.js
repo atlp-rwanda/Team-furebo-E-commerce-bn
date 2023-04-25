@@ -1,10 +1,11 @@
 import db from '../Database/models';
 import validateSignup from '../validation/signup.validator';
+import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import ROLES_LIST from '../utils/userRoles.util';
 import { generateToken, hashPassword } from '../utils/user.util';
 
 const { User } = db;
-const createAdminAccount = async (req, res) => {
+const createAdminAccount = asyncWrapper(async (req, res) => {
   const { email } = req.body;
 
   const { error } = validateSignup(req.body);
@@ -36,13 +37,7 @@ const createAdminAccount = async (req, res) => {
         .status(200)
         .header('authenticate', token)
         .json({ message: 'Admin successfully signed up', token });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating Admin account.',
-      });
     });
-};
+});
 
 export default createAdminAccount;

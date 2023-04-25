@@ -69,6 +69,6 @@ router.get('/', getAllBuyerItems);
  *                              $ref: '#components/schemas/Product'
  */
 
-router.get('/sellerCollection', authorizeUser, RoleCheck(['merchant', 'admin']), getAllSellerItems);
+router.get('/sellerCollection', authorizeUser, RoleCheck(['merchant']), getAllSellerItems);
 
 export default router;

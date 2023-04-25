@@ -1,6 +1,7 @@
 import express from 'express';
 import searchProduct from '../controllers/searchProducts.controller';
 import { authorizeUser } from '../middlewares/userRoles.middleware';
+import searchProductValidator from '../middlewares/searchProduct.middleware';
 
 const router = express.Router();
 
@@ -46,6 +47,6 @@ const router = express.Router();
  *                              $ref: '#components/schemas/Product'
  */
 
-router.get('/search', authorizeUser, searchProduct);
+router.get('/search', authorizeUser, searchProductValidator, searchProduct);
 
 export default router;

@@ -6,13 +6,14 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import db from '../Database/models';
 import validateSignup from '../validation/signup.validator';
+import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import ROLES_LIST from '../utils/userRoles.util';
 import { generateToken, hashPassword } from '../utils/user.util';
 
 const { User } = db;
 
 // create and save new user
-const createUser = async (req, res) => {
+const createUser = asyncWrapper(async (req, res) => {
   const { email } = req.body;
   const { error } = validateSignup(req.body);
 
@@ -47,12 +48,7 @@ const createUser = async (req, res) => {
         .status(200)
         .header('authenticate', token)
         .json({ message: 'successful signedup', token });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || 'Some error occurred while creating User.',
-      });
     });
-};
+});
 
 export default createUser;
