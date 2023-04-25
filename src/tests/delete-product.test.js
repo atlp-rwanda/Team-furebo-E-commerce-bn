@@ -49,10 +49,7 @@ describe('DELETE /api/deleteProduct/:id', () => {
 
   before(async () => {
     // ========= ADMIN ACCOUNT
-    await chai
-      .request(app)
-      .post('/api/registerAdmin')
-      .send(adminData);
+    await chai.request(app).post('/api/registerAdmin').send(adminData);
     // let adminRegResToken = adminRegRes.body.token;
 
     const adminRes = await chai
@@ -63,10 +60,7 @@ describe('DELETE /api/deleteProduct/:id', () => {
     adminToken = adminRes.body.token;
 
     // ========= SELLER ACCOUNT
-    await chai
-      .request(app)
-      .post('/api/register')
-      .send(sellerData);
+    await chai.request(app).post('/api/register').send(sellerData);
 
     const customerTokenBeforeMechantRes = await chai
       .request(app)
@@ -82,10 +76,7 @@ describe('DELETE /api/deleteProduct/:id', () => {
     sellerId = verifyCustomerBeforeMerchant.id;
 
     // ========= BUYER ACCOUNT
-    await chai
-      .request(app)
-      .post('/api/register')
-      .send(buyerData);
+    await chai.request(app).post('/api/register').send(buyerData);
 
     const buyerLoginRes = await chai
       .request(app)
@@ -116,18 +107,21 @@ describe('DELETE /api/deleteProduct/:id', () => {
       .set('Authorization', `Bearer ${sellerToken}`)
       .send({
         name: 'mugaboooo',
-        image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30',
+        exDate: '2123-05-30',
       });
     productId = productRes.body.data.id;
   });
   context('when deleting an existing product with valid data', () => {
-    it('should return status 200 and delete the product in the database', (done) => {
+    it('should return status 200 and delete the product in the database', done => {
       chai
         .request(app)
         .delete(`/api/deleteProduct/${productId}`)
