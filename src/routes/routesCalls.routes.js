@@ -14,6 +14,7 @@ import searchRouter from './searchProducts.routes';
 import ShoppingCart from './shopping-cart.routes';
 import updateShoppingCart from './update-shopping-cart.routes';
 import deleteProductRouter from './deleteProduct.routes';
+import viewCartItems from './view-cart-items.routes';
 
 const routes = express();
 
@@ -32,5 +33,6 @@ routes.use('/api', searchRouter);
 routes.use('/api', ShoppingCart);
 routes.use('/api', updateShoppingCart);
 routes.use('/api', deleteProductRouter);
+routes.use('/api', viewCartItems);
 
 export default routes;
