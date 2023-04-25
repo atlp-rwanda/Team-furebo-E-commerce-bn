@@ -1,7 +1,5 @@
 /* eslint-disable require-jsdoc */
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Payment extends Model {
@@ -10,26 +8,29 @@ module.exports = (sequelize, DataTypes) => {
       Payment.belongsTo(models.Order, {
         foreignKey: 'orderId',
         as: 'Order',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       });
     }
   }
-  Payment.init({
-    orderId: {
-      allowNull: false,
-      type: DataTypes.INTEGER
+  Payment.init(
+    {
+      orderId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      userId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      receiptUrl: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
     },
-    userId: {
-      allowNull: false,
-      type: DataTypes.INTEGER
-    },
-    receiptUrl: {
-      allowNull: false,
-      type: DataTypes.STRING
+    {
+      sequelize,
+      modelName: 'Payment',
     }
-  }, {
-    sequelize,
-    modelName: 'Payment'
-  });
+  );
   return Payment;
 };

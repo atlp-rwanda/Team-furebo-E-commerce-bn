@@ -20,8 +20,8 @@ const swaggerOptions = {
           url: process.env.DEPLOYED_API_URL,
         },
         {
-          url: process.env.LOCAL_API_URL
-        }
+          url: process.env.LOCAL_API_URL,
+        },
       ],
     },
   },

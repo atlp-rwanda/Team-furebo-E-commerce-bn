@@ -10,7 +10,8 @@ import logout from '../controllers/google-auth-controller';
 
 const router = express.Router();
 
-const isLoggedIn = ({ user }, res, next) => (user ? next() : res.sendStatus(401));
+const isLoggedIn = ({ user }, res, next) =>
+  user ? next() : res.sendStatus(401);
 router.use(
   session({
     secret: 'keyboard cat',

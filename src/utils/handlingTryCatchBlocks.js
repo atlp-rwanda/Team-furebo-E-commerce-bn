@@ -1,5 +1,5 @@
 // handling try catch block function
-const asyncWrapper = (fn) => async (req, res, next) => {
+const asyncWrapper = fn => async (req, res, next) => {
   try {
     await fn(req, res, next);
   } catch (err) {

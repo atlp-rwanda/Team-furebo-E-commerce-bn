@@ -24,7 +24,9 @@ const searchProduct = asyncWrapper(async (req, res) => {
   }
 
   if (req.searchQuery.minPrice && req.searchQuery.maxPrice) {
-    where.price = { [Op.between]: [req.searchQuery.minPrice, req.searchQuery.maxPrice] };
+    where.price = {
+      [Op.between]: [req.searchQuery.minPrice, req.searchQuery.maxPrice],
+    };
   } else if (req.searchQuery.minPrice) {
     where.price = { [Op.gte]: req.searchQuery.minPrice };
   } else if (req.searchQuery.maxPrice) {
@@ -33,10 +35,13 @@ const searchProduct = asyncWrapper(async (req, res) => {
 
   const items = await Product.findAll({ where });
   if (items.length === 0) {
-    return res.status(404)
-      .send({ message: 'Product not found' });
+    return res.status(404).send({ message: 'Product not found' });
   }
-  return res.status(200).json({ status: 200, message: 'successfully Products found.', data: items });
+  return res.status(200).json({
+    status: 200,
+    message: 'successfully Products found.',
+    data: items,
+  });
 });
 
 export default searchProduct;

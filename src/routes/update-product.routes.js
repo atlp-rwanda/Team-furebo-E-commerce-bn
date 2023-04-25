@@ -84,6 +84,11 @@ const router = express.Router();
  *                 message: Failed to update product
  *
  */
-router.patch('/updateProduct/:id', AuthMiddleware.checkAuthentication, authorizeMerchant, updateProduct);
+router.patch(
+  '/updateProduct/:id',
+  AuthMiddleware.checkAuthentication,
+  authorizeMerchant,
+  updateProduct
+);
 
 export default router;

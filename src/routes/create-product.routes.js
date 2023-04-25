@@ -95,6 +95,11 @@ const router = express.Router();
  *                   type: string
  *                   description: error details
  */
-router.post('/addProduct', AuthMiddleware.checkAuthentication, authorizeMerchant, createProduct);
+router.post(
+  '/addProduct',
+  AuthMiddleware.checkAuthentication,
+  authorizeMerchant,
+  createProduct
+);
 
 export default router;

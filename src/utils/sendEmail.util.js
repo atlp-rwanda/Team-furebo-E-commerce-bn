@@ -5,14 +5,14 @@ const sendMail = async (recipient, code, checker) => {
     service: 'gmail',
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
+      pass: process.env.SMTP_PASS,
+    },
   });
   const mailOptions = {
     from: process.env.SMTP_USER,
     to: recipient.recipientEmail,
     subject: recipient.emailSubject,
-    text: recipient.emailBody
+    text: recipient.emailBody,
   };
 
   transporter.sendMail(mailOptions, async (error, info) => {

@@ -2,7 +2,7 @@ import express from 'express';
 import {
   changeUserRole,
   addUserPermissions,
-  RemoveUserPermissions
+  RemoveUserPermissions,
 } from '../controllers/userRoles.controller';
 import { authorizeAdmin } from '../middlewares/userRoles.middleware';
 import AuthMiddleware from '../middlewares/login.middleware';
@@ -103,6 +103,16 @@ const router = express.Router();
  */
 
 router.patch('/updateRole/:id', authorizeAdmin, changeUserRole);
-router.post('/addPermision/:id', AuthMiddleware.checkAuthentication, authorizeAdmin, addUserPermissions);
-router.delete('/removePermission/:id', AuthMiddleware.checkAuthentication, authorizeAdmin, RemoveUserPermissions);
+router.post(
+  '/addPermision/:id',
+  AuthMiddleware.checkAuthentication,
+  authorizeAdmin,
+  addUserPermissions
+);
+router.delete(
+  '/removePermission/:id',
+  AuthMiddleware.checkAuthentication,
+  authorizeAdmin,
+  RemoveUserPermissions
+);
 export default router;

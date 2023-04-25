@@ -8,7 +8,7 @@ import app from '../../index';
 import sendMail from '../utils/sendEmail.util';
 import {
   generateSecretKey,
-  generateOTPCode
+  generateOTPCode,
 } from '../controllers/two-factor-auth.controller';
 
 chai.use(chaiHttp);
@@ -25,7 +25,7 @@ describe('generateSecretKey', () => {
 describe('generateOTPCode', () => {
   it('should return a valid OTP code', () => {
     const secretKey = speakeasy.generateSecret({
-      name: 'test'
+      name: 'test',
     }).base32;
 
     const code = generateOTPCode(secretKey);
@@ -34,7 +34,7 @@ describe('generateOTPCode', () => {
       secret: secretKey,
       encoding: 'base32',
       token: code,
-      step: 300
+      step: 300,
     });
 
     assert.isTrue(isValid);
@@ -51,21 +51,21 @@ const adminData = {
   firstname: 'James',
   lastname: 'admin',
   email: 'james@gmail.com',
-  password: 'Admin1912'
+  password: 'Admin1912',
 };
 const sellerData = {
   firstname: 'Jana',
   lastname: 'Seller',
   email: 'mizero@gmail.com',
-  password: 'Seller1912'
+  password: 'Seller1912',
 };
 const loginAdmin = {
   email: 'james@gmail.com',
-  password: 'Admin1912'
+  password: 'Admin1912',
 };
 const loginSeller = {
   email: 'mizero@gmail.com',
-  password: 'Seller1912'
+  password: 'Seller1912',
 };
 
 before(async () => {
@@ -116,7 +116,7 @@ before(async () => {
 });
 
 describe(' 2FA for Merchant', () => {
-  it('should allow merchant to enable 2FA and return 200', (done) => {
+  it('should allow merchant to enable 2FA and return 200', done => {
     chai
       .request(app)
       .post('/api/2fa/enable2faForMerchant')
@@ -127,7 +127,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should check if merchant is already has 2fa enabled and return a 409 status code', (done) => {
+  it('should check if merchant is already has 2fa enabled and return a 409 status code', done => {
     chai
       .request(app)
       .post('/api/2fa/enable2faForMerchant')
@@ -138,7 +138,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should check if merchant account exists and return a 403 status code', (done) => {
+  it('should check if merchant account exists and return a 403 status code', done => {
     chai
       .request(app)
       .post('/api/2fa/enable2faForMerchant')
@@ -149,7 +149,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should check if there is no token and return a 401 status code', (done) => {
+  it('should check if there is no token and return a 401 status code', done => {
     chai
       .request(app)
       .post('/api/2fa/enable2faForMerchant')
@@ -160,7 +160,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should resend OTP code and return a 200 status code', (done) => {
+  it('should resend OTP code and return a 200 status code', done => {
     chai
       .request(app)
       .post('/api/2fa/resendOTP')
@@ -175,7 +175,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should return 400 status code if code is missing', (done) => {
+  it('should return 400 status code if code is missing', done => {
     chai
       .request(app)
       .post('/api/2fa/verify')
@@ -191,7 +191,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should not verify invalid code, return 403 status code', (done) => {
+  it('should not verify invalid code, return 403 status code', done => {
     chai
       .request(app)
       .post('/api/2fa/verify')
@@ -207,7 +207,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should disable 2FA for merchant and return a 200 status code', (done) => {
+  it('should disable 2FA for merchant and return a 200 status code', done => {
     chai
       .request(app)
       .post('/api/2fa/disable2faForMerchant')
@@ -218,7 +218,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should check if 2FA is already disable for merchant and return a 409 status code', (done) => {
+  it('should check if 2FA is already disable for merchant and return a 409 status code', done => {
     chai
       .request(app)
       .post('/api/2fa/disable2faForMerchant')
@@ -238,7 +238,7 @@ describe('sendMail function', () => {
     const recipient = {
       recipientEmail: 'recipient@example.com',
       emailSubject: 'Test Subject',
-      emailBody: 'This is a test email'
+      emailBody: 'This is a test email',
     };
     const code = '123456';
     const checker = 0;

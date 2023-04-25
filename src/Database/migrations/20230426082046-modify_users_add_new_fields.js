@@ -2,23 +2,20 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     return Promise.all([
-      queryInterface.addColumn('Users', 'isExpired',{
+      queryInterface.addColumn('Users', 'isExpired', {
         type: Sequelize.BOOLEAN,
-        allowNull: true
-
+        allowNull: true,
       }),
-      queryInterface.addColumn('Users', 'lastTimePasswordUpdate',{
+      queryInterface.addColumn('Users', 'lastTimePasswordUpdate', {
         type: Sequelize.DATE,
-        allowNull: true
-
+        allowNull: true,
       }),
     ]);
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('Users', 'isExpired' );
-    await queryInterface.removeColumn('Users', 'lastTimePasswordUpdated' );
-
-  }
+    await queryInterface.removeColumn('Users', 'isExpired');
+    await queryInterface.removeColumn('Users', 'lastTimePasswordUpdated');
+  },
 };

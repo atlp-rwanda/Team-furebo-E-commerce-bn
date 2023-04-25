@@ -38,19 +38,19 @@ module.exports = (sequelize, DataTypes) => {
       enable2FA: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
       },
       twoFactorAuthKey: {
         type: DataTypes.STRING,
         allowNull: true,
       },
       isExpired: {
-        type:DataTypes.BOOLEAN,
-        defaultValue:false
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       lastTimePasswordUpdate: {
         type: DataTypes.DATE,
-        defaultValue:new Date()
+        defaultValue: new Date(),
       },
       createdAt: {
         allowNull: false,

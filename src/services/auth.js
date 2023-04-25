@@ -14,31 +14,33 @@ const db = require('../Database/models');
 
 const User = db.users;
 
-passport.use(new GoogleStrategy(
-  {
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/google/callback'
-  },
-  ((accessToken, refreshToken, profile, done) => {
-    User.findOne({ where: { email: profile.email } })
-      .then((user) => {
-        if (user) {
-          return done(null, user);
-        }
-        const newUser = {
-          fullname: profile.displayName,
-          email: profile.email,
-          password: bcrypt.hashSync(profile.id, 10),
-          role: JSON.stringify(newRole)
-        };
-        User.create(newUser)
-          .then((createdUser) => done(null, createdUser))
-          .catch((err) => done(err, null));
-      })
-      .catch((err) => done(err, null));
-  })
-));
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: 'http://localhost:3000/google/callback',
+    },
+    (accessToken, refreshToken, profile, done) => {
+      User.findOne({ where: { email: profile.email } })
+        .then(user => {
+          if (user) {
+            return done(null, user);
+          }
+          const newUser = {
+            fullname: profile.displayName,
+            email: profile.email,
+            password: bcrypt.hashSync(profile.id, 10),
+            role: JSON.stringify(newRole),
+          };
+          User.create(newUser)
+            .then(createdUser => done(null, createdUser))
+            .catch(err => done(err, null));
+        })
+        .catch(err => done(err, null));
+    }
+  )
+);
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -46,13 +48,13 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   User.findByPk(id)
-    .then((user) => {
+    .then(user => {
       if (!user) {
         return done('User not found', null);
       }
       done(null, user);
     })
-    .catch((err) => {
+    .catch(err => {
       done(err, null);
     });
 });

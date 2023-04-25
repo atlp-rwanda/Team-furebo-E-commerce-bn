@@ -22,19 +22,17 @@ describe('logout controller', () => {
   let testToken;
 
   beforeEach(async () => {
-    const login = await chai.request(app)
-      .post('/api/login')
-      .send({
-        email: 'user10@gmail.com',
-        password: 'Password1234'
-      });
+    const login = await chai.request(app).post('/api/login').send({
+      email: 'user10@gmail.com',
+      password: 'Password1234',
+    });
 
     // Store the token as a variable to use in the test case
     testToken = login.body.token;
     req = {
       headers: {
-        authorization: `Bearer ${testToken}`
-      }
+        authorization: `Bearer ${testToken}`,
+      },
     };
     res = {
       status(statusCode) {
@@ -47,7 +45,7 @@ describe('logout controller', () => {
       },
       redirect(url) {
         this.url = url;
-      }
+      },
     };
     next = function (err) {
       throw new Error(err);
@@ -56,7 +54,7 @@ describe('logout controller', () => {
   });
 
   describe('GET /logout', () => {
-    it('redirects to home page', (done) => {
+    it('redirects to home page', done => {
       chai
         .request(app)
         .get('/logout')
@@ -67,7 +65,7 @@ describe('logout controller', () => {
     });
   });
 
-  it('GET HOME PAGE', (done) => {
+  it('GET HOME PAGE', done => {
     chai
       .request(app)
       .get('/home')
@@ -89,7 +87,9 @@ describe('logout controller', () => {
 
   it('returns 401 and "Invalid token" message if token is invalid', async () => {
     const secretKey = process.env.USER_SECRET_KEY;
-    const invalidToken = jwt.sign({ username: 'testuser' }, 'invalidsecret', { expiresIn: process.env.TOKEN_EXPIRATION });
+    const invalidToken = jwt.sign({ username: 'testuser' }, 'invalidsecret', {
+      expiresIn: process.env.TOKEN_EXPIRATION,
+    });
     req.headers.authorization = `Bearer ${invalidToken}`;
 
     await logout(req, res, next);
@@ -111,7 +111,7 @@ describe('logout controller', () => {
 });
 
 describe('App', () => {
-  it('should use port 4000 by default', (done) => {
+  it('should use port 4000 by default', done => {
     const port = 4000;
     const server = app.listen(port, () => {
       expect(server.address().port).to.equal(port);

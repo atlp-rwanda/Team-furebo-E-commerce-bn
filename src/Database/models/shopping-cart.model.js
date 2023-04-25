@@ -11,19 +11,22 @@ module.exports = (sequelize, DataTypes) => {
       ShoppingCart.belongsTo(models.Product, { foreignKey: 'productId' });
     }
   }
-  ShoppingCart.init({
-    userId: DataTypes.INTEGER,
-    productId: DataTypes.INTEGER,
-    quantity: DataTypes.INTEGER,
-    totalPrice: DataTypes.DECIMAL(16, 2),
-    cartTotalPrice: DataTypes.DECIMAL(16, 2),
-    itemCounts: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
+  ShoppingCart.init(
+    {
+      userId: DataTypes.INTEGER,
+      productId: DataTypes.INTEGER,
+      quantity: DataTypes.INTEGER,
+      totalPrice: DataTypes.DECIMAL(16, 2),
+      cartTotalPrice: DataTypes.DECIMAL(16, 2),
+      itemCounts: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'ShoppingCart',
     }
-  }, {
-    sequelize,
-    modelName: 'ShoppingCart',
-  });
+  );
   return ShoppingCart;
 };

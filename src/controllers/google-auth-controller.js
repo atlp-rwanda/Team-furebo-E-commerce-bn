@@ -30,7 +30,7 @@ const googleProtected = async (req, res) => {
 };
 
 const logout = async (req, res, next) => {
-  req.logout((err) => {
+  req.logout(err => {
     if (err) {
       return next(err);
     }
@@ -39,5 +39,8 @@ const logout = async (req, res, next) => {
 };
 
 module.exports = {
-  initialize, googleFailure, googleProtected, logout
+  initialize,
+  googleFailure,
+  googleProtected,
+  logout,
 };

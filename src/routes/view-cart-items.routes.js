@@ -96,6 +96,11 @@ const router = express();
  *                   example: Error message
  */
 
-router.get('/view-cart-items', authorizeUser, viewCartItemsMiddleware, viewCartItems);
+router.get(
+  '/view-cart-items',
+  authorizeUser,
+  viewCartItemsMiddleware,
+  viewCartItems
+);
 
 export default router;

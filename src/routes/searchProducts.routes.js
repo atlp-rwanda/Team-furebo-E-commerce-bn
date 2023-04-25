@@ -49,6 +49,11 @@ const router = express.Router();
  */
 
 router.get('/search', authorizeUser, searchProductValidator, searchProduct);
-router.get('/search', AuthMiddleware.checkAuthentication, authorizeUser, searchProduct);
+router.get(
+  '/search',
+  AuthMiddleware.checkAuthentication,
+  authorizeUser,
+  searchProduct
+);
 
 export default router;
