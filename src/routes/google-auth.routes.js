@@ -1,15 +1,8 @@
-/* eslint-disable implicit-arrow-linebreak */
 import express from 'express';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import passport from 'passport';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import session from 'express-session';
-// eslint-disable-next-line import/no-duplicates
-// eslint-disable-next-line import/no-duplicates
 import googleAuth from '../controllers/google-auth-controller';
-// eslint-disable-next-line import/no-duplicates
 import googleFailure from '../controllers/google-auth-controller';
-// eslint-disable-next-line import/no-duplicates
 import googleProtected from '../controllers/google-auth-controller';
 import 'dotenv/config';
 // eslint-disable-next-line import/no-duplicates

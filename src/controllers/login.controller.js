@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable require-jsdoc */
 import db from '../Database/models';
 import { comparePassword, generateToken } from '../utils/user.util';
 import sendMail from '../utils/sendEmail.util';
@@ -25,7 +23,6 @@ export class PublicController {
       if (doesExist.dataValues.isEnabled === false) {
         return res.status(403).json({ msg: 'Account is disabled please contact admin' });
       }
-
       const isValid = await comparePassword(password, doesExist.password);
       if (!isValid) {
         return res.status(401).json({ msg: 'Invalid password' });

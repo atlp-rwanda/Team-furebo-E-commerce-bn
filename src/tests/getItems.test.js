@@ -137,7 +137,7 @@ describe('Retrieve list of items', () => {
       quantity: 10,
       type: 'Television',
       category: 'Electronics',
-      exDate: '2123-04-30',
+      exDate: '2123-05-30',
     };
 
     chai

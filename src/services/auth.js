@@ -1,7 +1,5 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import passport from 'passport';
 import ROLES_LIST from '../utils/userRoles.util';
-// eslint-disable-next-line import/no-extraneous-dependencies
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 require('dotenv').config();
 

@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import express from 'express';
 import createProduct from '../controllers/create-product.controller';
 import { authorizeMerchant } from '../middlewares/userRoles.middleware';

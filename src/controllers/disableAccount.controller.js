@@ -7,7 +7,6 @@ const update = asyncWrapper(async (req, res) => {
     where: { id },
   })
     .then((num) => {
-      // eslint-disable-next-line eqeqeq
       if (num == 1) {
         res.send({
           message: 'User is disabled successfully.',
