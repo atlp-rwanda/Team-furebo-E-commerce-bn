@@ -28,6 +28,7 @@ This is an e-commerce application . Through this app users: Sellers will be able
     - [Branches](#branches)
 * [License](#license)
 
+## Index
 
 
 ## Usage  <a name="usage"></a>
