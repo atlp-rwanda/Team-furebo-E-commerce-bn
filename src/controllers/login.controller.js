@@ -22,6 +22,9 @@ export class PublicController {
       if (!doesExist) {
         return res.status(404).json({ msg: "User doesn't exist", error: '' });
       }
+      if (doesExist.dataValues.isEnabled === false) {
+        return res.status(403).json({ msg: 'Account is disabled please contact admin' });
+      }
 
       const isValid = await comparePassword(password, doesExist.password);
       if (!isValid) {

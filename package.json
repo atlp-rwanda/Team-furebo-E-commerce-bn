@@ -10,9 +10,13 @@
     "reset-test": "npm run unmigrate && npm run migrate && npm run test",
     "migrate": "npx sequelize-cli db:migrate",
     "unmigrate": "npx sequelize-cli db:migrate:undo:all",
+    
+        
     "create-db": "npx sequelize-cli db:create",
     "drop-db": "npx sequelize-cli db:drop",
     "reset-db": "npm run drop-db && npm run create-db && npm run migrate",
+    
+    
     "seed": "npx sequelize-cli db:seed:all",
     "unseed": "npx sequelize-cli db:seed:undo",
     "unseed-all": "npx sequelize-cli db:seed:undo:all",

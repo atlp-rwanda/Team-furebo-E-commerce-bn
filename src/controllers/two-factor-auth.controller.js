@@ -85,9 +85,6 @@ export const resendOTP = asyncWrapper(async (req, res) => {
         .header('authenticate', token)
         .json({ msg: 'Please check your email for the new authentication code' });
     }
-    return res
-      .status(500)
-      .json({ msg: 'Email is not sent' });
   }
 });
 

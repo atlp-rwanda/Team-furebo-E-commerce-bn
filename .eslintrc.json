@@ -10,12 +10,9 @@
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module",
-<<<<<<< HEAD
-=======
     "ecmaFeatures": {
       "js": true
     },
->>>>>>> af585b7 (implementation of seller should able to delete item from a collection)
     "ignorePackages": true,
     "requireConfigFile": false,
     "allowImportExportEverywhere": true

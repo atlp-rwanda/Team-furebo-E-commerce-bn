@@ -252,6 +252,56 @@ describe(' 2FA for Merchant', () => {
           });
       });
   });
+  it('should return 400 status code if code is missing', (done) => {
+    const merchant = {
+      email: 'bahokelly02@gmail.com',
+      password: 'Abc123456',
+    };
+    chai
+      .request(app)
+      .post('/api/login')
+      .send(merchant)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.have.property('token');
+        const token = res.header.authenticate;
+        chai
+          .request(app)
+          .post('/api/2fa/verify')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({code:''})
+          .end((err, res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.have.property('message', 'Please provide the code sent to you on email');
+            done();
+          });
+      });
+  });
+  it('should not verify invalid code, return 403 status code', (done) => {
+    const merchant = {
+      email: 'bahokelly02@gmail.com',
+      password: 'Abc123456',
+    };
+    chai
+      .request(app)
+      .post('/api/login')
+      .send(merchant)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.have.property('token');
+        const token = res.header.authenticate;
+        chai
+          .request(app)
+          .post('/api/2fa/verify')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({code:'00000'})
+          .end((err, res) => {
+            expect(res).to.have.status(403);
+            expect(res.body).to.have.property('message', 'Code is wrong or expired! Please try again');
+            done();
+          });
+      });
+  });
 });
 
 describe('sendMail function', () => {
