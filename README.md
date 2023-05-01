@@ -99,5 +99,6 @@ In case you wish to contribute, raise a discussion first about what you would li
 * ch-Integrate-CircleCI-with-badge
 * ch-codeclimate-code-coverage
 * ft-login-api-endpoint
+* ft-app-logout
 
 ## License

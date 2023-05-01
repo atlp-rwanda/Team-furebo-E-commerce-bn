@@ -4,6 +4,8 @@
 import { verifyToken } from '../utils/user.util';
 
 class AuthMiddleware {
+  static blacklist = [];
+
   static async checkAuthentication(req, res, next) {
     try {
       const token = req.headers.authorization.split(' ')[1];
@@ -14,6 +16,9 @@ class AuthMiddleware {
       const data = await verifyToken(token);
       if (!data) {
         return res.status(500).json({ msg: 'Invalid token, Please sign in!' });
+      }
+      if (AuthMiddleware.blacklist.includes(token)) {
+        return res.status(401).json({ msg: 'You have been Logged Out!' });
       }
       req.id = data.id;
       next();
