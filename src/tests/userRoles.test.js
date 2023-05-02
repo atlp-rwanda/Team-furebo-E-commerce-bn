@@ -11,12 +11,12 @@ describe('User permissions and roles', () => {
     it('should update the user role and return a response with status code of 200', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
 
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
 
       chai
@@ -50,7 +50,7 @@ describe('User permissions and roles', () => {
     it('should check if admin is the one updatig the user role', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
       chai
         .request(app)
@@ -75,12 +75,12 @@ describe('User permissions and roles', () => {
     it('should not update the user role if user is already assigned the role', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
 
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
       chai
         .request(app)
@@ -112,11 +112,11 @@ describe('User permissions and roles', () => {
     it('should check for not update with an invalid user role', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
 
       chai
@@ -149,11 +149,11 @@ describe('User permissions and roles', () => {
     it('should not update the user role if the role field is empty', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
 
       chai
@@ -182,10 +182,45 @@ describe('User permissions and roles', () => {
             });
         });
     });
+    it('should not update the user role if a token is not provided', (done) => {
+      const user = {
+        email: 'abc@gmail.com',
+        password: 'Abc123456'
+      };
+      const admin = {
+        email: 'admin@gmail.com',
+        password: 'Test123456'
+      };
+
+      chai
+        .request(app)
+        .post('/api/login')
+        .send(user)
+        .end((err, res) => {
+          chai.expect(res).to.have.status(200);
+          const tokenn = res.header.authenticate;
+          const decoded = jwt.verify(tokenn, process.env.USER_SECRET_KEY);
+          chai
+            .request(app)
+            .post('/api/login')
+            .send(admin)
+            .end((err, res) => {
+              expect(res).to.have.status(200);
+              chai
+                .request(app)
+                .patch(`/api/updateRole/${decoded.id}`)
+                .set({ Authorization: '' })
+                .end((err, res) => {
+                  expect(res).to.have.status(401);
+                  done();
+                });
+            });
+        });
+    });
     it('should not update the role of a nonexistent account', (done) => {
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
 
       chai
@@ -210,11 +245,11 @@ describe('User permissions and roles', () => {
     it('should not update the user role if authentication fails', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
 
       chai
@@ -250,11 +285,11 @@ describe('User permissions and roles', () => {
     it('should assign a user a permission', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
       chai
         .request(app)
@@ -286,11 +321,11 @@ describe('User permissions and roles', () => {
     it('should not assign a user an already existing permission', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
 
       chai
@@ -323,7 +358,7 @@ describe('User permissions and roles', () => {
     it('should not assign permission to nonexistent account', (done) => {
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
       chai
         .request(app)
@@ -347,11 +382,11 @@ describe('User permissions and roles', () => {
     it('should not assign a user an empty permission', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
       chai
         .request(app)
@@ -386,11 +421,11 @@ describe('User permissions and roles', () => {
     it('should remove certain permissions from a user', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
       chai
         .request(app)
@@ -423,11 +458,11 @@ describe('User permissions and roles', () => {
     it('should check permission field to be empty', (done) => {
       const user = {
         email: 'abc@gmail.com',
-        password: 'Abc123456',
+        password: 'Abc123456'
       };
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
       chai
         .request(app)
@@ -459,7 +494,7 @@ describe('User permissions and roles', () => {
     it('should not remove permission for a nonexistent user', (done) => {
       const admin = {
         email: 'admin@gmail.com',
-        password: 'Test123456',
+        password: 'Test123456'
       };
       chai
         .request(app)
@@ -489,7 +524,7 @@ describe(' Customer and merchant role', () => {
       firstname: 'admin',
       lastname: 'acc',
       email: 'admin24@gmail.com',
-      password: 'Test123456',
+      password: 'Test123456'
     };
     chai
       .request(app)
@@ -518,7 +553,7 @@ describe(' Customer and merchant role', () => {
       firstname: 'admin',
       lastname: 'acc',
       email: 'admin274@gmail.com',
-      password: 'Test123456',
+      password: 'Test123456'
     };
     chai
       .request(app)
@@ -547,7 +582,7 @@ describe(' Customer and merchant role', () => {
       firstname: 'admin',
       lastname: 'acc',
       email: 'admin24@gmail.com',
-      password: 'Test123456',
+      password: 'Test123456'
     };
     chai
       .request(app)
@@ -575,11 +610,11 @@ describe(' Customer and merchant role', () => {
       firstname: 'admin',
       lastname: 'acc',
       email: 'admin245@gmail.com',
-      password: 'Test123456',
+      password: 'Test123456'
     };
     const admin = {
       email: 'admin@gmail.com',
-      password: 'Test123456',
+      password: 'Test123456'
     };
 
     chai
@@ -601,7 +636,7 @@ describe(' Customer and merchant role', () => {
               .post('/api/login')
               .send({
                 email: 'admin245@gmail.com',
-                password: 'Test123456',
+                password: 'Test123456'
               })
               .end((err, res) => {
                 expect(res).to.have.status(200);
@@ -620,7 +655,7 @@ describe(' Customer and merchant role', () => {
                       .post('/api/login')
                       .send({
                         email: 'admin245@gmail.com',
-                        password: 'Test123456',
+                        password: 'Test123456'
                       })
                       .end((err, res) => {
                         const newToken = res.header.authenticate;
@@ -641,7 +676,7 @@ describe(' Customer and merchant role', () => {
   it('should check if user is not a merchant and return a response with status code of 403', (done) => {
     const admin = {
       email: 'admin@gmail.com',
-      password: 'Test123456',
+      password: 'Test123456'
     };
 
     chai
@@ -663,7 +698,7 @@ describe(' Customer and merchant role', () => {
   it('should check if the token is invalid and return a response with status code of 401', (done) => {
     const admin = {
       email: 'admin@gmail.com',
-      password: 'Test123456',
+      password: 'Test123456'
     };
 
     chai

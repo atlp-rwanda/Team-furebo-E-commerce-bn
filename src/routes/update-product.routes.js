@@ -2,6 +2,7 @@
 import express from 'express';
 import updateProduct from '../controllers/update-product.controller';
 import { authorizeMerchant } from '../middlewares/userRoles.middleware';
+import AuthMiddleware from '../middlewares/login.middleware';
 
 const router = express.Router();
 
@@ -84,6 +85,6 @@ const router = express.Router();
  *                 message: Failed to update product
  *
  */
-router.patch('/updateProduct/:id', authorizeMerchant, updateProduct);
+router.patch('/updateProduct/:id', AuthMiddleware.checkAuthentication, authorizeMerchant, updateProduct);
 
 export default router;

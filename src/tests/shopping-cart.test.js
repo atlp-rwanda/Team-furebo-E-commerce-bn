@@ -47,34 +47,42 @@ describe('SHOPPING CART TEST', () => {
   before(async () => {
     const productData = {
       name: 'Laptop',
-      image: ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+      image: [
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+      ],
       price: 2000.99,
       quantity: 10,
       status: 'available',
       type: 'HP',
       category: 'Electronics',
-      exDate: '2023-04-30',
+      exDate: '2123-04-30',
     };
     const product = await Product.create(productData);
     EXISTING_PRODUCT_ID = product.id;
 
     const noAvailableProduct = {
       name: 'Unvailable Laptop',
-      image: ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+      image: [
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+      ],
       price: 2000.99,
       quantity: 10,
       status: 'unavailable',
       type: 'HP',
       category: 'Electronics',
-      exDate: '2023-04-30',
+      exDate: '2123-04-30',
     };
     const unvailableProduct = await Product.create(noAvailableProduct);
     UNVAILABLE_PRODUCT_ID = unvailableProduct.id;
   });
   context('WHEN VALID PRODUCT ID AND QUANTITY ARE GIVEN ', () => {
-    it('should add item to the shopping cart and return status 201', (done) => {
+    it('should add item to the shopping cart and return status 201', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
         quantity: 2,
@@ -88,7 +96,9 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(201);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('YES!, ITEM ADD TO THE CART SUCCESSFULLY!!!');
+          expect(actualVal).to.be.equal(
+            'YES!, ITEM ADD TO THE CART SUCCESSFULLY!!!'
+          );
           done();
         });
     });
@@ -106,12 +116,14 @@ describe('SHOPPING CART TEST', () => {
       // assert response
       expect(res).to.have.status(400);
       const actualVal = res.body.message;
-      expect(actualVal).to.be.equal('THE PRODUCT WITH THAT ID, IS NOT AVAILABLE');
+      expect(actualVal).to.be.equal(
+        'THE PRODUCT WITH THAT ID, IS NOT AVAILABLE'
+      );
     });
   });
 
   context('WHEN TOKEN IS NOT VALID', () => {
-    it('should return status 401 and an error message', (done) => {
+    it('should return status 401 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
         quantity: 2,
@@ -131,7 +143,7 @@ describe('SHOPPING CART TEST', () => {
     });
   });
   context('WHEN NO TOKEN IS GIVEN', () => {
-    it('should return status 401 and an error message', (done) => {
+    it('should return status 401 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
         quantity: 2,
@@ -150,7 +162,7 @@ describe('SHOPPING CART TEST', () => {
   });
 
   context('WHEN PRODUCT IS UNAVAILABLE', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         productId: UNVAILABLE_PRODUCT_ID,
         quantity: 2,
@@ -164,14 +176,16 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('THIS PRODUCT IS EITHER NOT IN STOCK OR EXPIRED');
+          expect(actualVal).to.be.equal(
+            'THIS PRODUCT IS EITHER NOT IN STOCK OR EXPIRED'
+          );
           done();
         });
     });
   });
 
   context('WHEN QUANTITY GIVEN IS NOT A NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
         quantity: 'two',
@@ -185,13 +199,15 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]');
+          expect(actualVal).to.be.equal(
+            'QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]'
+          );
           done();
         });
     });
   });
   context('WHEN QUANTITY GIVEN HAS A NEGATIVE NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
         quantity: -2,
@@ -205,14 +221,16 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]');
+          expect(actualVal).to.be.equal(
+            'PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]'
+          );
           done();
         });
     });
   });
 
   context('WHEN QUANTITY GIVEN IS GREATER THAN STOCK', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
         quantity: 98765,
@@ -232,7 +250,7 @@ describe('SHOPPING CART TEST', () => {
     });
   });
   context('WHEN FAILED TO ADD ITEM TO THE CART', () => {
-    it('should return status 500 and an error message', (done) => {
+    it('should return status 500 and an error message', done => {
       const itemData = {
         productId: NO_EXISTING_PRODUCT_ID,
         quantity: 2,
@@ -246,7 +264,9 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(500);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Oops! FAILED TO ADD THIS ITEM TO THE CART');
+          expect(actualVal).to.be.equal(
+            'Oops! FAILED TO ADD THIS ITEM TO THE CART'
+          );
           done();
         });
     });

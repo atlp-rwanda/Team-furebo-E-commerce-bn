@@ -120,13 +120,16 @@ describe('UPDATING SHOPPING CART TEST', () => {
       .set('Authorization', `Bearer ${sellerToken}`)
       .send({
         name: 'HCT/RP 360ST',
-        image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30',
+        exDate: '2123-05-30',
       });
     productId = productRes.body.data.id;
 
@@ -139,8 +142,9 @@ describe('UPDATING SHOPPING CART TEST', () => {
         quantity: 2,
       });
 
-    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
-      .ID;
+    CART_ITEM_ID =
+      addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
+        .ID;
   });
   context('IT SHOULD UPATE ITEM IN SHOPPING CART ', () => {
     it('should add item to the shopping cart and return status 200', async () => {
@@ -176,7 +180,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
   });
 
   context('WHEN TOKEN IS NOT VALID', () => {
-    it('should return status 401 and an error message', (done) => {
+    it('should return status 401 and an error message', done => {
       const itemData = {
         quantity: 2,
       };
@@ -195,7 +199,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
     });
   });
   context('WHEN NO TOKEN IS GIVEN', () => {
-    it('should return status 401 and an error message', (done) => {
+    it('should return status 401 and an error message', done => {
       const itemData = {
         quantity: 2,
       };
@@ -213,7 +217,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
   });
 
   context('WHEN QUANTITY GIVEN IS NOT A NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         quantity: 'two',
       };
@@ -234,7 +238,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
     });
   });
   context('WHEN QUANTITY GIVEN HAS A NEGATIVE NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         quantity: -2,
       };
@@ -256,7 +260,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
   });
 
   context('WHEN QUANTITY GIVEN IS GREATER THAN STOCK', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         quantity: 98765,
       };

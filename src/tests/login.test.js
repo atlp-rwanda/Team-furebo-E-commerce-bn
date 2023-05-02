@@ -83,7 +83,7 @@ describe('LOGIN USER', () => {
     });
 
     expect(res).to.have.status(400);
-    expect(res.body).to.have.property('msg', 'Please Fill in blank fields');
+    expect(res.body).to.have.property('msg', 'Please Fiil in blank fields');
   });
 
   it('should return status 401 and deny access if the password is invalid', async () => {

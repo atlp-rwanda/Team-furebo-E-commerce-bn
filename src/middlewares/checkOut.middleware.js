@@ -1,32 +1,13 @@
+import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import { ShoppingCart, Product, User, DeliveryAddress } from '../Database/models';
 
 import validateOrder from '../validation/checkOut.validator';
 
 import { verifyToken } from '../utils/user.util';
 
-const checkOutMiddleware = async (req,res,next) => {
+const checkOutMiddleware = asyncWrapper(async (req,res,next) => {
 
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-        return res.status(401).send({ 
-            status: 'error',
-            message: 'Authorization header missing' 
-        });
-    }
-
-    const token = req.headers.authorization.split(' ')[1];
-
-    const decoded = await verifyToken(token);
-
-    const dbUser = await User.findByPk(decoded.id);
-
-    if (!dbUser) {
-        return res.status(404).json({
-            status: 'error',
-            message: 'User not found',
-        });
-    }
+    const dbUser = req.user;
 
     const currentCart = await ShoppingCart.findAll({
         where: { userId: dbUser.id },
@@ -64,6 +45,6 @@ const checkOutMiddleware = async (req,res,next) => {
     req.paymentInformation = paymentInformation;
     next();
 
-}
+})
 
 export default checkOutMiddleware;

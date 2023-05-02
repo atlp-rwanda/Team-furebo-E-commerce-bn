@@ -1,45 +1,52 @@
+/* eslint-disable linebreak-style */
 import express from 'express';
-import disableAccount from '../controllers/disableAccount.controller';
-import { authorizeAdmin } from '../middlewares/userRoles.middleware';
-import AuthMiddleware from '../middlewares/login.middleware';
-
+import { authorizeMerchant } from '../middlewares/userRoles.middleware';
+import setProductAvailability from '../controllers/mark-availability.controller';
+import markProductAvailabilityMiddleware from '../middlewares/mark-availability.middleware';
 const router = express.Router();
+
 /**
  * @swagger
  * components:
  *   schemas:
- *     DisableAccount:
- *       $ref: '#/components/schemas/Users'
- *
+ *     SetProductAvailability:
+ *       type: object
+ *       properties:
+ *         quantity:
+ *           type: number
+ *           example: 10
+ *         exDate:
+ *           type: string
+ *           example: "2023-04-25"
  */
 
 /**
  * @swagger
- * /api/disableAccount/{id}:
+ * /api/set-product-availability/{id}:
  *   patch:
  *     security:
  *      - bearerAuth: []
- *     summary: This API is for disabling account
- *     description: This API is used to disable an existing account by user ID.
+ *     summary: This API is for changing a product's availability, To Mark it Available/Unvailable
+ *     description: This API is used to update an existing product's availability by ID.
  *     tags:
- *       - User
+ *       - Product
  *     parameters:
  *       - name: id
  *         in: path
- *         description: ID of the user tobe disable or enable
+ *         description: ID of the product to update
  *         required: true
  *         schema:
  *           type: string
  *     requestBody:
- *       description: Disable fields for isEnabled status
+ *       description: Update fields for the product
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/DisableAccount'
+ *             $ref: '#/components/schemas/SetProductAvailability'
  *     responses:
  *       200:
- *         description: User disabled successfully
+ *         description: Product updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -50,9 +57,9 @@ const router = express.Router();
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/Users'
+ *                   $ref: '#/components/schemas/SetProductAvailability'
  *       404:
- *         description: UserID not found
+ *         description: Product not found
  *         content:
  *           application/json:
  *             schema:
@@ -64,9 +71,9 @@ const router = express.Router();
  *                   type: string
  *               example:
  *                 status: error
- *                 message: UserID not found
+ *                 message: Product not found
  *       500:
- *         description: Failed to disable an account
+ *         description: Failed to update product
  *         content:
  *           application/json:
  *             schema:
@@ -80,9 +87,14 @@ const router = express.Router();
  *                   type: string
  *               example:
  *                 status: error
- *                 message: Failed to disable an account
+ *                 message: Failed to update product
  *
  */
-router.patch('/disableAccount/:id', AuthMiddleware.checkAuthentication, authorizeAdmin, disableAccount);
+router.patch(
+  '/mark-product-availability/:id',
+  authorizeMerchant,
+  markProductAvailabilityMiddleware,
+  setProductAvailability
+);
 
 export default router;

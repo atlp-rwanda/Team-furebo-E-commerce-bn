@@ -1,6 +1,4 @@
 /* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
@@ -93,30 +91,36 @@ describe('PATCH /api/updateProduct/:id', () => {
   before(async () => {
     const productData = {
       name: 'Laptop',
-      image:
-      ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+      image: [
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+      ],
       price: 2000.99,
       quantity: 10,
       category: 'Electronics',
-      exDate: '2023-04-30',
+      exDate: '2123-04-30',
     };
     const product = await Product.create(productData);
     existingProductId = product.id;
   });
 
   context('when updating an existing product with valid data', () => {
-    it('should return status 200 and update the product in the database', (done) => {
+    it('should return status 200 and update the product in the database', done => {
       const productData = {
         name: 'PC',
-        image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
         price: 14.99,
         quantity: 5,
         category: 'Electronics',
         status: 'available',
-        exDate: '2023-04-30',
+        exDate: '2123-04-30',
       };
       chai
         .request(app)
@@ -136,7 +140,7 @@ describe('PATCH /api/updateProduct/:id', () => {
   });
 
   context('when updating a non-existing product', () => {
-    it('should return status 404 and an error message', (done) => {
+    it('should return status 404 and an error message', done => {
       const productData = {
         name: 'Laptop',
         price: 2000.99,
@@ -158,18 +162,21 @@ describe('PATCH /api/updateProduct/:id', () => {
   });
 
   context('when product update fails', () => {
-    it('should return a 500 error with an error message', (done) => {
+    it('should return a 500 error with an error message', done => {
       // Mock the behavior of the Product.findByPk method to return a product
       const product = {
         id: existingProductId,
         name: 'Laptop',
-        image:
-        ['https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1', 'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'],
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2023-04-30',
+        exDate: '2123-04-30',
         update: sinon.stub().throws(new Error('Failed to update product')),
       };
       const findByPkStub = sinon.stub(Product, 'findByPk').resolves(product);

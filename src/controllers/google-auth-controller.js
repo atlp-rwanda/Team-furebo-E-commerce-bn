@@ -10,6 +10,37 @@ const googleFailure = async (req, res) => {
   res.send('Something went wrong');
 };
 const googleProtected = async (req, res) => {
-  res.send('<h2>You have sucessful logged in.</h2>');
+  res.send(`
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+<h2>You have sucessful logged in</h2></h2><button onclick="logout()">Logout</button>
+<script>
+  function logout() {
+    fetch('/logout', { method: 'GET' })
+      .then(response => {
+        if (response.redirected) {
+          window.location.href = '/';
+        }
+      })
+      .catch(error => console.error(error));
+  }
+</script>
+</body>
+</html>`);
 };
-module.exports = { initialize, googleFailure, googleProtected };
+
+const logout = async (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
+};
+
+module.exports = {
+  initialize, googleFailure, googleProtected, logout
+};

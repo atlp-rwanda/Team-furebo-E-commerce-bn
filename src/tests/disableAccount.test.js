@@ -23,7 +23,7 @@ describe('DISABLE ACCOUNT', async () => {
     firstname: 'James',
     lastname: 'admin',
     email: 'admin19@gmail.com',
-    password: 'Admin1912',
+    password: 'Admin1912'
   };
   before(async () => {
     // Register admin
