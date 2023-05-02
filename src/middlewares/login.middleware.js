@@ -11,7 +11,9 @@ class AuthMiddleware {
       const token = req.headers.authorization.split(' ')[1];
       // console.log(req.headers)
       if (!token) {
-        return res.status(400).json({ msg: 'Please sign in!' });
+        return res.status(400).json({ 
+          error: "error",
+          msg: 'Please sign in!' });
       }
       const data = await verifyToken(token);
       if (!data) {
@@ -25,7 +27,10 @@ class AuthMiddleware {
     } catch (error) {
       return res
         .status(500)
-        .json({ msg: 'Something went wrong, Invalid token' });
+        .json({ 
+          status: "error",
+          msg: 'Something went wrong, Invalid token' 
+        });
     }
   }
 }
