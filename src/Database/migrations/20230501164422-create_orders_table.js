@@ -26,8 +26,8 @@ module.exports = {
         type: Sequelize.JSONB,
         allowNull: false
       },
-      paymentInformation: {
-        type: Sequelize.JSONB,
+      paymentMethod: {
+        type: Sequelize.STRING,
         allowNull: false
       },
       status: {
@@ -56,4 +56,3 @@ module.exports = {
     await queryInterface.dropTable('Orders');
   }
 };
-

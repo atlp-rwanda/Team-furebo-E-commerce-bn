@@ -35,7 +35,7 @@ export const buyerCheckout = asyncWrapper(async(req,res) => {
         products: products,
         totalPrice: cartTotalPrice,
         deliveryAddress: deliveryAddress,
-        paymentInformation: paymentInformation
+        paymentMethod: paymentInformation.method
     })
 
     res.status(200).json({
