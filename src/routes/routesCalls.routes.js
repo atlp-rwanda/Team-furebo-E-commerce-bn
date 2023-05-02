@@ -18,6 +18,8 @@ import updateShoppingCart from './update-shopping-cart.routes';
 import deleteProductRouter from './deleteProduct.routes';
 import viewCartItems from './view-cart-items.routes';
 import logout from './logout.routes';
+import markProductAvailability from './mark-availability.routes';
+import changePassword from './change-password.routes';
 
 const routes = express();
 
@@ -39,5 +41,7 @@ routes.use('/api', updateShoppingCart);
 routes.use('/api', deleteProductRouter);
 routes.use('/api', viewCartItems);
 routes.use('/api', logout);
+routes.use('/api', markProductAvailability);
+routes.use('/api', changePassword);
 
 export default routes;
