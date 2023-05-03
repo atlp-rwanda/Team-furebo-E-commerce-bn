@@ -17,9 +17,7 @@ const stripePayment = stripe(STRIPE_SECRET_KEY);
 // MAKE PAYMENT
 export const makePayment = asyncWrapper(async (req, res) => {
   // RETRIEVE VALUES RETURNED BY THE MIDDLEWARE
-  const {
-    user, findOrder, orderProductsDataArray
-  } = res.datas;
+  const { user, findOrder, orderProductsDataArray } = res.datas;
 
   const { card } = req.body;
 
@@ -32,7 +30,7 @@ export const makePayment = asyncWrapper(async (req, res) => {
 
   // CREATE STRIPE TOKEN
   const stripeToken = await stripePayment.tokens.create({
-    card
+    card,
   });
 
   // CREATE STRIPE CUSTOMER
@@ -43,10 +41,10 @@ export const makePayment = asyncWrapper(async (req, res) => {
       line1: findOrder.deliveryAddress.street,
       city: findOrder.deliveryAddress.city,
       postal_code: findOrder.deliveryAddress.zipCode,
-      country: findOrder.deliveryAddress.country
+      country: findOrder.deliveryAddress.country,
     },
     name: user.fullname,
-    description: `Customer for ${user.email}`
+    description: `Customer for ${user.email}`,
   });
 
   // CREATE STRIPE CHARGE
@@ -54,31 +52,34 @@ export const makePayment = asyncWrapper(async (req, res) => {
     amount: findOrder.totalPrice,
     currency: 'usd',
     customer: stripeCustomer.id,
-    description: `Charge for ${user.fullname}`
+    description: `Charge for ${user.fullname}`,
   });
 
   // CHECK IF PAYMENT IS UNSUCCESSFULL
   if (!stripeCharge) {
-    res.status(402).json({ message: 'There is a problem occured in payment! please try again or contact Admin' });
+    res.status(402).json({
+      message:
+        'There is a problem occured in payment! please try again or contact Admin',
+    });
   }
 
   // CREATE PAYMENT RECORD
   const createPayment = await Payment.create({
     orderId: findOrder.id,
     userId: user.id,
-    receiptUrl: stripeCharge.receipt_url
+    receiptUrl: stripeCharge.receipt_url,
   });
   // UPDATE ORDER STATUS
   const updateOrder = await findOrder.update({
-    status: 'paid'
+    status: 'paid',
   });
 
   // DELETING PAYED PRODUCTS FROM SHOPING CART
-  orderProductsDataArray.forEach(async (element) => {
+  orderProductsDataArray.forEach(async element => {
     const data = await ShoppingCart.findOne({
       where: {
-        productId: element.id
-      }
+        productId: element.id,
+      },
     });
     await data.destroy();
   });
@@ -88,7 +89,7 @@ export const makePayment = asyncWrapper(async (req, res) => {
     ok: true,
     message: 'Payment successfully added and order status updated',
     data: createPayment,
-    status
+    status,
   });
 });
 
@@ -104,13 +105,13 @@ export const fetchPayments = asyncWrapper(async (req, res) => {
       {
         model: Order,
         as: 'Order',
-        attributes: ['totalPrice', 'status']
-      }
-    ]
+        attributes: ['totalPrice', 'status'],
+      },
+    ],
   });
   return res.status(200).json({
     ok: true,
     message: 'Payments retrieved successfully',
-    data: getPayments
+    data: getPayments,
   });
 });

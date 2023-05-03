@@ -20,14 +20,16 @@ export const getAllBuyerItems = asyncWrapper(async (req, res) => {
 
   const items = await Product.findAndCountAll({
     where: {
-      status: 'available'
+      status: 'available',
     },
     limit: size,
-    offset
+    offset,
   });
 
   if (items.rows.length === 0) {
-    return res.status(404).json({ message: `There is no items found on page ${page}` });
+    return res
+      .status(404)
+      .json({ message: `There is no items found on page ${page}` });
   }
 
   // Returning paginated results
@@ -63,14 +65,16 @@ export const getAllSellerItems = asyncWrapper(async (req, res) => {
 
   const items = await Product.findAndCountAll({
     where: {
-      userId: `${user.id}`
+      userId: `${user.id}`,
     },
     limit: size,
-    offset
+    offset,
   });
 
   if (items.rows.length === 0) {
-    return res.status(404).json({ message: `There is no items found on page ${page}` });
+    return res
+      .status(404)
+      .json({ message: `There is no items found on page ${page}` });
   }
 
   // Returning paginated results

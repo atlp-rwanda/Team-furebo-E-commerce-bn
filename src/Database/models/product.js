@@ -2,9 +2,7 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   /**
@@ -16,12 +14,14 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, {
         foreignKey: 'userId',
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
+        onUpdate: 'CASCADE',
       });
     }
 
     static async beforeDestroy(options) {
-      await this.sequelize.getQueryInterface().removeConstraint('Products', 'Products_userId_fkey');
+      await this.sequelize
+        .getQueryInterface()
+        .removeConstraint('Products', 'Products_userId_fkey');
     }
   }
 
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       category: DataTypes.STRING,
       userId: DataTypes.INTEGER,
       status: DataTypes.STRING,
-      exDate: DataTypes.DATE
+      exDate: DataTypes.DATE,
     },
     {
       sequelize,

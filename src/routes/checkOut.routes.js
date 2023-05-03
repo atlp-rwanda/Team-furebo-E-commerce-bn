@@ -58,14 +58,15 @@ const router = express.Router();
  *                  status:
  *                      type: string
  *                      example: pending
- * 
+ *
  */
 
-router.post('/checkout', 
-    AuthMiddleware.checkAuthentication, 
-    authorizeCustomer, 
-    checkOutMiddleware, 
-    buyerCheckout
+router.post(
+  '/checkout',
+  AuthMiddleware.checkAuthentication,
+  authorizeCustomer,
+  checkOutMiddleware,
+  buyerCheckout
 );
 
 /**
@@ -95,7 +96,7 @@ router.post('/checkout',
  *                          details:
  *                            type: object
  *                            properties:
- *                              cardNumber: 
+ *                              cardNumber:
  *                                  type: string
  *                              expirationDate:
  *                                  type: string
@@ -161,7 +162,7 @@ router.post('/checkout',
  *                 message:
  *                   type: string
  *                   example: UNAUTHORIZED ACCESS! YOU NEED TO BE AUTHENTICATED
- * 
+ *
  *       404:
  *         description: User not found
  *         content:
@@ -176,7 +177,7 @@ router.post('/checkout',
  *               example:
  *                 status: error
  *                 message: User not found
- * 
+ *
  *       500:
  *         description: Server error! Failed to complete the checkout process
  *         content:

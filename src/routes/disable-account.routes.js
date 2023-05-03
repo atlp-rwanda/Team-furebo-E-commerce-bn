@@ -83,6 +83,11 @@ const router = express.Router();
  *                 message: Failed to disable an account
  *
  */
-router.patch('/disableAccount/:id', AuthMiddleware.checkAuthentication, authorizeAdmin, disableAccount);
+router.patch(
+  '/disableAccount/:id',
+  AuthMiddleware.checkAuthentication,
+  authorizeAdmin,
+  disableAccount
+);
 
 export default router;

@@ -37,16 +37,10 @@ describe('VIEW ITEMS IN SHOPPING CART', () => {
 
   beforeEach(async () => {
     // ========= SELLER ACCOUNT
-    await chai
-      .request(app)
-      .post('/api/register')
-      .send(sellerData);
+    await chai.request(app).post('/api/register').send(sellerData);
 
     // ========= BUYER ACCOUNT
-    await chai
-      .request(app)
-      .post('/api/register')
-      .send(buyerData);
+    await chai.request(app).post('/api/register').send(buyerData);
 
     const sellerLogin = await chai
       .request(app)

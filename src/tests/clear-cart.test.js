@@ -1,13 +1,17 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import jwt from 'jsonwebtoken';
 import app from '../../index';
+import jwt from 'jsonwebtoken';
+import { sequelize } from '../Database/models';
 
 const { expect } = chai;
 chai.use(chaiHttp);
 
-describe('UPDATING SHOPPING CART TEST', () => {
+describe(' CLEAR SHOPPING CART TEST', () => {
   let sellerToken;
   let adminToken;
   let sellerId;
@@ -129,7 +133,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2123-05-30',
+        exDate: '2023-05-30',
       });
     productId = productRes.body.data.id;
 
@@ -146,136 +150,38 @@ describe('UPDATING SHOPPING CART TEST', () => {
       addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
         .ID;
   });
-  context('IT SHOULD UPATE ITEM IN SHOPPING CART ', () => {
-    it('should add item to the shopping cart and return status 200', async () => {
+  after(async () => {
+    await sequelize.sync({ force: true });
+  });
+  context('CLEAR CLEAR CART WHEN THERE ITEM(S) INSIDE ', () => {
+    it('should clean shopping cart and return status 200', done => {
+      chai
+        .request(app)
+        .delete('/api/clear-cart')
+        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
+        .end((err, res) => {
+          chai.expect(res).to.have.status(200);
+          const actualVal = res.body.message;
+          expect(actualVal).to.be.equal(
+            'ALL ITEMS REMOVED FROM THE CART SUCCESSFULLY!!!'
+          );
+          done();
+        });
+    });
+  });
+
+  context('NOTIFY WHEN THERE IS NOTHING TO CLEAN IN THE CART', () => {
+    it('should return status 400 and an error message', async () => {
       // make request to add item to cart
       const res = await chai
         .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send({ quantity: 3 });
-
-      // assert response
-      expect(res).to.have.status(200);
+        .delete('/api/clear-cart')
+        .set({ Authorization: `Bearer ${BUYER_TOKEN}` });
+      expect(res).to.have.status(400);
       const actualVal = res.body.message;
       expect(actualVal).to.be.equal(
-        'THE ITEM IN THE CART WAS UPDATED SUCCESSFULLY!!!'
+        'CART IS EMPTY, THERE ARE NO ITEMS TO REMOVE!'
       );
-    });
-  });
-  context('WHEN PRODUCT WITH THAT ID, ID NOT IN PRODUCT', () => {
-    it('should return status 404 and an error message', async () => {
-      // make request to add item to cart
-      const res = await chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${NO_EXISTING_PRODUCT_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send({ quantity: 1 });
-
-      // assert response
-      expect(res).to.have.status(404);
-      const actualVal = res.body.message;
-      expect(actualVal).to.be.equal('THE PRODUCT IS NOT IN THE CART');
-    });
-  });
-
-  context('WHEN TOKEN IS NOT VALID', () => {
-    it('should return status 401 and an error message', done => {
-      const itemData = {
-        quantity: 2,
-      };
-
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: 'Bearer invalid_token' })
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(401);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Invalid token');
-          done();
-        });
-    });
-  });
-  context('WHEN NO TOKEN IS GIVEN', () => {
-    it('should return status 401 and an error message', done => {
-      const itemData = {
-        quantity: 2,
-      };
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(401);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Authorization header missing');
-          done();
-        });
-    });
-  });
-
-  context('WHEN QUANTITY GIVEN IS NOT A NUMBER', () => {
-    it('should return status 400 and an error message', done => {
-      const itemData = {
-        quantity: 'two',
-      };
-
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal(
-            'QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]'
-          );
-          done();
-        });
-    });
-  });
-  context('WHEN QUANTITY GIVEN HAS A NEGATIVE NUMBER', () => {
-    it('should return status 400 and an error message', done => {
-      const itemData = {
-        quantity: -2,
-      };
-
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal(
-            'PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]'
-          );
-          done();
-        });
-    });
-  });
-
-  context('WHEN QUANTITY GIVEN IS GREATER THAN STOCK', () => {
-    it('should return status 400 and an error message', done => {
-      const itemData = {
-        quantity: 98765,
-      };
-
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('THE STOCK HAS LESS QUANTITY');
-          done();
-        });
     });
   });
 });

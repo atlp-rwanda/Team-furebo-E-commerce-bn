@@ -3,9 +3,7 @@ import validateProduct from '../validation/product.validator';
 
 const createProduct = async (req, res) => {
   try {
-    const {
-      name, image, price, quantity, category, exDate
-    } = req.body;
+    const { name, image, price, quantity, category, exDate } = req.body;
 
     const { error } = validateProduct(req.body);
     if (error) {

@@ -1,7 +1,10 @@
 import express from 'express';
 import { authorizeUser } from '../middlewares/userRoles.middleware';
 import RoleCheck from '../middlewares/user.Checkrole';
-import { getAllBuyerItems, getAllSellerItems } from '../controllers/getItems.controller';
+import {
+  getAllBuyerItems,
+  getAllSellerItems,
+} from '../controllers/getItems.controller';
 
 const router = express.Router();
 
@@ -69,6 +72,11 @@ router.get('/', getAllBuyerItems);
  *                              $ref: '#components/schemas/Product'
  */
 
-router.get('/sellerCollection', authorizeUser, RoleCheck(['merchant']), getAllSellerItems);
+router.get(
+  '/sellerCollection',
+  authorizeUser,
+  RoleCheck(['merchant']),
+  getAllSellerItems
+);
 
 export default router;

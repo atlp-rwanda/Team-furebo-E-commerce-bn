@@ -1,46 +1,57 @@
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
-import { ShoppingCart, Product, User, Order, DeliveryAddress } from '../Database/models';
+import {
+  ShoppingCart,
+  Product,
+  User,
+  Order,
+  DeliveryAddress,
+} from '../Database/models';
 
-export const buyerCheckout = asyncWrapper(async(req,res) => {
+export const buyerCheckout = asyncWrapper(async (req, res) => {
+  const {
+    user,
+    currentCart,
+    cartTotalPrice,
+    deliveryAddress,
+    paymentInformation,
+  } = req;
 
-    const {user, currentCart, cartTotalPrice, deliveryAddress, paymentInformation} = req;
+  const products = [];
 
-    const products = []
+  currentCart.forEach(item => {
+    const product = {
+      productId: item.productId,
+      quantity: item.productId,
+      price: item.totalPrice,
+    };
+    products.push(product);
+  });
 
-    currentCart.forEach(item => {
-        const product = {
-            productId: item.productId,
-            quantity: item.productId,
-            price: item.totalPrice
-        }
-        products.push(product)
+  const addressExists = await DeliveryAddress.findOne({
+    where: {
+      userId: user.id,
+      address: deliveryAddress,
+    },
+  });
+
+  if (!addressExists) {
+    await DeliveryAddress.create({
+      userId: user.id,
+      address: deliveryAddress,
     });
+  }
 
-    const addressExists = await DeliveryAddress.findOne({
-        where : {
-            userId: user.id,
-            address: deliveryAddress
-        }
-    })
+  const order = await Order.create({
+    userId: user.id,
+    products: products,
+    totalPrice: cartTotalPrice,
+    deliveryAddress: deliveryAddress,
+    paymentMethod: paymentInformation.method,
+  });
 
-    if (!addressExists) {
-        await DeliveryAddress.create({
-            userId: user.id,
-            address: deliveryAddress
-        })
-    }
-
-    const order = await Order.create({
-        userId: user.id,
-        products: products,
-        totalPrice: cartTotalPrice,
-        deliveryAddress: deliveryAddress,
-        paymentMethod: paymentInformation.method
-    })
-
-    res.status(200).json({
-        status: "success",
-        message: "Order created successfully, kindly proceed to payment!",
-        data: order
-    });
-})
+  res.status(200).json({
+    status: 'success',
+    message: 'Order created successfully, kindly proceed to payment!',
+    data: order,
+  });
+});

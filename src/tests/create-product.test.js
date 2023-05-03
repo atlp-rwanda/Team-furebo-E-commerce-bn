@@ -320,4 +320,4 @@ describe('POST PRODUCT', async () => {
         });
     });
   });
-})
+});

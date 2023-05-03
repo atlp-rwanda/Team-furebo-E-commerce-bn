@@ -13,6 +13,7 @@
     "ecmaFeatures": {
       "js": true
     },
+
     "ignorePackages": true,
     "requireConfigFile": false,
     "allowImportExportEverywhere": true
@@ -55,4 +56,3 @@
     ]
   }
 }
-

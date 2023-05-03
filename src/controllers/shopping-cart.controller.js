@@ -81,10 +81,9 @@ const addItemToCart = async (req, res) => {
         include: Product,
       });
 
-      const newCartTotalPrice = cartItems.reduce(
-        (total, item) => total + parseFloat(item.totalPrice),
-        0
-      ).toFixed(2);
+      const newCartTotalPrice = cartItems
+        .reduce((total, item) => total + parseFloat(item.totalPrice), 0)
+        .toFixed(2);
 
       // Update the cartTotalPrice field in the database for the newly added item
       await updatedCartItem.update({ cartTotalPrice: newCartTotalPrice });
@@ -113,7 +112,7 @@ const addItemToCart = async (req, res) => {
             'Expiration Date': product.exDate,
           },
         },
-      }
+      },
     });
   } catch (err) {
     res.status(500).json({

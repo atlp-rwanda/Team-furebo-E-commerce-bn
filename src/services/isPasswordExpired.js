@@ -11,10 +11,10 @@ const passwordExipiration = async () => {
         [Sequelize.Op.lt]: moment().subtract(
           process.env.EXPIREDIN,
           process.env.TIMEUNITS
-        )
+        ),
       },
-      isExpired: false
-    }
+      isExpired: false,
+    },
   });
   if (isPasswordExpired.length > 0) {
     User.update(
@@ -25,9 +25,9 @@ const passwordExipiration = async () => {
             [Sequelize.Op.lt]: moment().subtract(
               process.env.EXPIREDIN,
               process.env.TIMEUNITS
-            )
-          }
-        }
+            ),
+          },
+        },
       }
     );
     eventEmitter.emit(

@@ -17,11 +17,11 @@ describe('SHOPPING CART TEST', () => {
     firstname: 'KALISA',
     lastname: 'MUSONI',
     email: 'albert@gmail.com',
-    password: 'Seller1912'
+    password: 'Seller1912',
   };
   const loginSeller = {
     email: 'albert@gmail.com',
-    password: 'Seller1912'
+    password: 'Seller1912',
   };
 
   before(async () => {
@@ -47,14 +47,14 @@ describe('SHOPPING CART TEST', () => {
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
       ],
       price: 2000.99,
       quantity: 10,
       status: 'available',
       type: 'HP',
       category: 'Electronics',
-      exDate: '2023-05-30'
+      exDate: '2023-05-30',
     };
     const product = await Product.create(productData);
     EXISTING_PRODUCT_ID = product.id;
@@ -65,23 +65,23 @@ describe('SHOPPING CART TEST', () => {
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'
+        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
       ],
       price: 2000.99,
       quantity: 10,
       status: 'unavailable',
       type: 'HP',
       category: 'Electronics',
-      exDate: '2023-05-30'
+      exDate: '2023-05-30',
     };
     const unvailableProduct = await Product.create(noAvailableProduct);
     UNVAILABLE_PRODUCT_ID = unvailableProduct.id;
   });
   context('WHEN VALID PRODUCT ID AND QUANTITY ARE GIVEN ', () => {
-    it('should add item to the shopping cart and return status 201', (done) => {
+    it('should add item to the shopping cart and return status 201', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
-        quantity: 2
+        quantity: 2,
       };
 
       chai
@@ -119,10 +119,10 @@ describe('SHOPPING CART TEST', () => {
   });
 
   context('WHEN TOKEN IS NOT VALID', () => {
-    it('should return status 401 and an error message', (done) => {
+    it('should return status 401 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
-        quantity: 2
+        quantity: 2,
       };
 
       chai
@@ -139,10 +139,10 @@ describe('SHOPPING CART TEST', () => {
     });
   });
   context('WHEN NO TOKEN IS GIVEN', () => {
-    it('should return status 401 and an error message', (done) => {
+    it('should return status 401 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
-        quantity: 2
+        quantity: 2,
       };
       chai
         .request(app)
@@ -158,10 +158,10 @@ describe('SHOPPING CART TEST', () => {
   });
 
   context('WHEN PRODUCT IS UNAVAILABLE', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         productId: UNVAILABLE_PRODUCT_ID,
-        quantity: 2
+        quantity: 2,
       };
 
       chai
@@ -181,10 +181,10 @@ describe('SHOPPING CART TEST', () => {
   });
 
   context('WHEN QUANTITY GIVEN IS NOT A NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
-        quantity: 'two'
+        quantity: 'two',
       };
 
       chai
@@ -203,10 +203,10 @@ describe('SHOPPING CART TEST', () => {
     });
   });
   context('WHEN QUANTITY GIVEN HAS A NEGATIVE NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
-        quantity: -2
+        quantity: -2,
       };
 
       chai
@@ -226,10 +226,10 @@ describe('SHOPPING CART TEST', () => {
   });
 
   context('WHEN QUANTITY GIVEN IS GREATER THAN STOCK', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', done => {
       const itemData = {
         productId: EXISTING_PRODUCT_ID,
-        quantity: 98765
+        quantity: 98765,
       };
 
       chai
@@ -246,10 +246,10 @@ describe('SHOPPING CART TEST', () => {
     });
   });
   context('WHEN FAILED TO ADD ITEM TO THE CART', () => {
-    it('should return status 500 and an error message', (done) => {
+    it('should return status 500 and an error message', done => {
       const itemData = {
         productId: NO_EXISTING_PRODUCT_ID,
-        quantity: 2
+        quantity: 2,
       };
 
       chai

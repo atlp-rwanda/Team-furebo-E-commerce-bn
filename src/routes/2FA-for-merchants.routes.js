@@ -1,12 +1,19 @@
 import express from 'express';
 import {
-  verify2FAkey, disable2FAForMerchants, enable2FAForMerchants, resendOTP
+  verify2FAkey,
+  disable2FAForMerchants,
+  enable2FAForMerchants,
+  resendOTP,
 } from '../controllers/two-factor-auth.controller';
 import { authorizeMerchant } from '../middlewares/userRoles.middleware';
 
 const router = express.Router();
 
-router.post('/2fa/enable2faForMerchant', authorizeMerchant, enable2FAForMerchants);
+router.post(
+  '/2fa/enable2faForMerchant',
+  authorizeMerchant,
+  enable2FAForMerchants
+);
 /**
  * @swagger
  * /api/2fa/enable2faForMerchant:
@@ -23,7 +30,11 @@ router.post('/2fa/enable2faForMerchant', authorizeMerchant, enable2FAForMerchant
  *          409:
  *              description: Two Factor Authentication is already enabled for this user
  */
-router.post('/2fa/disable2faForMerchant', authorizeMerchant, disable2FAForMerchants);
+router.post(
+  '/2fa/disable2faForMerchant',
+  authorizeMerchant,
+  disable2FAForMerchants
+);
 /**
  * @swagger
  * /api/2fa/disable2faForMerchant:

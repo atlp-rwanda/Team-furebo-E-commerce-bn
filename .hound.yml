@@ -12,4 +12,3 @@ eslint:
     no-undef:
       - 2
       - { 'typeof': true }
-      
