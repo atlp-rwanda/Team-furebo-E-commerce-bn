@@ -12,7 +12,7 @@ const productSchema = Joi.object({
     .min(4)
     .max(8),
   quantity: Joi.number().min(0).required(),
-  exDate: Joi.date().min('now').required(),
+  exDate: Joi.date().min('now').required()
 });
 
 validator(productSchema);

@@ -27,7 +27,7 @@ export const requestPasswordReset = async (req, res) => {
       to: email,
       from: process.env.SENDER_EMAIL, // replace with your own email address
       subject: 'Password reset request',
-      text: `To reset your password, click on this link: ${resetLink}`,
+      text: `To reset your password, click on this link: ${resetLink}`
     };
     await sgMail.send(msg);
 
