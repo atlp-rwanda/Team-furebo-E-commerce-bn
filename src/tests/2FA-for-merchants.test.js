@@ -6,7 +6,10 @@ import speakeasy from 'speakeasy';
 import { User } from '../Database/models';
 import app from '../../index';
 import sendMail from '../utils/sendEmail.util';
-import { generateSecretKey, generateOTPCode } from '../controllers/two-factor-auth.controller';
+import {
+  generateSecretKey,
+  generateOTPCode
+} from '../controllers/two-factor-auth.controller';
 
 chai.use(chaiHttp);
 
@@ -66,7 +69,7 @@ const loginSeller = {
 };
 
 before(async () => {
-// Register admin
+  // Register admin
   const adminRegRes = await chai
     .request(app)
     .post('/api/registerAdmin')
@@ -77,10 +80,7 @@ before(async () => {
   await chai.request(app).post('/api/register').send(sellerData);
 
   // Login as admin and get token
-  const adminRes = await chai
-    .request(app)
-    .post('/api/login')
-    .send(loginAdmin);
+  const adminRes = await chai.request(app).post('/api/login').send(loginAdmin);
   expect(adminRes).to.have.status(200);
   adminToken = adminRes.body.token;
 
@@ -167,7 +167,10 @@ describe(' 2FA for Merchant', () => {
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(res.body).to.have.property('msg', 'Please check your email for the new authentication code');
+        expect(res.body).to.have.property(
+          'msg',
+          'Please check your email for the new authentication code'
+        );
         done();
       });
   });
@@ -180,7 +183,10 @@ describe(' 2FA for Merchant', () => {
       .send({ code: '' })
       .end((err, res) => {
         expect(res).to.have.status(400);
-        expect(res.body).to.have.property('message', 'Please provide the code sent to you on email');
+        expect(res.body).to.have.property(
+          'message',
+          'Please provide the code sent to you on email'
+        );
         done();
       });
   });
@@ -193,7 +199,10 @@ describe(' 2FA for Merchant', () => {
       .send({ code: '00000' })
       .end((err, res) => {
         expect(res).to.have.status(403);
-        expect(res.body).to.have.property('message', 'Code is wrong or expired! Please try again');
+        expect(res.body).to.have.property(
+          'message',
+          'Code is wrong or expired! Please try again'
+        );
         done();
       });
   });

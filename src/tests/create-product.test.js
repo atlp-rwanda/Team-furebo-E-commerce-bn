@@ -111,7 +111,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2123-04-30',
+        exDate: '2123-05-30',
       };
 
       chai
@@ -141,7 +141,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2123-04-30',
+        exDate: '2123-05-30',
       };
 
       chai
@@ -202,7 +202,7 @@ describe('POST PRODUCT', async () => {
         price: 'invalid_price_value',
         quantity: 10,
         category: 'example',
-        exDate: '2123-04-30',
+        exDate: '2123-05-30',
       };
 
       chai
@@ -236,7 +236,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2123-04-30',
+        exDate: '2123-05-30',
       };
       chai
         .request(app)
@@ -267,7 +267,7 @@ describe('POST PRODUCT', async () => {
         quantity: -12,
         price: 200,
         category: 'example',
-        exDate: '2123-04-30',
+        exDate: '2123-05-30',
       };
 
       chai
@@ -303,7 +303,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'HP',
-        exDate: '2123-04-30',
+        exDate: '2123-05-30',
       };
       chai
         .request(app)
@@ -320,4 +320,4 @@ describe('POST PRODUCT', async () => {
         });
     });
   });
-});
+})

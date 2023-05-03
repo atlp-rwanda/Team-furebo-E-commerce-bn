@@ -1,6 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import bcrypt from 'bcryptjs';
 import sgMail from '@sendgrid/mail';
 import db from '../Database/models';

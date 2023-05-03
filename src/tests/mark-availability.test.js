@@ -22,31 +22,31 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
     firstname: 'ZIGA',
     lastname: 'SHEILA',
     email: 'sheila@gmail.com',
-    password: 'Admin1912',
+    password: 'Admin1912'
   };
   const loginAdmin = {
     email: 'sheila@gmail.com',
-    password: 'Admin1912',
+    password: 'Admin1912'
   };
   const sellerData = {
     firstname: 'Mike',
     lastname: 'sinzi',
     email: 'sinzi@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
   const loginSeller = {
     email: 'sinzi@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
   const seller2Data = {
     firstname: 'Michael',
     lastname: 'sinzi',
     email: 'michael@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
   const login2Seller = {
     email: 'michael@gmail.com',
-    password: 'Seller1912',
+    password: 'Seller1912'
   };
 
   before(async () => {
@@ -118,21 +118,21 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'
         ],
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2123-05-30',
+        exDate: '2123-05-30'
       });
     existingProductId = productRes.body.data.id;
   });
 
   context(' SET PRODUCT AVAILABILITY WITH VALID DATA', () => {
-    it('should return status 200 and set product availability', done => {
+    it('should return status 200 and set product availability', (done) => {
       const productData = {
         quantity: 5,
-        exDate: '2020-04-30',
+        exDate: '2020-05-30'
       };
       chai
         .request(app)
@@ -147,10 +147,10 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
     });
   });
   context(' SET PRODUCT AVAILABILITY WITH INVALID USER', () => {
-    it('should return status 403 and an error message', done => {
+    it('should return status 403 and an error message', (done) => {
       const productData = {
         quantity: 5,
-        exDate: '2020-04-30',
+        exDate: '2020-05-30'
       };
       chai
         .request(app)
@@ -165,10 +165,10 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
   });
 
   context('SET PRODUCT AVAILABILITY WITH NO-EXISTING PRODUCT', () => {
-    it('should return status 404 and an error message', done => {
+    it('should return status 404 and an error message', (done) => {
       const productData = {
         quantity: 5,
-        exDate: '2020-04-30',
+        exDate: '2020-05-30'
       };
       chai
         .request(app)

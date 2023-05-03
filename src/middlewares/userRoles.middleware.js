@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import jwt from 'jsonwebtoken';
 import db from '../Database/models';
 import { verifyToken } from '../utils/user.util';

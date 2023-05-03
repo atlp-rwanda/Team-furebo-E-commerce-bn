@@ -1,13 +1,8 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-expressions */
 import bcrypt from 'bcryptjs';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sgMail from '@sendgrid/mail';
 import jwt from 'jsonwebtoken';
-// eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import app from '../../index';
 import db from '../Database/models';
 
@@ -47,10 +42,6 @@ describe('Reset Password Via Email', () => {
     userId = verifyUserToken.id;
   });
 
-  // afterEach(async () => {
-  //   await db.User.destroy({ where: {} });
-  // });
-
   describe('POST /api/requestPasswordReset', () => {
     context('when a valid email is provided', () => {
       it('should return status 200 and send password reset email', async () => {
@@ -60,10 +51,6 @@ describe('Reset Password Via Email', () => {
           .send({ email: 'ruberwa3@gmail.com' });
 
         expect(res).to.have.status(200);
-        // expect(res.body).to.have.property(
-        // 'message',
-        // 'Password reset email sent'
-        // );
       });
     });
 

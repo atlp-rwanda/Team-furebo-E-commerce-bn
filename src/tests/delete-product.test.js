@@ -18,33 +18,33 @@ describe('DELETE /api/deleteProduct/:id', () => {
     firstname: 'Peter',
     lastname: 'adams',
     email: 'adams@gmail.com',
-    password: 'Adams1912',
+    password: 'Adams1912'
   };
   const loginAdmin = {
     email: 'adams@gmail.com',
-    password: 'Adams1912',
+    password: 'Adams1912'
   };
   // SELLER INFO
   const sellerData = {
     firstname: 'State',
     lastname: 'Price',
     email: 'state19@gmail.com',
-    password: 'State1912',
+    password: 'State1912'
   };
   const loginSeller = {
     email: 'state19@gmail.com',
-    password: 'State1912',
+    password: 'State1912'
   };
   // BUYER INFO
   const buyerData = {
     firstname: 'MUGABO',
     lastname: 'James',
     email: 'mugabo@gmail.com',
-    password: 'Mugabo1234',
+    password: 'Mugabo1234'
   };
   const buyerLogin = {
     email: 'mugabo@gmail.com',
-    password: 'Mugabo1234',
+    password: 'Mugabo1234'
   };
 
   before(async () => {
@@ -111,25 +111,34 @@ describe('DELETE /api/deleteProduct/:id', () => {
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'
         ],
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2123-05-30',
+        exDate: '2123-05-30'
       });
     productId = productRes.body.data.id;
   });
   context('when deleting an existing product with valid data', () => {
-    it('should return status 200 and delete the product in the database', done => {
+    it('should return status 200 and delete the product in the database', (done) => {
       chai
         .request(app)
         .delete(`/api/deleteProduct/${productId}`)
         .set({ Authorization: `Bearer ${sellerToken}` })
         .end((err, res) => {
+          const actualVal = res.body.message;
           chai.expect(res).to.have.status(200);
+          expect(actualVal).to.have.equal('Product deleted successfully');
           done();
         });
     });
+  });
+  it('should return a 404 error if the product is not found', async () => {
+    const res = await chai.request(app)
+      .delete('/api/deleteProduct/999')
+      .set({ Authorization: `Bearer ${sellerToken}` });
+    res.should.have.status(404);
+    res.body.should.have.property('message').equal('Product not found');
   });
 });

@@ -1,7 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../index';
@@ -58,7 +54,7 @@ describe('SHOPPING CART TEST', () => {
       status: 'available',
       type: 'HP',
       category: 'Electronics',
-      exDate: '2123-04-30',
+      exDate: '2023-05-30',
     };
     const product = await Product.create(productData);
     EXISTING_PRODUCT_ID = product.id;
@@ -76,7 +72,7 @@ describe('SHOPPING CART TEST', () => {
       status: 'unavailable',
       type: 'HP',
       category: 'Electronics',
-      exDate: '2123-04-30',
+      exDate: '2023-05-30',
     };
     const unvailableProduct = await Product.create(noAvailableProduct);
     UNVAILABLE_PRODUCT_ID = unvailableProduct.id;

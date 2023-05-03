@@ -1,8 +1,4 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import joi from 'joi';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { joiPasswordExtendCore } from 'joi-password';
 
 const joiPassword = joi.extend(joiPasswordExtendCore);

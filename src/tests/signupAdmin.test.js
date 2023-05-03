@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-// eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import app from '../../index';
 
 chai.use(chaiHttp);

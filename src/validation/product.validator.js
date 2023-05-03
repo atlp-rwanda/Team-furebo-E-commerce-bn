@@ -1,6 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import Joi from 'joi';
 
 const validator = (schema) => (payload) => schema.validate(payload, { abortEarly: false });

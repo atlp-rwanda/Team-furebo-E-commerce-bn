@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-// eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import jwt from 'jsonwebtoken';
 import app from '../../index';
 import 'dotenv/config';
@@ -11,7 +10,6 @@ const { expect } = chai;
 
 describe('DISABLE ACCOUNT', async () => {
   let adminToken;
-  // eslint-disable-next-line no-unused-vars
   let adminRegResToken;
   let adminId;
   const loginAdmin = {

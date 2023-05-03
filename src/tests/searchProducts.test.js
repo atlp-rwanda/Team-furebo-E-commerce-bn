@@ -104,7 +104,7 @@ describe('SEARCH PRODUCTS', async () => {
       price: 900.99,
       quantity: 10,
       category: 'Electronics',
-      exDate: '2123-04-30',
+      exDate: '2123-05-30',
     };
 
     chai
@@ -132,7 +132,7 @@ describe('SEARCH PRODUCTS', async () => {
       price: 900.99,
       quantity: 10,
       category: 'Electronics',
-      exDate: '2123-04-30',
+      exDate: '2123-05-30',
     };
 
     chai

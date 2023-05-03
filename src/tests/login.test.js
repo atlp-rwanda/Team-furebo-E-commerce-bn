@@ -1,5 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-expressions */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sgMail from '@sendgrid/mail';
@@ -131,7 +129,6 @@ describe('LOGIN USER', () => {
       .request(app)
       .get('/api/protectedroute')
       .set({ authorization: `Bearer ${token}` });
-
     expect(res).to.have.status(400);
   });
 });

@@ -100,7 +100,7 @@ describe('PATCH /api/updateProduct/:id', () => {
       price: 2000.99,
       quantity: 10,
       category: 'Electronics',
-      exDate: '2123-04-30',
+      exDate: '2123-05-30',
     };
     const product = await Product.create(productData);
     existingProductId = product.id;
@@ -120,7 +120,7 @@ describe('PATCH /api/updateProduct/:id', () => {
         quantity: 5,
         category: 'Electronics',
         status: 'available',
-        exDate: '2123-04-30',
+        exDate: '2123-05-30',
       };
       chai
         .request(app)
@@ -176,7 +176,7 @@ describe('PATCH /api/updateProduct/:id', () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2123-04-30',
+        exDate: '2123-05-30',
         update: sinon.stub().throws(new Error('Failed to update product')),
       };
       const findByPkStub = sinon.stub(Product, 'findByPk').resolves(product);
@@ -186,7 +186,7 @@ describe('PATCH /api/updateProduct/:id', () => {
         price: 19.99,
         quantity: 5,
         category: 'Electronics',
-        exDate: '2024-04-30',
+        exDate: '2024-05-30',
       };
       chai
         .request(app)

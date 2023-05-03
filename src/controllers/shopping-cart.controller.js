@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import { ShoppingCart, Product } from '../Database/models';
 
 const addItemToCart = async (req, res) => {
