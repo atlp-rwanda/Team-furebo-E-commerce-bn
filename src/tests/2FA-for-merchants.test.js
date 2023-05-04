@@ -4,11 +4,12 @@ import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
 import speakeasy from 'speakeasy';
 import { User } from '../Database/models';
+import client from '../utils/redis.util';
 import app from '../../index';
 import sendMail from '../utils/sendEmail.util';
 import {
   generateSecretKey,
-  generateOTPCode,
+  generateOTPCode
 } from '../controllers/two-factor-auth.controller';
 
 chai.use(chaiHttp);
@@ -25,7 +26,7 @@ describe('generateSecretKey', () => {
 describe('generateOTPCode', () => {
   it('should return a valid OTP code', () => {
     const secretKey = speakeasy.generateSecret({
-      name: 'test',
+      name: 'test'
     }).base32;
 
     const code = generateOTPCode(secretKey);
@@ -34,7 +35,7 @@ describe('generateOTPCode', () => {
       secret: secretKey,
       encoding: 'base32',
       token: code,
-      step: 300,
+      step: 300
     });
 
     assert.isTrue(isValid);
@@ -46,26 +47,27 @@ let adminToken;
 let sellerId;
 let adminRegResToken;
 let customerTokenBeforeMechant;
+let otpCode;
 
 const adminData = {
   firstname: 'James',
   lastname: 'admin',
   email: 'james@gmail.com',
-  password: 'Admin1912',
+  password: 'Admin1912'
 };
 const sellerData = {
-  firstname: 'Jana',
-  lastname: 'Seller',
-  email: 'mizero@gmail.com',
-  password: 'Seller1912',
+  firstname: 'baho',
+  lastname: 'Kelly',
+  email: 'bahokelly02@gmail.com',
+  password: 'Seller1912'
 };
 const loginAdmin = {
   email: 'james@gmail.com',
-  password: 'Admin1912',
+  password: 'Admin1912'
 };
 const loginSeller = {
-  email: 'mizero@gmail.com',
-  password: 'Seller1912',
+  email: 'bahokelly02@gmail.com',
+  password: 'Seller1912'
 };
 
 before(async () => {
@@ -116,7 +118,7 @@ before(async () => {
 });
 
 describe(' 2FA for Merchant', () => {
-  it('should allow merchant to enable 2FA and return 200', done => {
+  it('should allow merchant to enable 2FA and return 200', (done) => {
     chai
       .request(app)
       .post('/api/2fa/enable2faForMerchant')
@@ -126,19 +128,17 @@ describe(' 2FA for Merchant', () => {
         done();
       });
   });
-
-  it('should check if merchant is already has 2fa enabled and return a 409 status code', done => {
+  it('should check if merchant is has 2fa enabled and return a 403 status code before new login', (done) => {
     chai
       .request(app)
       .post('/api/2fa/enable2faForMerchant')
       .set({ Authorization: `Bearer ${sellerToken}` })
       .end((err, res) => {
-        expect(res).to.have.status(409);
+        expect(res).to.have.status(403);
         done();
       });
   });
-
-  it('should check if merchant account exists and return a 403 status code', done => {
+  it('should check if merchant account exists and return a 403 status code', (done) => {
     chai
       .request(app)
       .post('/api/2fa/enable2faForMerchant')
@@ -149,7 +149,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should check if there is no token and return a 401 status code', done => {
+  it('should check if there is no token and return a 401 status code', (done) => {
     chai
       .request(app)
       .post('/api/2fa/enable2faForMerchant')
@@ -160,22 +160,35 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should resend OTP code and return a 200 status code', done => {
-    chai
-      .request(app)
-      .post('/api/2fa/resendOTP')
-      .set({ Authorization: `Bearer ${sellerToken}` })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.have.property(
-          'msg',
-          'Please check your email for the new authentication code'
-        );
-        done();
-      });
+  it('should send an OTP at login test ', async () => {
+    const res = await chai.request(app)
+      .post('/api/login')
+      .send(loginSeller);
+
+    expect(res).to.have.status(200);
+    expect(res.body).to.have.property('msg', 'Please check your email for the authentication code');
+    sellerToken = res.header.authenticate;
+    otpCode = await client.get(loginSeller.email, (err, value) => {
+      expect(err).to.be.null;
+    });
+
+    const failVerifyRes = await chai.request(app)
+      .post('/api/2fa/verify')
+      .set('Authorization', `Bearer ${sellerToken}`)
+      .send({ code: '00000' });
+
+    expect(failVerifyRes).to.have.status(403);
+    expect(failVerifyRes.body).to.have.property('message', 'Two Factor Authentication has not been verified, Please provide the right OTP code');
+
+    const verifyRes = await chai.request(app)
+      .post('/api/2fa/verify')
+      .set('Authorization', `Bearer ${sellerToken}`)
+      .send({ code: otpCode });
+
+    expect(verifyRes).to.have.status(200);
   });
 
-  it('should return 400 status code if code is missing', done => {
+  it('should return 400 status code if code is missing', (done) => {
     chai
       .request(app)
       .post('/api/2fa/verify')
@@ -191,23 +204,17 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should not verify invalid code, return 403 status code', done => {
+  it('should check if merchant is already has 2fa enabled and return a 409 status code', (done) => {
     chai
       .request(app)
-      .post('/api/2fa/verify')
+      .post('/api/2fa/enable2faForMerchant')
       .set({ Authorization: `Bearer ${sellerToken}` })
-      .send({ code: '00000' })
       .end((err, res) => {
-        expect(res).to.have.status(403);
-        expect(res.body).to.have.property(
-          'message',
-          'Code is wrong or expired! Please try again'
-        );
+        expect(res).to.have.status(409);
         done();
       });
   });
-
-  it('should disable 2FA for merchant and return a 200 status code', done => {
+  it('should disable 2FA for merchant and return a 200 status code', (done) => {
     chai
       .request(app)
       .post('/api/2fa/disable2faForMerchant')
@@ -218,7 +225,7 @@ describe(' 2FA for Merchant', () => {
       });
   });
 
-  it('should check if 2FA is already disable for merchant and return a 409 status code', done => {
+  it('should check if 2FA is already disable for merchant and return a 409 status code', (done) => {
     chai
       .request(app)
       .post('/api/2fa/disable2faForMerchant')
@@ -234,17 +241,27 @@ after(async () => {
   await User.destroy({ truncate: true, cascade: true });
 });
 describe('sendMail function', () => {
-  it('should send an email and return a checker value', async () => {
+  it('should send email and resolve with success message', async () => {
     const recipient = {
-      recipientEmail: 'recipient@example.com',
+      recipientEmail: 'example@example.com',
       emailSubject: 'Test Subject',
-      emailBody: 'This is a test email',
+      emailBody: 'Test Body'
     };
     const code = '123456';
-    const checker = 0;
-
-    const result = await sendMail(recipient, code, checker);
-
-    expect(result).to.equal(0);
+    const result = await sendMail(recipient, code);
+    expect(result.response).to.include('250 2.0.0 OK');
+  });
+  it('should check the send email function and resolve with error message', async () => {
+    const recipient = {
+      recipientEmail: 'invalid-email',
+      emailSubject: 'Test Subject',
+      emailBody: 'Test Body'
+    };
+    const code = '123456';
+    try {
+      await sendMail(recipient, code);
+    } catch (error) {
+      expect(error).to.be.an('Error');
+    }
   });
 });

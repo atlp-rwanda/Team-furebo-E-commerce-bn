@@ -1,9 +1,12 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable require-jsdoc */
+import client from '../utils/redis.util';
 import db from '../Database/models';
 import { comparePassword, generateToken } from '../utils/user.util';
 import sendMail from '../utils/sendEmail.util';
 import {
   generateSecretKey,
-  generateOTPCode,
+  generateOTPCode
 } from './two-factor-auth.controller';
 
 const { User } = db;
@@ -35,30 +38,21 @@ export class PublicController {
       const token = await generateToken(doesExist);
       if (doesExist.enable2FA) {
         const { base32 } = generateSecretKey();
-        await User.update(
-          {
-            twoFactorAuthKey: base32,
-          },
-          {
-            where: {
-              id: doesExist.id,
-            },
-          }
-        );
         const secret = base32;
         const code = generateOTPCode(secret);
+        client.set(doesExist.email, code, 'EX', 300);
         const recipient = {
           recipientEmail: doesExist.email,
           emailSubject: 'ECOMMERCE AUTHENTICATON CODE',
-          emailBody: `Your authentication code is: ${code}`,
+          emailBody: `Your authentication code is: ${code}`
         };
-        const checker = 0;
-        sendMail(recipient, code, checker);
-        if (checker === 0) {
-          return res.status(200).header('authenticate', token).json({
-            msg: 'Please check your email for the authentication code',
-            token,
-          });
+
+        const checkEmail = await sendMail(recipient);
+        if (checkEmail) {
+          return res
+            .status(200)
+            .header('authenticate', token)
+            .json({ msg: 'Please check your email for the authentication code', token });
         }
         return res.status(500).json({ msg: 'Email is not sent' });
       }
