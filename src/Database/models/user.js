@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       enable2FA: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: false
       },
       checkTwoFactor: {
         type: DataTypes.BOOLEAN,

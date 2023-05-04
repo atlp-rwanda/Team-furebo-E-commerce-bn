@@ -30,7 +30,7 @@ const createAdminAccount = asyncWrapper(async (req, res) => {
     password: hashedPassword,
     role: JSON.stringify(newRole),
   };
-  User.create(user).then(async data => {
+  User.create(user).then(async (data) => {
     const token = await generateToken(data);
     res
       .status(200)

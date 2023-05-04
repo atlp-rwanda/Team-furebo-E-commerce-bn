@@ -33,7 +33,7 @@ export const generateSecretKey = () => {
     name: process.env.TWO_FACTOR_AUTH_NAME
   });
   return {
-    base32: secretKey.base32
+    base32: secretKey.base32,
 
   };
 };
@@ -61,9 +61,7 @@ export const verify2FAkey = asyncWrapper(async (req, res) => {
   }
   const key = req.body.code.trim();
   if (!key) {
-    return res
-      .status(400)
-      .json({ message: 'Please provide the code sent to you on email' });
+    return res.status(400).json({ message: 'Please provide the code sent to you on email' });
   }
   const result = await client.get(existingUser.email, (err, value) => {
     if (err) {
@@ -86,4 +84,5 @@ export const verify2FAkey = asyncWrapper(async (req, res) => {
     return res.status(403).json({ message: 'Two Factor Authentication has not been verified, Please provide the right OTP code' });
   }
   return res.status(400).json({ message: 'Please login again to receive an OTP code' });
+
 });

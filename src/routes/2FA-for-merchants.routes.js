@@ -7,11 +7,7 @@ import AuthMiddleware from '../middlewares/login.middleware';
 
 const router = express.Router();
 
-router.post(
-  '/2fa/enable2faForMerchant',
-  authorizeMerchant,
-  enable2FAForMerchants
-);
+router.post('/2fa/enable2faForMerchant', authorizeMerchant, enable2FAForMerchants);
 /**
  * @swagger
  * /api/2fa/enable2faForMerchant:
@@ -28,11 +24,7 @@ router.post(
  *          409:
  *              description: Two Factor Authentication is already enabled for this user
  */
-router.post(
-  '/2fa/disable2faForMerchant',
-  authorizeMerchant,
-  disable2FAForMerchants
-);
+router.post('/2fa/disable2faForMerchant', authorizeMerchant, disable2FAForMerchants);
 /**
  * @swagger
  * /api/2fa/disable2faForMerchant:
