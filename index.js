@@ -7,7 +7,7 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import routes from './src/routes/routesCalls.routes';
 import swaggerDocs from './src/swagger';
-import schedulingJob from './src/jobs/schedulingTask';
+import { schedulingJob, isProductExpiredschedulingJob } from './src/jobs/schedulingTask';
 
 const app = express();
 require('./src/services/auth');
@@ -25,6 +25,7 @@ app.get('/home', (req, res) => {
 });
 app.use(routes);
 schedulingJob();
+isProductExpiredschedulingJob();
 const port = process.env.PORT || 3000;
 const httpServer = createServer(app);
 const io = new Server(httpServer, {

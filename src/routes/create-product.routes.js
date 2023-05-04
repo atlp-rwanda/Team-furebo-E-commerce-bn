@@ -99,7 +99,7 @@ router.post(
   '/addProduct',
   AuthMiddleware.checkAuthentication,
   authorizeMerchant,
-  createProduct
+  createProduct,
 );
 
 export default router;

@@ -1,33 +1,30 @@
 import db from '../Database/models';
 import ROLES_LIST from '../utils/userRoles.util';
+import asyncWrapper from '../utils/handlingTryCatchBlocks';
 
 const { User } = db;
-export const addUserPermissions = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { Permission: newPermission } = req.body;
-    const existingUser = await User.findByPk(id);
-    if (!existingUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    if (!newPermission) {
-      return res.status(400).json({ message: 'Permission can not be empty' });
-    }
-    const existingRole = JSON.parse(existingUser.role);
-    const index = existingRole.permissions.indexOf(newPermission);
-    if (index > -1) {
-      return res
-        .status(409)
-        .json({ message: 'User already has this permission' });
-    }
-    existingRole.permissions.push(newPermission);
-    existingUser.role = JSON.stringify(existingRole);
-    await existingUser.save();
-    return res.status(200).json({ message: 'Permission added successfully' });
-  } catch (err) {
-    return res.status(500).json({ message: 'An error occurred', err });
+export const addUserPermissions = asyncWrapper(async (req, res) => {
+  const { id } = req.params;
+  const { Permission: newPermission } = req.body;
+  const existingUser = await User.findByPk(id);
+  if (!existingUser) {
+    return res.status(404).json({ message: 'User not found' });
   }
-};
+  if (!newPermission) {
+    return res.status(400).json({ message: 'Permission can not be empty' });
+  }
+  const existingRole = JSON.parse(existingUser.role);
+  const index = existingRole.permissions.indexOf(newPermission);
+  if (index > -1) {
+    return res
+      .status(409)
+      .json({ message: 'User already has this permission' });
+  }
+  existingRole.permissions.push(newPermission);
+  existingUser.role = JSON.stringify(existingRole);
+  await existingUser.save();
+  return res.status(200).json({ message: 'Permission added successfully' });
+});
 export const RemoveUserPermissions = async (req, res) => {
   try {
     const { id } = req.params;

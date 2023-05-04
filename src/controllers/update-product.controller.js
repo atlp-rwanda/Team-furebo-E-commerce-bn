@@ -1,4 +1,5 @@
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
+import checkExpiredProducts from '../utils/productExpiration';
 
 const updateProduct = asyncWrapper(async (req, res) => {
   const { name, image, price, quantity, category, exDate } = req.body;
@@ -19,7 +20,7 @@ const updateProduct = asyncWrapper(async (req, res) => {
     },
     { where: { userId, productId } }
   );
-
+  checkExpiredProducts();
   res.status(200).json({
     status: 'success',
     message: 'Product updated successfully',

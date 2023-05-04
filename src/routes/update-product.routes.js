@@ -1,5 +1,6 @@
 import express from 'express';
 import updateProduct from '../controllers/update-product.controller';
+import { checkExpiredProducts } from '../controllers/create-product.controller';
 import { authorizeMerchant } from '../middlewares/userRoles.middleware';
 import checkUserAndProductMiddleware from '../middlewares/check-user-and-product.middleware.js';
 
