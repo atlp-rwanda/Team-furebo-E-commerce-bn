@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       Payment.belongsTo(models.Order, {
         foreignKey: 'orderId',
         as: 'Order',
-        onDelete: 'CASCADE',
+        onDelete: 'CASCADE'
       });
     }
   }
@@ -16,20 +16,20 @@ module.exports = (sequelize, DataTypes) => {
     {
       orderId: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER
       },
       userId: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER
       },
       receiptUrl: {
         allowNull: false,
-        type: DataTypes.STRING,
-      },
+        type: DataTypes.STRING
+      }
     },
     {
       sequelize,
-      modelName: 'Payment',
+      modelName: 'Payment'
     }
   );
   return Payment;

@@ -22,6 +22,7 @@ import logout from './logout.routes';
 import markProductAvailability from './mark-availability.routes';
 import changePassword from './change-password.routes';
 import clearCart from './clear-cart.routes';
+import chatRouter from './chats.routes';
 
 const routes = express();
 
@@ -51,5 +52,6 @@ routes.use('/api', logout);
 routes.use('/api', markProductAvailability);
 routes.use('/api', changePassword);
 routes.use('/api', clearCart);
+routes.use('/api', chatRouter);
 
 export default routes;
