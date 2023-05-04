@@ -3,6 +3,7 @@ import { Product } from '../Database/models';
 import validateProduct from '../validation/product.validator';
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import checkExpiredProducts from '../utils/productExpiration';
+import emitter from '../events/notifications.event';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -17,7 +18,9 @@ const createProduct = asyncWrapper(async (req, res) => {
   }
 
   // Get userId from logged in user
+  // Get userId from logged in user
   const userId = req.user.id;
+  const { user } = req;
 
   // Verify if product already exists in the user's collection
   const productExists = await Product.findOne({
@@ -44,6 +47,7 @@ const createProduct = asyncWrapper(async (req, res) => {
     isExpired: false,
     userId // set the userId field to the current user's ID
   });
+  emitter.emit('newProduct', product, user);
   checkExpiredProducts();
   res.status(201).json({
     status: 'success',
