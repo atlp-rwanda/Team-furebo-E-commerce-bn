@@ -1,5 +1,5 @@
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
-import { Product } from '../Database/models';
+
 const setProductAvailability = asyncWrapper(async (req, res) => {
   const { product } = req;
   const { quantity, exDate } = req.body;

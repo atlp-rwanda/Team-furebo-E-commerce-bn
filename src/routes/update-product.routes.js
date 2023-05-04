@@ -1,7 +1,7 @@
 import express from 'express';
 import updateProduct from '../controllers/update-product.controller';
 import { authorizeMerchant } from '../middlewares/userRoles.middleware';
-import AuthMiddleware from '../middlewares/login.middleware';
+import checkUserAndProductMiddleware from '../middlewares/check-user-and-product.middleware.js';
 
 const router = express.Router();
 
@@ -86,8 +86,8 @@ const router = express.Router();
  */
 router.patch(
   '/updateProduct/:id',
-  AuthMiddleware.checkAuthentication,
   authorizeMerchant,
+  checkUserAndProductMiddleware,
   updateProduct
 );
 
