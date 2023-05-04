@@ -5,10 +5,10 @@ dotenv.config();
 
 const client = createClient({
   url: process.env.REDIS_CLIENT_URL,
-  connect_timeout: 60000
+  connect_timeout: 60000,
 });
 
-client.on('error', (err) => err);
+client.on('error', err => err);
 
 client.connect();
 

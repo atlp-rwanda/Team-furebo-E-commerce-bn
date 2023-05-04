@@ -21,6 +21,7 @@ class AuthMiddleware {
         return res.status(401).json({ msg: 'You have been Logged Out!' });
       }
       req.id = data.id;
+      req.data = data;
       next();
     } catch (error) {
       return res.status(500).json({

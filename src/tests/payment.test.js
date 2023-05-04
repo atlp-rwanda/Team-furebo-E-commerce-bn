@@ -20,48 +20,48 @@ const merchantData = {
   firstname: 'Jane',
   lastname: 'Doe',
   email: 'janedoe@gmail.com',
-  password: 'Password1234'
+  password: 'Password1234',
 };
 
 const loginMerchant = {
   email: 'janedoe@gmail.com',
-  password: 'Password1234'
+  password: 'Password1234',
 };
 
 const customerData = {
   firstname: 'John',
   lastname: 'Doe',
   email: 'johndoe@gmail.com',
-  password: 'Password1234'
+  password: 'Password1234',
 };
 
 const loginCustomer = {
   email: 'johndoe@gmail.com',
-  password: 'Password1234'
+  password: 'Password1234',
 };
 
 const customer2Data = {
   firstname: 'customer',
   lastname: 'two',
   email: 'customer2@gmail.com',
-  password: 'Password1234'
+  password: 'Password1234',
 };
 
 const loginCustomer2 = {
   email: 'customer2@gmail.com',
-  password: 'Password1234'
+  password: 'Password1234',
 };
 
 const adminData = {
   firstname: 'Admin',
   lastname: 'Doe',
   email: 'admindoe@gmail.com',
-  password: 'Password1234'
+  password: 'Password1234',
 };
 
 const loginAdmin = {
   email: 'admindoe@gmail.com',
-  password: 'Password1234'
+  password: 'Password1234',
 };
 
 describe('MAKING PAYMENT', async () => {
@@ -128,12 +128,12 @@ describe('MAKING PAYMENT', async () => {
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1'
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         ],
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30'
+        exDate: '2023-05-30',
       });
     expect(product).to.have.status(201);
     const productId = product.body.data.id;
@@ -144,7 +144,7 @@ describe('MAKING PAYMENT', async () => {
       .set({ Authorization: `Bearer ${customerToken}` })
       .send({
         productId,
-        quantity: 5
+        quantity: 5,
       });
 
     // working on checkout
@@ -157,16 +157,16 @@ describe('MAKING PAYMENT', async () => {
           street: 'KN 55 st',
           city: 'Kigali',
           country: 'Rwanda',
-          zipCode: '3853'
+          zipCode: '3853',
         },
         paymentInformation: {
           method: 'credit card',
           details: {
             cardNumber: '5555 5555 5555 4444',
             expirationDate: '10/23',
-            cvv: '346'
-          }
-        }
+            cvv: '346',
+          },
+        },
       });
     orderId = chechout.body.data.id;
   });
@@ -174,13 +174,13 @@ describe('MAKING PAYMENT', async () => {
   context(
     'It should fail to make payment because there is a missing input',
     () => {
-      it('should return a status of 406 when you entered an invalid data', (done) => {
+      it('should return a status of 406 when you entered an invalid data', done => {
         const requestBody = {
           card: {
             exp_month: 5,
             exp_year: 2025,
-            cvc: '123'
-          }
+            cvc: '123',
+          },
         };
         chai
           .request(app)
@@ -195,14 +195,14 @@ describe('MAKING PAYMENT', async () => {
     }
   );
   context('It should make payment', () => {
-    it('should make payment and return status of 201', (done) => {
+    it('should make payment and return status of 201', done => {
       const requestBody = {
         card: {
           number: '5555 5555 5555 4444',
           exp_month: 5,
           exp_year: 2025,
-          cvc: '123'
-        }
+          cvc: '123',
+        },
       };
       chai
         .request(app)
@@ -216,14 +216,14 @@ describe('MAKING PAYMENT', async () => {
     });
   });
   context('It should fail to make payment because order does not exist', () => {
-    it('should return a status of 404 when order not found', (done) => {
+    it('should return a status of 404 when order not found', done => {
       const requestBody = {
         card: {
           number: '5555 5555 5555 4444',
           exp_month: 5,
           exp_year: 2025,
-          cvc: '123'
-        }
+          cvc: '123',
+        },
       };
       chai
         .request(app)
@@ -239,14 +239,14 @@ describe('MAKING PAYMENT', async () => {
   context(
     'It should fail to make payment because user does not own the order',
     () => {
-      it('should return a status of 403 when user does not own order', (done) => {
+      it('should return a status of 403 when user does not own order', done => {
         const requestBody = {
           card: {
             number: '5555 5555 5555 4444',
             exp_month: 5,
             exp_year: 2025,
-            cvc: '123'
-          }
+            cvc: '123',
+          },
         };
         chai
           .request(app)
@@ -263,14 +263,14 @@ describe('MAKING PAYMENT', async () => {
   context(
     'It should fail to make payment because the order have been allready paid',
     () => {
-      it('should return a status of 409 when the order have been allready paid', (done) => {
+      it('should return a status of 409 when the order have been allready paid', done => {
         const requestBody = {
           card: {
             number: '5555 5555 5555 4444',
             exp_month: 5,
             exp_year: 2025,
-            cvc: '123'
-          }
+            cvc: '123',
+          },
         };
         chai
           .request(app)
@@ -285,7 +285,7 @@ describe('MAKING PAYMENT', async () => {
     }
   );
   context('It should get all payments history of specific user', () => {
-    it('should return a status of 200 with the payment history of specific user', (done) => {
+    it('should return a status of 200 with the payment history of specific user', done => {
       chai
         .request(app)
         .get('/api/getAllPayment')

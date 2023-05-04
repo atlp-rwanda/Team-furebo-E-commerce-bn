@@ -15,35 +15,65 @@ module.exports = (sequelize, DataTypes) => {
     {
       fullname: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+      },
+      gender: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      birthdate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        unique: true,
+      },
+      preferredLanguage: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      preferredCurrency: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      homeAddress: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      billingAddress: {
+        type: DataTypes.JSON,
+        allowNull: true,
       },
       isEnabled: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: true
+        defaultValue: true,
       },
       role: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+      },
+      profileImage: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
       },
       enable2FA: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
       },
       checkTwoFactor: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
       },
       isExpired: {
         type: DataTypes.BOOLEAN,
@@ -55,16 +85,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       createdAt: {
         allowNull: false,
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: DataTypes.DATE
-      }
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,
-      modelName: 'User'
+      modelName: 'User',
     }
   );
   return User;

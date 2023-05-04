@@ -18,14 +18,14 @@ export const CreatNewMessage = asyncWrapper(async (req, res) => {
   // Creating New Chat
   const Newmessage = await Chats.create({
     message,
-    sender: req.body.sender
+    sender: req.body.sender,
   });
 
   // Broadcasting the message to all connected users
   res.status(201).json({
     status: 'success',
     data: Newmessage,
-    message: 'sent sucessfully'
+    message: 'sent sucessfully',
   });
 });
 
@@ -36,12 +36,12 @@ export const listAllMessages = asyncWrapper(async (req, res) => {
     res.status(200).json({
       status: 'success',
       data: allMessages,
-      message: 'no message found'
+      message: 'no message found',
     });
   }
   res.status(200).json({
     status: 'success',
     data: allMessages,
-    message: 'messages'
+    message: 'messages',
   });
 });

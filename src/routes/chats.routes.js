@@ -1,5 +1,8 @@
 import express from 'express';
-import { CreatNewMessage, listAllMessages } from '../controllers/chats.controller';
+import {
+  CreatNewMessage,
+  listAllMessages,
+} from '../controllers/chats.controller';
 import { authorizeUser } from '../middlewares/userRoles.middleware';
 
 const router = express.Router();

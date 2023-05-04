@@ -28,18 +28,18 @@ schedulingJob();
 const port = process.env.PORT || 3000;
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: true
+  cors: true,
 });
 
 const users = {};
 
 // listening events using socket.io instance
-io.on('connection', (socket) => {
-  socket.on('new-user', (name) => {
+io.on('connection', socket => {
+  socket.on('new-user', name => {
     users[socket.id] = name;
     socket.broadcast.emit('user-connected', name);
   });
-  socket.on('send-chat-message', (message) => {
+  socket.on('send-chat-message', message => {
     socket.broadcast.emit('chat-message', { message, name: users[socket.id] });
   });
   socket.on('disconnect', () => {
