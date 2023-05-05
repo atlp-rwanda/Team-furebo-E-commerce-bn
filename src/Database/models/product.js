@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, {
         foreignKey: 'userId',
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        onUpdate: 'CASCADE'
       });
     }
 
@@ -35,12 +35,20 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       status: DataTypes.STRING,
       exDate: DataTypes.DATE,
+      isExpired: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      }
     },
     {
       sequelize,
-      modelName: 'Product',
+      modelName: 'Product'
     }
   );
-
+  Product.addHook('beforeUpdate', (product) => {
+    if (product.changed('exDate')) {
+      product.isExpired = product.exDate < new Date();
+    }
+  });
   return Product;
 };

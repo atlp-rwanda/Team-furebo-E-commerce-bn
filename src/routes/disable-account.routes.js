@@ -9,7 +9,7 @@ const router = express.Router();
  * components:
  *   schemas:
  *     DisableAccount:
- *       $ref: '#/components/schemas/Users'
+ *       $ref: '#/components/schemas/User'
  *
  */
 
@@ -50,7 +50,7 @@ const router = express.Router();
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/Users'
+ *                   $ref: '#/components/schemas/User'
  *       404:
  *         description: UserID not found
  *         content:

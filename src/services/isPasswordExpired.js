@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { Sequelize } from 'sequelize';
 import { User } from '../Database/models';
-import eventEmitter from '../events/eventEmit';
+import eventEmitter from '../events/passwordEventEmit';
 import 'dotenv/config';
 
 const passwordExipiration = async () => {

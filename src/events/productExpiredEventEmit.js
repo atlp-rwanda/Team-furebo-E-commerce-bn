@@ -2,10 +2,10 @@ import events from 'events';
 
 const eventEmitter = new events();
 
-eventEmitter.on('password_expiration', msg => {
+eventEmitter.on('product_expiration', (msg) => {
   console.log(msg);
 });
-eventEmitter.on('noExpiredPassword', msg => {
+eventEmitter.on('noProductExpired', (msg) => {
   console.log(msg);
 });
 export default eventEmitter;

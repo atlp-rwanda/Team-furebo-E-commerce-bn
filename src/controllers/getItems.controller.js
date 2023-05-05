@@ -40,9 +40,9 @@ export const getAllBuyerItems = asyncWrapper(async (req, res) => {
       totalPages: Math.ceil(items.count / size),
       itemsPerPage: size,
       currentPage: page,
-      items: items.rows,
+      items: items.rows
     },
-    message: 'product retrived',
+    message: 'product retrived'
   });
 });
 
@@ -85,8 +85,8 @@ export const getAllSellerItems = asyncWrapper(async (req, res) => {
       totalPages: Math.ceil(items.count / size),
       itemsPerPage: size,
       currentPage: page,
-      items: items.rows,
+      items: items.rows
     },
-    message: 'product retrived',
+    message: 'product retrived'
   });
 });
