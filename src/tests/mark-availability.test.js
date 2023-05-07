@@ -5,6 +5,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
 import app from '../../index';
+import { sequelize } from '../Database/models';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -128,8 +129,12 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
     existingProductId = productRes.body.data.id;
   });
 
+  // after(async () => {
+  //   await sequelize.sync({ force: true });
+  // });
+
   context(' SET PRODUCT AVAILABILITY WITH VALID DATA', () => {
-    it('should return status 200 and set product availability', done => {
+    it('should return status 200 and set product availability', (done) => {
       const productData = {
         quantity: 5,
         exDate: '2020-04-30',
@@ -147,7 +152,7 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
     });
   });
   context(' SET PRODUCT AVAILABILITY WITH INVALID USER', () => {
-    it('should return status 403 and an error message', done => {
+    it('should return status 403 and an error message', (done) => {
       const productData = {
         quantity: 5,
         exDate: '2020-04-30',
@@ -165,7 +170,7 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
   });
 
   context('SET PRODUCT AVAILABILITY WITH NO-EXISTING PRODUCT', () => {
-    it('should return status 404 and an error message', done => {
+    it('should return status 404 and an error message', (done) => {
       const productData = {
         quantity: 5,
         exDate: '2020-04-30',

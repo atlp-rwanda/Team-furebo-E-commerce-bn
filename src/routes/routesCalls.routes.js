@@ -24,6 +24,8 @@ import changePassword from './change-password.routes';
 import clearCart from './clear-cart.routes';
 import chatRouter from './chats.routes';
 import profilePage from './profile.routes';
+import readNotificatioRouter from './notificationRead.routes';
+import trackOrder from './track-order.routes';
 
 const routes = express();
 
@@ -55,5 +57,7 @@ routes.use('/api', changePassword);
 routes.use('/api', clearCart);
 routes.use('/api', chatRouter);
 routes.use('/api', profilePage);
+routes.use('/api', readNotificatioRouter);
+routes.use('/api', trackOrder);
 
 export default routes;

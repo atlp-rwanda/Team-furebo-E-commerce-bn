@@ -6,7 +6,7 @@ import paymentCardShema from '../validation/paymentCard.validator';
 import db from '../Database/models';
 
 // LOAD MODELS FROM DB
-const { Payment, ShoppingCart, Order } = db;
+const { Payment, ShoppingCart, Order, OrderStatus } = db;
 
 // LOAD SECRET
 const { STRIPE_SECRET_KEY } = process.env;
@@ -17,7 +17,7 @@ const stripePayment = stripe(STRIPE_SECRET_KEY);
 // MAKE PAYMENT
 export const makePayment = asyncWrapper(async (req, res) => {
   // RETRIEVE VALUES RETURNED BY THE MIDDLEWARE
-  const { user, findOrder, orderProductsDataArray } = res.datas;
+  const { user, findOrder, orderProductsDataArray, currentOrderStatus } = res.datas;
 
   const { card } = req.body;
 
@@ -71,6 +71,10 @@ export const makePayment = asyncWrapper(async (req, res) => {
   });
   // UPDATE ORDER STATUS
   const updateOrder = await findOrder.update({
+    status: 'paid',
+  });
+
+  await currentOrderStatus.update({
     status: 'paid',
   });
 

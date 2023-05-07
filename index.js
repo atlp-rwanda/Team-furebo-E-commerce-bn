@@ -49,6 +49,6 @@ io.on('connection', socket => {
   });
 });
 
-httpServer.listen(port, () => {});
+httpServer.listen(port, () => {console.log(port); });
 
 export default app;

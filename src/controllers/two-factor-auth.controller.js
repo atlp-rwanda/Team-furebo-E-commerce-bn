@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import speakeasy from 'speakeasy';
 import client from '../utils/redis.util';
 import db from '../Database/models';
@@ -25,7 +26,7 @@ export const enable2FAForMerchants = asyncWrapper(async (req, res) => {
   return res.status(200).json({ message: 'Two Factor Authentication enabled' });
 });
 
-export const generateOTPCode = secretKey => {
+export const generateOTPCode = (secretKey) => {
   const code = speakeasy.time({
     secret: secretKey,
     encoding: 'base32',

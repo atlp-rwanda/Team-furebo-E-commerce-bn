@@ -147,12 +147,15 @@ describe('POST /api/checkout', async () => {
       });
   });
 
-  // after(async () => {
-  //     await sequelize.sync({ force: true });
-  // });
+  after(async () => {
+    await users.destroy({
+        where: { email: customer2Data.email, email: customerData.email, email: merchantData.email, email: adminData.email},
+        truncate: { cascade: true },
+    });
+});
 
   context('It should create a new order', () => {
-    it('should retrive user information with status code 200', done => {
+    it('It should create a new order and return status code 200', (done) => {
       const requestBody = {
         deliveryAddress: {
           street: 'KN 55 st',
@@ -183,7 +186,7 @@ describe('POST /api/checkout', async () => {
   });
 
   context('when trying to checkout with invalid input', () => {
-    it('should return status 400 and an error message', done => {
+    it('should return status 400 and an error message', (done) => {
       const requestBody = {
         deliveryAddress: {
           city: 'Kigali',
@@ -209,7 +212,7 @@ describe('POST /api/checkout', async () => {
   });
 
   context('When the cart is empty, User is notified ', () => {
-    it(' should return 404 status when cart is empty', done => {
+    it(' should return 404 status when cart is empty', (done) => {
       const requestBody = {
         deliveryAddress: {
           street: 'KN 55 st',
@@ -242,7 +245,7 @@ describe('POST /api/checkout', async () => {
   context(
     'Return error message requesting the user to login to proceed with checkout',
     () => {
-      it('should return 400 when user/token is not provided', done => {
+      it('should return 400 when user/token is not provided', (done) => {
         const requestBody = {
           deliveryAddress: {
             street: 'KN 55 st',
@@ -262,11 +265,11 @@ describe('POST /api/checkout', async () => {
         chai
           .request(app)
           .post('/api/checkout')
-          .set({ Authorization: `Bearer ` })
+          .set({ Authorization: 'Bearer ' })
           .send(requestBody)
           .end((err, res) => {
             chai.expect(res).to.have.status(400);
-            // chai.expect(res.body.status).to.include('error');
+            chai.expect(res.body.status).to.include('error');
             done();
           });
       });

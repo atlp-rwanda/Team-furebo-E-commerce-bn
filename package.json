@@ -86,6 +86,7 @@
     "sequelize-cli": "^6.6.0",
     "sinon": "^15.0.3",
     "socket.io": "^4.6.1",
+    "socket.io-client": "^4.6.1",
     "speakeasy": "^2.0.0",
     "stripe": "^12.3.0",
     "swagger-jsdoc": "^6.2.8",

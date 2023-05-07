@@ -20,6 +20,7 @@ export const authorizeAdmin = async (req, res, next) => {
     const userRole = JSON.parse(user.role);
 
     if (userRole.name === 'admin') {
+      req.user = user;
       next();
     } else {
       return res.status(403).send({ message: 'Admin access only' });

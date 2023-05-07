@@ -4,8 +4,8 @@
 /* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../../index';
 import jwt from 'jsonwebtoken';
+import app from '../../index';
 import { sequelize } from '../Database/models';
 
 const { expect } = chai;
@@ -146,15 +146,14 @@ describe(' CLEAR SHOPPING CART TEST', () => {
         quantity: 2,
       });
 
-    CART_ITEM_ID =
-      addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
-        .ID;
+    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
+      .ID;
   });
-  after(async () => {
-    await sequelize.sync({ force: true });
-  });
+  // after(async () => {
+  //   await sequelize.sync({ force: true });
+  // });
   context('CLEAR CLEAR CART WHEN THERE ITEM(S) INSIDE ', () => {
-    it('should clean shopping cart and return status 200', done => {
+    it('should clean shopping cart and return status 200', (done) => {
       chai
         .request(app)
         .delete('/api/clear-cart')

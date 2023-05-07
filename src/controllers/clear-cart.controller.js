@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
 
 const clearCart = asyncWrapper(async (req, res, next) => {

@@ -2,7 +2,9 @@ import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import checkExpiredProducts from '../utils/productExpiration';
 
 const updateProduct = asyncWrapper(async (req, res) => {
-  const { name, image, price, quantity, category, exDate } = req.body;
+  const {
+    name, image, price, quantity, category, exDate
+  } = req.body;
 
   const { product, productId, userId } = req;
   // update the product record
