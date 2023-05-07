@@ -31,36 +31,36 @@ const loginMerchant = {
 const customerData = {
   firstname: 'John',
   lastname: 'Doe',
-  email: 'johndoe@gmail.com',
+  email: 'johndoegg@gmail.com',
   password: 'Password1234'
 };
 
 const loginCustomer = {
-  email: 'johndoe@gmail.com',
+  email: 'johndoegg@gmail.com',
   password: 'Password1234'
 };
 
 const customer2Data = {
   firstname: 'customer',
   lastname: 'two',
-  email: 'customer2@gmail.com',
+  email: 'customerhh2@gmail.com',
   password: 'Password1234'
 };
 
 const loginCustomer2 = {
-  email: 'customer2@gmail.com',
+  email: 'customerhh2@gmail.com',
   password: 'Password1234'
 };
 
 const adminData = {
   firstname: 'Admin',
   lastname: 'Doe',
-  email: 'admindoe@gmail.com',
+  email: 'admindoehhg@gmail.com',
   password: 'Password1234'
 };
 
 const loginAdmin = {
-  email: 'admindoe@gmail.com',
+  email: 'admindoehhg@gmail.com',
   password: 'Password1234'
 };
 
@@ -123,7 +123,7 @@ describe('MAKING PAYMENT', async () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${merchantToken}`)
       .send({
-        name: 'HCT/RP 360ST',
+        name: 'HCT/RPKKOOPPVhbg 360ST',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -132,13 +132,13 @@ describe('MAKING PAYMENT', async () => {
         ],
         price: 2500,
         quantity: 12,
-        category: 'GAMMING PC',
+        category: 'GAMMINGjut PC',
         exDate: '2023-05-30'
       });
     expect(product).to.have.status(201);
     const productId = product.body.data.id;
 
-    await chai
+    const Cart = await chai
       .request(app)
       .post('/api/addItemToCart')
       .set({ Authorization: `Bearer ${customerToken}` })
@@ -146,6 +146,7 @@ describe('MAKING PAYMENT', async () => {
         productId,
         quantity: 5
       });
+    expect(Cart).to.have.status(201);
 
     // working on checkout
     const chechout = await chai

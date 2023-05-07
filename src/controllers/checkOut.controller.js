@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable import/prefer-default-export */
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import {
   ShoppingCart,
@@ -18,7 +20,7 @@ export const buyerCheckout = asyncWrapper(async (req, res) => {
 
   const products = [];
 
-  currentCart.forEach(item => {
+  currentCart.forEach((item) => {
     const product = {
       productId: item.productId,
       quantity: item.productId,
@@ -43,9 +45,9 @@ export const buyerCheckout = asyncWrapper(async (req, res) => {
 
   const order = await Order.create({
     userId: user.id,
-    products: products,
+    products,
     totalPrice: cartTotalPrice,
-    deliveryAddress: deliveryAddress,
+    deliveryAddress,
     paymentMethod: paymentInformation.method,
   });
 

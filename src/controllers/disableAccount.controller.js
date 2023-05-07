@@ -5,7 +5,7 @@ const update = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   User.update(req.body, {
     where: { id },
-  }).then(num => {
+  }).then((num) => {
     if (num == 1) {
       res.send({
         message: 'User is disabled successfully.',

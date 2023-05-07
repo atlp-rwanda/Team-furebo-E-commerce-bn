@@ -37,7 +37,7 @@ const validatePayment = asyncWrapper(async (req, res, next) => {
 
   // CHECK IF PRODUCT EXISTS
 
-  const orderProductsData = findOrder.products.map(async product => {
+  const orderProductsData = findOrder.products.map(async (product) => {
     const data = await Product.findOne({
       where: {
         id: product.productId,

@@ -2,7 +2,7 @@ import 'dotenv/config';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../index';
-import { sequelize } from '../Database/models';
+// import { sequelize } from '../Database/models';
 import { verifyToken } from '../utils/user.util';
 
 const { expect } = chai;
@@ -97,9 +97,9 @@ describe('CHANGE USER PASSWORD', async () => {
     );
     USER_THREE_ID = user3DecodToken.id;
   });
-  after(async () => {
-    await sequelize.sync({ force: true });
-  });
+  // after(async () => {
+  //   await sequelize.sync({ force: true });
+  // });
 
   context('WHEN USER TRIED TO CHANGE SOMEONE ELSE PASSWORD', () => {
     it('should return a 403 error response with "Unauthorized" message when a user attempts to change another user\'s password', async () => {
