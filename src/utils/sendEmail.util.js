@@ -12,7 +12,7 @@ const sendMail = async (recipient) => new Promise((resolve, reject) => {
     from: process.env.SMTP_USER,
     to: recipient.recipientEmail,
     subject: recipient.emailSubject,
-    text: recipient.emailBody,
+    html: recipient.emailBody,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

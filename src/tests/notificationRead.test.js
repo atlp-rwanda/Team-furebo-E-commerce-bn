@@ -5,7 +5,10 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
 import app from '../../index';
-import { users } from '../Database/models';
+import db from '../Database/models';
+import { emitProductAddedEvent } from '../events/notifications.event';
+
+const { User } = db;
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -15,6 +18,7 @@ let customerToken;
 let adminToken;
 let customer2Token;
 let orderId;
+let notificationId;
 
 const merchantData = {
   firstname: 'Jane',
@@ -149,6 +153,10 @@ describe('MARK NOTIFICATIONS', async () => {
         exDate: '2023-05-30',
       });
     expect(product).to.have.status(201);
+    const merchant = await User.findByPk(merchantId);
+
+    const notification = await emitProductAddedEvent(product.body.data, merchant);
+    notificationId = notification.id;
 
     // create a 2nd product to be added to the shopping cart
     const product2 = await chai
@@ -239,30 +247,11 @@ describe('MARK NOTIFICATIONS', async () => {
         };
         chai
           .request(app)
-          .post('/api/singleNotification/7')
+          .post(`/api/singleNotification/${notificationId}`)
           .set({ Authorization: `Bearer ${merchantToken}` })
           .send(requestBody)
           .end((err, res) => {
             chai.expect(res).to.have.status(200);
-            done();
-          });
-      });
-    }
-  );
-  context(
-    'It should fail to mark notification as read because there will not be notfication',
-    () => {
-      it('should return a status of 404 notification is not there', (done) => {
-        const requestBody = {
-          isRead: true,
-        };
-        chai
-          .request(app)
-          .post('/api/allNotifications')
-          .set({ Authorization: `Bearer ${merchantToken}` })
-          .send(requestBody)
-          .end((err, res) => {
-            chai.expect(res).to.have.status(404);
             done();
           });
       });
@@ -282,6 +271,25 @@ describe('MARK NOTIFICATIONS', async () => {
           .send(requestBody)
           .end((err, res) => {
             chai.expect(res).to.have.status(200);
+            done();
+          });
+      });
+    }
+  );
+  context(
+    'It should fail to mark notification as read because there will not be notfication',
+    () => {
+      it('should return a status of 404 notification is not there', (done) => {
+        const requestBody = {
+          isRead: true,
+        };
+        chai
+          .request(app)
+          .post('/api/allNotifications')
+          .set({ Authorization: `Bearer ${customerToken}` })
+          .send(requestBody)
+          .end((err, res) => {
+            chai.expect(res).to.have.status(404);
             done();
           });
       });
