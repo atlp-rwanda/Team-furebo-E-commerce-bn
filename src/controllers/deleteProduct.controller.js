@@ -1,5 +1,6 @@
-import { Product } from '../Database/models';
+import { Product, User } from '../Database/models';
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
+import emitter from '../events/notifications.event';
 
 const deleteProduct = asyncWrapper(async (req, res) => {
   const { id } = req.params;
@@ -9,6 +10,9 @@ const deleteProduct = asyncWrapper(async (req, res) => {
     });
   }
   const userId = req.user.id;
+  const user = await User.findOne({
+    where: { id: userId }
+  });
   const product = await Product.findOne({
     where: { id, userId },
   });
@@ -19,6 +23,7 @@ const deleteProduct = asyncWrapper(async (req, res) => {
   }
 
   await product.destroy();
+  emitter.emit('productRemoved', product, user);
   res.status(200).json({
     status: 'success',
     message: 'Product deleted successfully',
