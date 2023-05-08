@@ -11,6 +11,13 @@ jobs:
 
     docker:
       - image: node:18.15
+      - image: cimg/postgres:14.0
+        environment:
+          POSTGRES_USER: ${DB_USERNAME}
+          POSTGRES_PASSWORD: ${DB_PASSWORD}
+          POSTGRES_HOST: ${DB_HOST}
+          POSTGRES_DB: ${DB_USERNAME}
+
       - image: cimg/redis:6.2.6
 
     executor: node/default

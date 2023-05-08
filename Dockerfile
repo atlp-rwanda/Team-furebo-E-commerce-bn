@@ -1,5 +1,5 @@
 
-FROM node:16;
+FROM node:16
 
 # We have to install nodemon globally before moving into the working directory
 RUN npm install -g nodemon
@@ -17,4 +17,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 3000
-CMD ./start.sh
+CMD [ "node", "index.js" ]
