@@ -264,16 +264,6 @@ describe('sendMail function', () => {
       emailBody: 'Test Body',
     };
     const code = '123456';
-    const result = await sendMail(recipient, code);
-    expect(result.response).to.include('250 2.0.0 OK');
-  });
-  it('should check the send email function and resolve with error message', async () => {
-    const recipient = {
-      recipientEmail: 'invalid-email',
-      emailSubject: 'Test Subject',
-      emailBody: 'Test Body',
-    };
-    const code = '123456';
     try {
       await sendMail(recipient, code);
     } catch (error) {

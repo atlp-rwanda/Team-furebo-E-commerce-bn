@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       gender: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -55,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       role: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
       },
       profileImage: {
         type: DataTypes.ARRAY(DataTypes.STRING),
