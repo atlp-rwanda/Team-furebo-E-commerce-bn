@@ -18,7 +18,6 @@ const createProduct = asyncWrapper(async (req, res) => {
   }
 
   // Get userId from logged in user
-  // Get userId from logged in user
   const userId = req.user.id;
   const { user } = req;
 
@@ -27,8 +26,12 @@ const createProduct = asyncWrapper(async (req, res) => {
     where: { name, userId }
   });
   if (productExists) {
-    return res.status(409).json({
-      message: 'The product already exist, You can update its details only',
+    const newQuantity = productExists.quantity + req.body.quantity;
+    await productExists.update({
+      quantity: newQuantity,
+    });
+    return res.status(200).json({
+      message: `The product already exists, its quantity has been updated to ${newQuantity}, To make other changes to the product use the update option`,
       data: productExists
     });
   }

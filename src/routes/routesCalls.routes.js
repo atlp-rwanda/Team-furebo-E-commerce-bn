@@ -26,6 +26,7 @@ import chatRouter from './chats.routes';
 import profilePage from './profile.routes';
 import readNotificatioRouter from './notificationRead.routes';
 import findProduct from './findProduct.routes';
+import addProductFeedback from './productFeedback.routes';
 
 const routes = express();
 
@@ -59,5 +60,6 @@ routes.use('/api', chatRouter);
 routes.use('/api', profilePage);
 routes.use('/api', readNotificatioRouter);
 routes.use('/api', findProduct);
+routes.use('/api', addProductFeedback);
 
 export default routes;
