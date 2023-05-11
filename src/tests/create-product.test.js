@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import 'dotenv/config';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
@@ -99,7 +100,7 @@ describe('POST PRODUCT', async () => {
   });
 
   context('CREATE PRODUCT WITH valid Data', () => {
-    it('should return status 201 and add the product to the database', (done) => {
+    it('should return status 201 and add the product to the database', async () => {
       const productData = {
         name: 'Screen',
         image: [
@@ -111,25 +112,22 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2123-05-30',
+        exDate: '2023-05-30',
       };
 
-      chai
+      const res = await chai
         .request(app)
         .post('/api/addProduct')
         .set({ Authorization: `Bearer ${sellerToken}` })
-        .send(productData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(201);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Product created successfully');
-          done();
-        });
+        .send(productData);
+      expect(res).to.have.status(201);
+      const actualVal = res.body.message;
+      expect(actualVal).to.be.equal('Product created successfully');
     });
   });
 
   context('WHEN A PRODUCT ALREADY EXISTS in the seller collection', () => {
-    it('should return status 409 and return an adequate message', (done) => {
+    it('should return status 200 and return an adequate message', async () => {
       const productData = {
         name: 'Screen',
         image: [
@@ -141,27 +139,24 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2123-05-30',
+        exDate: '2023-05-30',
       };
 
-      chai
+      const res = await chai
         .request(app)
         .post('/api/addProduct')
         .set({ Authorization: `Bearer ${sellerToken}` })
-        .send(productData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(409);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal(
-            'The product already exist, You can update its details only'
-          );
-          done();
-        });
+        .send(productData);
+      expect(res).to.have.status(200);
+      const actualVal = res.body.message;
+      expect(actualVal).to.be.equal(
+        'The product already exists, its quantity has been updated to 20, To make other changes to the product use the update option'
+      );
     });
   });
 
   context('when a required field is missing', () => {
-    it('should return status 400 and an error message detailing the missing field', (done) => {
+    it('should return status 400 and an error message detailing the missing field', async () => {
       const productData = {
         name: 'Laptop',
         image: [
@@ -176,21 +171,17 @@ describe('POST PRODUCT', async () => {
         // exDate is missing
       };
 
-      chai
+      const res = await chai
         .request(app)
         .post('/api/addProduct')
         .set({ Authorization: `Bearer ${sellerToken}` })
-        .send(productData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          const actualVal = res.body.message;
-          done();
-        });
+        .send(productData);
+      chai.expect(res).to.have.status(400);
     });
   });
 
   context('when the price value is invalid', () => {
-    it('should return status 400 and an error message', (done) => {
+    it('should return status 400 and an error message', async () => {
       const productData = {
         name: 'Laptop',
         image: [
@@ -202,25 +193,22 @@ describe('POST PRODUCT', async () => {
         price: 'invalid_price_value',
         quantity: 10,
         category: 'example',
-        exDate: '2123-05-30',
+        exDate: '2123-04-30',
       };
 
-      chai
+      const res = await chai
         .request(app)
         .post('/api/addProduct')
         .set({ Authorization: `Bearer ${sellerToken}` })
-        .send(productData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('"price" must be a number');
-          done();
-        });
+        .send(productData);
+      chai.expect(res).to.have.status(400);
+      const actualVal = res.body.message;
+      expect(actualVal).to.be.equal('"price" must be a number');
     });
   });
 
   context('when product creation fails', () => {
-    it('should return status 500 and an error message', (done) => {
+    it('should return status 500 and an error message', async () => {
       // Mock the behavior of the Product.create method to always throw an error
       const createStub = sinon
         .stub(Product, 'create')
@@ -236,88 +224,81 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2123-05-30',
+        exDate: '2023-05-30',
       };
-      chai
+      const res = chai
         .request(app)
         .post('/api/addProduct')
         .set({ Authorization: `Bearer ${sellerToken}` })
         .send(productData)
         .end((err, res) => {
-          chai.expect(res).to.have.status(500);
+          expect(res).to.have.status(500);
           const actualVal = res.body.message;
           expect(actualVal).to.be.equal('Failed to create product');
           // Restore the original behavior of the Product.create method
           createStub.restore();
-          done();
         });
     });
-  });
 
-  context('when the quantity is not a positive number', () => {
-    it('should return status 400 and an error message', (done) => {
-      const productData = {
-        name: 'Laptop',
-        image: [
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        ],
-        quantity: -12,
-        price: 200,
-        category: 'example',
-        exDate: '2123-05-30',
-      };
+    context('when the quantity is not a positive number', () => {
+      it('should return status 400 and an error message', async () => {
+        const productData = {
+          name: 'Laptop',
+          image: [
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          ],
+          quantity: -12,
+          price: 200,
+          category: 'example',
+          exDate: '2023-05-30',
+        };
 
-      chai
-        .request(app)
-        .post('/api/addProduct')
-        .set({ Authorization: `Bearer ${sellerToken}` })
-        .send(productData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal(
-            '"quantity" must be greater than or equal to 0'
-          );
-          done();
-        });
+        const res = await chai
+          .request(app)
+          .post('/api/addProduct')
+          .set({ Authorization: `Bearer ${sellerToken}` })
+          .send(productData);
+        expect(res).to.have.status(400);
+        const actualVal = res.body.message;
+        expect(actualVal).to.be.equal(
+          '"quantity" must be greater than or equal to 0'
+        );
+      });
     });
-  });
 
-  context('when product creation fails', () => {
-    it('should return status 500 and an error message', (done) => {
+    context('when product creation fails', () => {
+      it('should return status 500 and an error message', async () => {
       // Mock the behavior of the Product.create method to always throw an error
-      const createStub = sinon
-        .stub(Product, 'create')
-        .rejects(new Error('Failed to create product'));
-      const productData = {
-        name: 'Laptop',
-        image: [
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        ],
-        price: 2000.99,
-        quantity: 10,
-        category: 'HP',
-        exDate: '2123-05-30',
-      };
-      chai
-        .request(app)
-        .post('/api/addProduct')
-        .set({ Authorization: `Bearer ${sellerToken}` })
-        .send(productData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(500);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Failed to create product');
-          // Restore the original behavior of the Product.create method
-          createStub.restore();
-          done();
-        });
+        const createStub = sinon
+          .stub(Product, 'create')
+          .rejects(new Error('Failed to create product'));
+        const productData = {
+          name: 'Laptop',
+          image: [
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          ],
+          price: 2000.99,
+          quantity: 10,
+          category: 'HP',
+          exDate: '2023-05-30',
+        };
+        const res = await chai
+          .request(app)
+          .post('/api/addProduct')
+          .set({ Authorization: `Bearer ${sellerToken}` })
+          .send(productData);
+        expect(res).to.have.status(500);
+        const actualVal = res.body.message;
+        expect(actualVal).to.be.equal('Failed to create product');
+        // Restore the original behavior of the Product.create method
+        createStub.restore();
+      });
     });
   });
 });

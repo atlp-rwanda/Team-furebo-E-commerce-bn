@@ -23,48 +23,48 @@ let notificationId;
 const merchantData = {
   firstname: 'Jane',
   lastname: 'Doe',
-  email: 'janedoe@gmail.com',
+  email: 'janedoe12@gmail.com',
   password: 'Password1234',
 };
 
 const loginMerchant = {
-  email: 'janedoe@gmail.com',
+  email: 'janedoe12@gmail.com',
   password: 'Password1234',
 };
 
 const customerData = {
   firstname: 'John',
   lastname: 'Doe',
-  email: 'johndoe@gmail.com',
+  email: 'johndoe12@gmail.com',
   password: 'Password1234',
 };
 
 const loginCustomer = {
-  email: 'johndoe@gmail.com',
+  email: 'johndoe12@gmail.com',
   password: 'Password1234',
 };
 
 const customer2Data = {
   firstname: 'customer',
   lastname: 'two',
-  email: 'customer2@gmail.com',
+  email: 'customer212@gmail.com',
   password: 'Password1234',
 };
 
 const loginCustomer2 = {
-  email: 'customer2@gmail.com',
+  email: 'customer212@gmail.com',
   password: 'Password1234',
 };
 
 const adminData = {
   firstname: 'Admin',
   lastname: 'Doe',
-  email: 'admindoe@gmail.com',
+  email: 'admindoe12@gmail.com',
   password: 'Password1234',
 };
 
 const loginAdmin = {
-  email: 'admindoe@gmail.com',
+  email: 'admindoe12@gmail.com',
   password: 'Password1234',
 };
 
@@ -155,7 +155,10 @@ describe('MARK NOTIFICATIONS', async () => {
     expect(product).to.have.status(201);
     const merchant = await User.findByPk(merchantId);
 
-    const notification = await emitProductAddedEvent(product.body.data, merchant);
+    const notification = await emitProductAddedEvent(
+      product.body.data,
+      merchant
+    );
     notificationId = notification.id;
 
     // create a 2nd product to be added to the shopping cart
@@ -164,7 +167,7 @@ describe('MARK NOTIFICATIONS', async () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${customerToken}`)
       .send({
-        name: 'HCT/RPhhh 360ST',
+        name: 'HCT/RPhhhy 360ST',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -173,50 +176,16 @@ describe('MARK NOTIFICATIONS', async () => {
         ],
         price: 2500,
         quantity: 12,
-        category: 'GAMMING PCww',
+        category: 'GAMMING PCwwy',
         exDate: '2023-05-30',
       });
     expect(product2).to.have.status(201);
+    const merchant2 = await User.findByPk(customerId);
 
-    // create a 3rd product to be added to the shopping cart
-    const product3 = await chai
-      .request(app)
-      .post('/api/addProduct')
-      .set('Authorization', `Bearer ${customerToken}`)
-      .send({
-        name: 'HCT/RPee 360ST',
-        image: [
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        ],
-        price: 2500,
-        quantity: 12,
-        category: '1GAMMING PCwwee',
-        exDate: '2023-05-30',
-      });
-    expect(product3).to.have.status(201);
-
-    // create a 4th product to be added to the shopping cart
-    const product4 = await chai
-      .request(app)
-      .post('/api/addProduct')
-      .set('Authorization', `Bearer ${customerToken}`)
-      .send({
-        name: 'HCT/RPeeyt 360ST',
-        image: [
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        ],
-        price: 2500,
-        quantity: 12,
-        category: '1GAMMINGhg PCwwee',
-        exDate: '2023-05-30',
-      });
-    expect(product4).to.have.status(201);
+    const notification2 = await emitProductAddedEvent(
+      product2.body.data,
+      merchant2
+    );
   });
 
   context(
@@ -238,44 +207,38 @@ describe('MARK NOTIFICATIONS', async () => {
       });
     }
   );
-  context(
-    'It should mark notification as read',
-    () => {
-      it('should return a status of 200 when notification is read', (done) => {
-        const requestBody = {
-          isRead: true,
-        };
-        chai
-          .request(app)
-          .post(`/api/singleNotification/${notificationId}`)
-          .set({ Authorization: `Bearer ${merchantToken}` })
-          .send(requestBody)
-          .end((err, res) => {
-            chai.expect(res).to.have.status(200);
-            done();
-          });
-      });
-    }
-  );
-  context(
-    'It should mark all notifications as read',
-    () => {
-      it('should return a status of 200 when all notifications are read', (done) => {
-        const requestBody = {
-          isRead: true,
-        };
-        chai
-          .request(app)
-          .post('/api/allNotifications')
-          .set({ Authorization: `Bearer ${customerToken}` })
-          .send(requestBody)
-          .end((err, res) => {
-            chai.expect(res).to.have.status(200);
-            done();
-          });
-      });
-    }
-  );
+  context('It should mark notification as read', () => {
+    it('should return a status of 200 when notification is read', (done) => {
+      const requestBody = {
+        isRead: true,
+      };
+      chai
+        .request(app)
+        .post(`/api/singleNotification/${notificationId}`)
+        .set({ Authorization: `Bearer ${merchantToken}` })
+        .send(requestBody)
+        .end((err, res) => {
+          chai.expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
+  context('It should mark all notifications as read', () => {
+    it('should return a status of 200 when all notifications are read', (done) => {
+      const requestBody = {
+        isRead: true,
+      };
+      chai
+        .request(app)
+        .post('/api/allNotifications')
+        .set({ Authorization: `Bearer ${customerToken}` })
+        .send(requestBody)
+        .end((err, res) => {
+          chai.expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
   context(
     'It should fail to mark notification as read because there will not be notfication',
     () => {

@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       category: DataTypes.STRING,
       userId: DataTypes.INTEGER,
       status: DataTypes.STRING,
+      averageRating: DataTypes.DECIMAL(2, 1),
       exDate: DataTypes.DATE,
       isExpired: {
         type: DataTypes.BOOLEAN,

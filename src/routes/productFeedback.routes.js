@@ -1,8 +1,8 @@
 import express from 'express';
-import createProduct from '../controllers/create-product.controller';
-import { authorizeMerchant } from '../middlewares/userRoles.middleware';
+import createProductFeedback from '../controllers/productFeedback.controller';
+import { authorizeCustomer } from '../middlewares/userRoles.middleware';
 import AuthMiddleware from '../middlewares/login.middleware';
-import validateProductMiddleware from '../middlewares/validateProductMiddleware';
+import validateProductFeedbackMiddleware from '../middlewares/validateProductFeedbackMiddleware';
 
 const router = express.Router();
 
@@ -15,44 +15,41 @@ const router = express.Router();
  *          scheme: bearer
  *          bearerFormat: JWT
  *      schemas:
- *          Product:
+ *          ProductFeedback:
  *              type: object
  *              properties:
- *                  name:
- *                      type: string
- *                  image:
- *                      type: array
- *                      items:
- *                          type: string
- *                  price:
+ *                  rating:
  *                      type: number
- *                  quantity:
- *                      type: number
- *                  category:
- *                      type: string
- *                  exDate:
+ *                  review:
  *                      type: string
  */
 
 /**
  * @swagger
- * /api/addProduct:
+ * /api/addProductFeedback/{id}:
  *   post:
  *     security:
  *      - bearerAuth: []
- *     summary: This API is for adding a product
- *     description: Add a new product to the database.
+ *     summary: This API is for adding a rating and review to a product
+ *     description: Add a new review and rating. The rating should be between 1 and 5
  *     tags:
  *       - Product
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: ID of the product to add a review and rate to
+ *         required: true
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Product'
+ *             $ref: '#/components/schemas/ProductFeedback'
  *     responses:
  *       201:
- *         description: Product created successfully
+ *         description: Product review created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -65,7 +62,7 @@ const router = express.Router();
  *                   type: string
  *                   description: success message
  *                 data:
- *                   $ref: '#/components/schemas/Product'
+ *                   $ref: '#/components/schemas/ProductFeedback'
  *       400:
  *         description: Missing or invalid fields
  *         content:
@@ -97,11 +94,11 @@ const router = express.Router();
  *                   description: error details
  */
 router.post(
-  '/addProduct',
+  '/addProductFeedback/:id',
   AuthMiddleware.checkAuthentication,
-  authorizeMerchant,
-  validateProductMiddleware,
-  createProduct,
+  authorizeCustomer,
+  validateProductFeedbackMiddleware,
+  createProductFeedback
 );
 
 export default router;
