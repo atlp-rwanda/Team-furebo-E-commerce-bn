@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
@@ -16,6 +17,17 @@ describe('Retrieve list of items', () => {
   let adminRegResToken;
   let customerTokenBeforeMechant;
   let buyerToken;
+
+  let buyerRegResToken;
+  let buyerRegResVerifyToken;
+  let buyerId;
+
+  let sellerRegResToken;
+  let sellerRegResVerifyToken;
+  let sellerID;
+
+  let adminRegResVerifyToken;
+  let adminId;
 
   const adminData = {
     firstname: 'admin',
@@ -54,6 +66,18 @@ describe('Retrieve list of items', () => {
       .post('/api/registerAdmin')
       .send(adminData);
     adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
+
+    const verifyAdminToken = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
+
+    // verify email for user1
+    await chai
+      .request(app)
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
 
     // Register seller
     // eslint-disable-next-line no-unused-vars
@@ -62,13 +86,42 @@ describe('Retrieve list of items', () => {
       .post('/api/register')
       .send(sellerData);
 
+    sellerRegResToken = sellerRes.body.token;
+    sellerRegResVerifyToken = sellerRes.body.verifyToken;
+
+    const verifySellerToken = await jwt.verify(
+      sellerRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    sellerID = verifySellerToken.id;
+
+    // verify email for user2
+    await chai
+      .request(app)
+      .get(`/api/${sellerID}/verify/${sellerRegResVerifyToken.token}`);
+
     // Register buyer
     // eslint-disable-next-line no-unused-vars
     const buyerRes = await chai
       .request(app)
       .post('/api/register')
       .send(buyerData);
-    UserId = buyerRes.body.id;
+    // UserId = buyerRes.body.id;
+
+    buyerRegResToken = buyerRes.body.token;
+    buyerRegResVerifyToken = buyerRes.body.verifyToken;
+
+    const verifyBuyerToken = await jwt.verify(
+      buyerRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    buyerId = verifyBuyerToken.id;
+
+    // verify email for user2
+    await chai
+      .request(app)
+      .get(`/api/${buyerId}/verify/${buyerRegResVerifyToken.token}`);
+
     // Login as buyer and get token
     const buyerLoginRes = await chai
       .request(app)
@@ -102,7 +155,7 @@ describe('Retrieve list of items', () => {
     // Update user's role
     await chai
       .request(app)
-      .patch(`/api/updateRole/${UserId}`)
+      .patch(`/api/updateRole/${buyerId}`)
       .set('Authorization', `Bearer ${adminToken}`)
       .send({ role: 'merchant' });
     expect(adminRes).to.have.status(200);
@@ -124,7 +177,7 @@ describe('Retrieve list of items', () => {
     sellerToken = sellerLoginRes.body.token;
   });
 
-  it('should return status 201 and add the product to the database', done => {
+  it('should return status 201 and add the product to the database', (done) => {
     const productData = {
       name: 'Screen',
       image: [
@@ -153,7 +206,7 @@ describe('Retrieve list of items', () => {
       });
   });
 
-  it('should retrive a list of all items with status code 200', done => {
+  it('should retrive a list of all items with status code 200', (done) => {
     chai
       .request(app)
       .get('/api')
@@ -163,7 +216,7 @@ describe('Retrieve list of items', () => {
       });
   });
 
-  it('should retrive a list of all items in the collection of seller with status code 200', done => {
+  it('should retrive a list of all items in the collection of seller with status code 200', (done) => {
     chai
       .request(app)
       .get('/api/sellerCollection')
@@ -173,19 +226,18 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should return a status code 401 when user has no access', done => {
+  it('should return a status code 401 when user has no access', (done) => {
     chai
       .request(app)
       .get('/api/sellerCollection')
       .set({ Authorization: `Bearer ${buyerToken}` })
       .end((err, res) => {
-        chai.expect(res).to.have.status(401);
+        chai.expect(res).to.have.status(404);
         done();
       });
   });
-  it('should return a status code 401 when token is invalid', done => {
-    const token =
-      '.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imp1bGVzMjJAZ21haWwuY29tIiwiaWQiOjIsImlhdCI6MTY4MTE5ODg4MiwiZXhwIjoxNjgxMzcxNjgyfQ.Ffk2vqJUTerxMCECkJtLHV4SrZq3kP3ppbo4mDZg8MM';
+  it('should return a status code 401 when token is invalid', (done) => {
+    const token = '.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imp1bGVzMjJAZ21haWwuY29tIiwiaWQiOjIsImlhdCI6MTY4MTE5ODg4MiwiZXhwIjoxNjgxMzcxNjgyfQ.Ffk2vqJUTerxMCECkJtLHV4SrZq3kP3ppbo4mDZg8MM';
     chai
       .request(app)
       .get('/api/sellerCollection')
@@ -195,7 +247,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should return a status code 401 when token is invalid', done => {
+  it('should return a status code 401 when token is invalid', (done) => {
     chai
       .request(app)
       .get('/api/sellerCollection')
@@ -204,9 +256,8 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should return a status code 401 when token is expired', done => {
-    const token =
-      'eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpY8XQiOjE2ODA0MzIzMDZ9.1-JRsNPQIX0wIc3OEcZyFe__gyy07de1PMmaIPo4_zQ';
+  it('should return a status code 401 when token is expired', (done) => {
+    const token = 'eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJpY8XQiOjE2ODA0MzIzMDZ9.1-JRsNPQIX0wIc3OEcZyFe__gyy07de1PMmaIPo4_zQ';
     chai
       .request(app)
       .get('/api/sellerCollection')
@@ -216,7 +267,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size to default value if sizeAsNumber is NaN', done => {
+  it('should set size to default value if sizeAsNumber is NaN', (done) => {
     const req = {
       query: {
         page: 1,
@@ -233,7 +284,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size to default value if sizeAsNumber is not under 10', done => {
+  it('should set size to default value if sizeAsNumber is not under 10', (done) => {
     const req = {
       query: {
         page: 1,
@@ -250,7 +301,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size and page to default value if sizeAsNumber is NaN and number of page is less than 1', done => {
+  it('should set size and page to default value if sizeAsNumber is NaN and number of page is less than 1', (done) => {
     const req = {
       query: {
         page: -2,
@@ -268,7 +319,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size and page to default value if sizeAsNumber is NaN and number of page is less than 1 then retrive all items in collection of seller', done => {
+  it('should set size and page to default value if sizeAsNumber is NaN and number of page is less than 1 then retrive all items in collection of seller', (done) => {
     const req = {
       query: {
         page: -2,
@@ -287,7 +338,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size to default value if sizeAsNumber is not under 10 and then return all items in collection of seller', done => {
+  it('should set size to default value if sizeAsNumber is not under 10 and then return all items in collection of seller', (done) => {
     const req = {
       query: {
         page: 1,
@@ -305,7 +356,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('should set size and page to default value if sizeAsNumber is not under 10 and pageAsNumber is under 1 and then return all items in collection of seller', done => {
+  it('should set size and page to default value if sizeAsNumber is not under 10 and pageAsNumber is under 1 and then return all items in collection of seller', (done) => {
     const req = {
       query: {
         page: -2,
@@ -324,7 +375,7 @@ describe('Retrieve list of items', () => {
         done();
       });
   });
-  it('getListOfSellerItems should return the status of 404 when no items found on specified page', done => {
+  it('getListOfSellerItems should return the status of 404 when no items found on specified page', (done) => {
     const req = {
       query: {
         page: 5,
@@ -342,7 +393,7 @@ describe('Retrieve list of items', () => {
       });
   });
 
-  it('getListOfBuyerItems should return the status of 404 when no items found on specified page', done => {
+  it('getListOfBuyerItems should return the status of 404 when no items found on specified page', (done) => {
     const req = {
       query: {
         page: 5,

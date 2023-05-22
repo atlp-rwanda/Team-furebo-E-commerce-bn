@@ -1,26 +1,18 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
-import jwt from 'jsonwebtoken';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import jwt from 'jsonwebtoken';
 import app from '../../index';
-import { sequelize } from '../Database/models';
 
-const { expect } = chai;
 chai.use(chaiHttp);
+const { expect } = chai;
 
-describe(' CLEAR SHOPPING CART TEST', () => {
+describe('ADD PRODUCT FEEDBACK /api/addProductFeedback/:id', () => {
   let sellerToken;
   let adminToken;
   let sellerId;
-  let adminRegResToken;
   let customerTokenBeforeMechant;
   let productId;
-  const NO_EXISTING_PRODUCT_ID = 98745;
-  let BUYER_TOKEN;
-  let CART_ITEM_ID;
+  let buyerToken;
 
   let user1RegResToken;
   let user1RegResVerifyToken;
@@ -28,6 +20,8 @@ describe(' CLEAR SHOPPING CART TEST', () => {
   let user2RegResToken;
   let user2RegResVerifyToken;
   let user2Id;
+
+  let adminRegResToken;
   let adminRegResVerifyToken;
   let adminId;
 
@@ -35,42 +29,45 @@ describe(' CLEAR SHOPPING CART TEST', () => {
   const adminData = {
     firstname: 'Peter',
     lastname: 'adams',
-    email: 'adamsww@gmail.com',
+    email: 'adamskitp@gmail.com',
     password: 'Adams1912',
   };
   const loginAdmin = {
-    email: 'adamsww@gmail.com',
+    email: 'adamskitp@gmail.com',
     password: 'Adams1912',
   };
   // SELLER INFO
   const sellerData = {
     firstname: 'State',
     lastname: 'Price',
-    email: 'state19hh@gmail.com',
+    email: 'state19kknh@gmail.com',
     password: 'State1912',
   };
   const loginSeller = {
-    email: 'state19hh@gmail.com',
+    email: 'state19kknh@gmail.com',
     password: 'State1912',
   };
   // BUYER INFO
   const buyerData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugaboki@gmail.com',
+    email: 'mugaboooytfgr@gmail.com',
     password: 'Mugabo1234',
   };
   const buyerLogin = {
-    email: 'mugaboki@gmail.com',
+    email: 'mugaboooytfgr@gmail.com',
     password: 'Mugabo1234',
+  };
+  // FEEDBACK DATA
+  const feedback = {
+    rating: 5,
+    review: 'Very satisfied with the product. I recommend it',
   };
 
   before(async () => {
     // ========= ADMIN ACCOUNT
-    const adminRegRes = await chai
-      .request(app)
-      .post('/api/registerAdmin')
-      .send(adminData);
+    const adminRegRes = await chai.request(app).post('/api/registerAdmin').send(adminData);
+
     adminRegResToken = adminRegRes.body.token;
     adminRegResVerifyToken = adminRegRes.body.verifyToken;
 
@@ -93,13 +90,10 @@ describe(' CLEAR SHOPPING CART TEST', () => {
     adminToken = adminRes.body.token;
 
     // ========= SELLER ACCOUNT
-    const sellerRes = await chai
-      .request(app)
-      .post('/api/register')
-      .send(sellerData);
+    const user1RegRes = await chai.request(app).post('/api/register').send(sellerData);
 
-    user1RegResToken = sellerRes.body.token;
-    user1RegResVerifyToken = sellerRes.body.verifyToken;
+    user1RegResToken = user1RegRes.body.token;
+    user1RegResVerifyToken = user1RegRes.body.verifyToken;
 
     const verifyUser1Token = await jwt.verify(
       user1RegResToken,
@@ -126,18 +120,18 @@ describe(' CLEAR SHOPPING CART TEST', () => {
     sellerId = verifyCustomerBeforeMerchant.id;
 
     // ========= BUYER ACCOUNT
-    const customerRes = await chai.request(app).post('/api/register').send(buyerData);
+    const user2RegRes = await chai.request(app).post('/api/register').send(buyerData);
 
-    user2RegResToken = customerRes.body.token;
-    user2RegResVerifyToken = customerRes.body.verifyToken;
+    user2RegResToken = user2RegRes.body.token;
+    user2RegResVerifyToken = user2RegRes.body.verifyToken;
 
-    const verifyCutomerToken = await jwt.verify(
+    const verifyUser2Token = await jwt.verify(
       user2RegResToken,
       process.env.USER_SECRET_KEY
     );
-    user2Id = verifyCutomerToken.id;
+    user2Id = verifyUser2Token.id;
 
-    // verify email for customer
+    // verify email for user2
     await chai
       .request(app)
       .get(`/api/${user2Id}/verify/${user2RegResVerifyToken.token}`);
@@ -147,8 +141,7 @@ describe(' CLEAR SHOPPING CART TEST', () => {
       .post('/api/login')
       .send(buyerLogin);
     expect(buyerLoginRes).to.have.status(200);
-    const { token } = buyerLoginRes.body;
-    BUYER_TOKEN = token;
+    buyerToken = buyerLoginRes.body.token;
 
     // Update seller's role
     await chai
@@ -172,7 +165,7 @@ describe(' CLEAR SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${sellerToken}`)
       .send({
-        name: 'HCT/RP 360ST',
+        name: 'mugabooooo',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -185,51 +178,75 @@ describe(' CLEAR SHOPPING CART TEST', () => {
         exDate: '2023-05-30',
       });
     productId = productRes.body.data.id;
-
-    const addItemInCart = await chai
-      .request(app)
-      .post('/api/addItemToCart')
-      .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-      .send({
-        productId,
-        quantity: 2,
-      });
-
-    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
-      .ID;
   });
-  // after(async () => {
-  //   await sequelize.sync({ force: true });
-  // });
-  context('CLEAR CLEAR CART WHEN THERE ITEM(S) INSIDE ', () => {
-    it('should clean shopping cart and return status 200', (done) => {
-      chai
+  context('when adding a valid review to a product', () => {
+    it('should return status 201 and add the review and rating to the database', async () => {
+      const res = await chai
         .request(app)
-        .delete('/api/clear-cart')
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .end((err, res) => {
-          chai.expect(res).to.have.status(200);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal(
-            'ALL ITEMS REMOVED FROM THE CART SUCCESSFULLY!!!'
-          );
-          done();
-        });
+        .post(`/api/addProductFeedback/${productId}`)
+        .send(feedback)
+        .set({ Authorization: `Bearer ${buyerToken}` });
+      chai.expect(res).to.have.status(201);
     });
   });
 
-  context('NOTIFY WHEN THERE IS NOTHING TO CLEAN IN THE CART', () => {
-    it('should return status 400 and an error message', async () => {
-      // make request to add item to cart
+  context('when certain required credentails are missing ', () => {
+    it('should return status 400 and send a message requiring the user to fill the missing fields', async () => {
       const res = await chai
         .request(app)
-        .delete('/api/clear-cart')
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` });
-      expect(res).to.have.status(400);
+        .post(`/api/addProductFeedback/${productId}`)
+        .send({
+          review: 'great product',
+        })
+        .set({ Authorization: `Bearer ${buyerToken}` });
+      chai.expect(res).to.have.status(400);
       const actualVal = res.body.message;
-      expect(actualVal).to.be.equal(
-        'CART IS EMPTY, THERE ARE NO ITEMS TO REMOVE!'
-      );
+      expect(actualVal).to.be.equal('Rating is required.');
+    });
+  });
+  context('when rating value is not between 1 and 5', () => {
+    it('should return status 400 and send a message requiring the user to use the right range for rating', async () => {
+      const res = await chai
+        .request(app)
+        .post(`/api/addProductFeedback/${productId}`)
+        .send({
+          rating: 6,
+          review: 'Great product',
+        })
+        .set({ Authorization: `Bearer ${buyerToken}` });
+      chai.expect(res).to.have.status(400);
+      const actualVal = res.body.message;
+      expect(actualVal).to.be.equal('the rating must be between 1 and 5');
+    });
+  });
+  context('when the productId is invalid', () => {
+    it('should return status 400 and send a message requiring the user to use a correct productId', async () => {
+      const res = await chai
+        .request(app)
+        .post('/api/addProductFeedback/1000')
+        .send({
+          rating: 4,
+          review: 'Great product',
+        })
+        .set({ Authorization: `Bearer ${buyerToken}` });
+      expect(res).to.have.status(404);
+      const actualVal = res.body.message;
+      expect(actualVal).to.be.equal('product not found');
+    });
+  });
+  context('when a server error occurs', () => {
+    it('should return status 500 and send a message detailing the error', async () => {
+      const res = await chai
+        .request(app)
+        .post('/api/addProductFeedback/id')
+        .send({
+          rating: 4,
+          review: 'Great product',
+        })
+        .set({ Authorization: `Bearer ${buyerToken}` });
+      chai.expect(res).to.have.status(500);
+      const actualVal = res.body.message;
+      expect(actualVal).to.be.equal('Internal server error');
     });
   });
 });

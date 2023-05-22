@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
@@ -12,15 +13,23 @@ const { expect } = chai;
 
 let userToken;
 
+let user1RegResToken;
+let user1RegResVerifyToken;
+let user1Id;
+
+let user2RegResToken;
+let user2RegResVerifyToken;
+let user2Id;
+
 const userData = {
   firstname: 'Jane',
   lastname: 'Doe',
-  email: 'janedoe@gmail.com',
+  email: 'janedoekiuhmf@gmail.com',
   password: 'Password1234',
 };
 
 const loginUser = {
-  email: 'janedoe@gmail.com',
+  email: 'janedoekiuhmf@gmail.com',
   password: 'Password1234',
 };
 
@@ -31,6 +40,20 @@ describe('GET /api/profile', () => {
       .request(app)
       .post('/api/register')
       .send(userData);
+
+    user1RegResToken = userRegRes.body.token;
+    user1RegResVerifyToken = userRegRes.body.verifyToken;
+
+    const verifyUser1Token = await jwt.verify(
+      user1RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user1Id = verifyUser1Token.id;
+
+    // verify email for user1
+    await chai
+      .request(app)
+      .get(`/api/${user1Id}/verify/${user1RegResVerifyToken.token}`);
 
     // Login as user
     const userRes = await chai.request(app).post('/api/login').send(loginUser);
@@ -48,7 +71,7 @@ describe('GET /api/profile', () => {
   context(
     'After successful login, User can retrieve all the account information',
     () => {
-      it('should retrive user information with status code 200', done => {
+      it('should retrive user information with status code 200', (done) => {
         chai
           .request(app)
           .get('/api/profile')
@@ -70,6 +93,20 @@ describe('PATCH /api/profile', () => {
       .post('/api/register')
       .send(userData);
 
+    user2RegResToken = userRegRes.body.token;
+    user2RegResVerifyToken = userRegRes.body.verifyToken;
+
+    const verifyUser2Token = await jwt.verify(
+      user2RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user2Id = verifyUser2Token.id;
+
+    // verify email for user2
+    await chai
+      .request(app)
+      .get(`/api/${user2Id}/verify/${user2RegResVerifyToken.token}`);
+
     // Login as user
     const userRes = await chai.request(app).post('/api/login').send(loginUser);
     expect(userRes).to.have.status(200);
@@ -84,7 +121,7 @@ describe('PATCH /api/profile', () => {
   });
 
   context('when updating an existing user with valid data', () => {
-    it('should return status 200 and update the user in the database', done => {
+    it('should return status 200 and update the user in the database', (done) => {
       const userData = {
         profileImage: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -124,7 +161,7 @@ describe('PATCH /api/profile', () => {
   });
 
   context('when updating a user with invalid data', () => {
-    it('should return status 400 and an error message', done => {
+    it('should return status 400 and an error message', (done) => {
       const userData = {
         gender: 1234,
         birthdate: '2023-06-25',
@@ -153,7 +190,7 @@ describe('PATCH /api/profile', () => {
   context(
     'when trying to update a user, providing only the first name or the last name',
     () => {
-      it('should return status 400 and an error message', done => {
+      it('should return status 400 and an error message', (done) => {
         const userData = {
           firstname: 'john',
         };

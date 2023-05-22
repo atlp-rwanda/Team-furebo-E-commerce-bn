@@ -12,6 +12,13 @@ const { expect } = chai;
 
 let customerToken;
 
+let userRegResToken;
+let userRegResVerifyToken;
+let userId;
+// let userRegResToken2;
+// let userRegResVerifyToken2;
+// let userId2;
+
 const customerData = {
   firstname: 'John',
   lastname: 'Doe',
@@ -27,7 +34,21 @@ const loginCustomer = {
 describe('CHATTING ON THE PLATFORM', async () => {
   before(async () => {
     // Register user
-    await chai.request(app).post('/api/register').send(customerData);
+    const userRegRes = await chai.request(app).post('/api/register').send(customerData);
+
+    userRegResToken = userRegRes.body.token;
+    userRegResVerifyToken = userRegRes.body.verifyToken;
+
+    const verifyUserToken = await jwt.verify(
+      userRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    userId = verifyUserToken.id;
+
+    // verify email for user1
+    await chai
+      .request(app)
+      .get(`/api/${userId}/verify/${userRegResVerifyToken.token}`);
 
     const customerLogin = await chai
       .request(app)
@@ -38,7 +59,7 @@ describe('CHATTING ON THE PLATFORM', async () => {
   });
 
   context('It should send a message', () => {
-    it('should return a status of 201 and broadcast message', done => {
+    it('should return a status of 201 and broadcast message', (done) => {
       const requestBody = {
         message: 'hello',
         sender: 'jules',
@@ -56,7 +77,7 @@ describe('CHATTING ON THE PLATFORM', async () => {
   });
 
   context('It should fail to send a message', () => {
-    it('should return a status of 406 with the message specifying the invalid input ', done => {
+    it('should return a status of 406 with the message specifying the invalid input ', (done) => {
       const requestBody = {
         message: '',
         sender: 'jules',
@@ -74,7 +95,7 @@ describe('CHATTING ON THE PLATFORM', async () => {
   });
 
   context('It should return all message', () => {
-    it('should return a status of 200 with all messages', done => {
+    it('should return a status of 200 with all messages', (done) => {
       chai
         .request(app)
         .get('/api/allChat')
