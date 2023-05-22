@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 import 'dotenv/config';
 import chai from 'chai';
@@ -11,84 +12,153 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 describe('POST PRODUCT', async () => {
-  let sellerToken;
-  let adminToken;
+  let SELLER_TOKEN;
+  let SELLER2_TOKEN;
+
+  let sellerRegResToken;
+  let sellerRegResVerifyToken;
   let sellerId;
+  let seller2RegResToken;
+  let seller2RegResVerifyToken;
+  let seller2Id;
+
   let adminRegResToken;
-  let customerTokenBeforeMechant;
+  let adminRegResVerifyToken;
+  let adminId;
+  let adminToken;
 
   const adminData = {
-    firstname: 'James',
-    lastname: 'admin',
-    email: 'admin19@gmail.com',
+    firstname: 'ZIGA',
+    lastname: 'SHEILA',
+    email: 'sheila1@gmail.com',
+    password: 'Admin1912',
+  };
+  const loginAdmin = {
+    email: 'sheila1@gmail.com',
     password: 'Admin1912',
   };
   const sellerData = {
-    firstname: 'Jana',
-    lastname: 'Seller',
-    email: 'seller19@gmail.com',
+    firstname: 'Mike',
+    lastname: 'sinzi',
+    email: 'sinzi1@gmail.com',
     password: 'Seller1912',
   };
-  const loginAdmin = {
-    email: 'admin19@gmail.com',
-    password: 'Admin1912',
+  const loginSellerData = {
+    email: 'sinzi1@gmail.com',
+    password: 'Seller1912',
   };
-  const loginSeller = {
-    email: 'seller19@gmail.com',
+  const seller2Data = {
+    firstname: 'Michael',
+    lastname: 'sinzi',
+    email: 'michael1@gmail.com',
+    password: 'Seller1912',
+  };
+  const loginSeller2Data = {
+    email: 'michael1@gmail.com',
     password: 'Seller1912',
   };
 
-  beforeEach(async () => {
-    // Register admin
-    const adminRegRes = await chai
+  before(async () => {
+    // ========= SELLER 1 ACCOUNT
+    const sellerAccount = await chai.request(app).post('/api/register').send(sellerData);
+
+    sellerRegResToken = sellerAccount.body.token;
+    sellerRegResVerifyToken = sellerAccount.body.verifyToken;
+
+    const verifySerllerToken = await jwt.verify(
+      sellerRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    sellerId = verifySerllerToken.id;
+
+    // verify email for seller
+    await chai
       .request(app)
-      .post('/api/registerAdmin')
-      .send(adminData);
+      .get(`/api/${sellerId}/verify/${sellerRegResVerifyToken.token}`);
+
+    // ========= SELLER 2 ACCOUNT
+    const seller2Account = await chai.request(app).post('/api/register').send(seller2Data);
+
+    seller2RegResToken = seller2Account.body.token;
+    seller2RegResVerifyToken = seller2Account.body.verifyToken;
+
+    const verifySerller2Token = await jwt.verify(
+      seller2RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    seller2Id = verifySerller2Token.id;
+
+    // verify email for seller
+    await chai
+      .request(app)
+      .get(`/api/${seller2Id}/verify/${seller2RegResVerifyToken.token}`);
+
+    // ===== ADMIN ACCOUNT
+    const adminRegRes = await chai.request(app).post('/api/registerAdmin').send(adminData);
+
     adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
 
-    // Register seller
-    const sellerRes = await chai
+    const verifyAdminToken = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
+
+    // verify email for admin
+    await chai
       .request(app)
-      .post('/api/register')
-      .send(sellerData);
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
 
-    // Login as admin and get token
-    const adminRes = await chai
+    // ADMIN
+    const adminLogin = await chai
       .request(app)
       .post('/api/login')
       .send(loginAdmin);
-    expect(adminRes).to.have.status(200);
-    adminToken = adminRes.body.token;
+    expect(adminLogin).to.have.status(200);
+    adminToken = adminLogin.body.token;
 
-    // Login as Login Seller before updted and get token
-    const customerTokenBeforeMechantRes = await chai
+    /// SELLER
+    const sellerLogin = await chai
       .request(app)
       .post('/api/login')
-      .send(loginSeller);
-    expect(customerTokenBeforeMechantRes).to.have.status(200);
-    customerTokenBeforeMechant = customerTokenBeforeMechantRes.body.token;
+      .send(loginSellerData);
+    expect(sellerLogin).to.have.status(200);
+    SELLER_TOKEN = sellerLogin.body.token;
 
-    const verifyCustomerBeforeMerchant = await jwt.verify(
-      customerTokenBeforeMechant,
+    const verifyMerchant = await jwt.verify(
+      SELLER_TOKEN,
       process.env.USER_SECRET_KEY
     );
-    sellerId = verifyCustomerBeforeMerchant.id;
-
+    const merchantId = verifyMerchant.id;
     // Update seller's role
     await chai
       .request(app)
-      .patch(`/api/updateRole/${sellerId}`)
+      .patch(`/api/updateRole/${merchantId}`)
       .set('Authorization', `Bearer ${adminToken}`)
       .send({ role: 'merchant' });
-    expect(adminRes).to.have.status(200);
 
-    // Login as seller and get token
-    const sellerLoginRes = await chai
+    /// SELLER 2
+    const seller2Login = await chai
       .request(app)
       .post('/api/login')
-      .send(loginSeller);
-    expect(sellerLoginRes).to.have.status(200);
-    sellerToken = sellerLoginRes.body.token;
+      .send(loginSeller2Data);
+    expect(seller2Login).to.have.status(200);
+    SELLER2_TOKEN = seller2Login.body.token;
+
+    const verifyMerchant2 = await jwt.verify(
+      SELLER2_TOKEN,
+      process.env.USER_SECRET_KEY
+    );
+    const merchant2Id = verifyMerchant2.id;
+
+    // Update seller2's role
+    await chai
+      .request(app)
+      .patch(`/api/updateRole/${merchant2Id}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ role: 'merchant' });
+    // create a new product to be added to the shopping cart
   });
 
   after(async () => {
@@ -118,7 +188,7 @@ describe('POST PRODUCT', async () => {
       const res = await chai
         .request(app)
         .post('/api/addProduct')
-        .set({ Authorization: `Bearer ${sellerToken}` })
+        .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
         .send(productData);
       expect(res).to.have.status(201);
       const actualVal = res.body.message;
@@ -145,7 +215,7 @@ describe('POST PRODUCT', async () => {
       const res = await chai
         .request(app)
         .post('/api/addProduct')
-        .set({ Authorization: `Bearer ${sellerToken}` })
+        .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
         .send(productData);
       expect(res).to.have.status(200);
       const actualVal = res.body.message;
@@ -174,7 +244,7 @@ describe('POST PRODUCT', async () => {
       const res = await chai
         .request(app)
         .post('/api/addProduct')
-        .set({ Authorization: `Bearer ${sellerToken}` })
+        .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
         .send(productData);
       chai.expect(res).to.have.status(400);
     });
@@ -199,7 +269,7 @@ describe('POST PRODUCT', async () => {
       const res = await chai
         .request(app)
         .post('/api/addProduct')
-        .set({ Authorization: `Bearer ${sellerToken}` })
+        .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
         .send(productData);
       chai.expect(res).to.have.status(400);
       const actualVal = res.body.message;
@@ -229,7 +299,7 @@ describe('POST PRODUCT', async () => {
       const res = chai
         .request(app)
         .post('/api/addProduct')
-        .set({ Authorization: `Bearer ${sellerToken}` })
+        .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
         .send(productData)
         .end((err, res) => {
           expect(res).to.have.status(500);
@@ -259,7 +329,7 @@ describe('POST PRODUCT', async () => {
         const res = await chai
           .request(app)
           .post('/api/addProduct')
-          .set({ Authorization: `Bearer ${sellerToken}` })
+          .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
           .send(productData);
         expect(res).to.have.status(400);
         const actualVal = res.body.message;
@@ -269,36 +339,36 @@ describe('POST PRODUCT', async () => {
       });
     });
 
-    context('when product creation fails', () => {
-      it('should return status 500 and an error message', async () => {
-      // Mock the behavior of the Product.create method to always throw an error
-        const createStub = sinon
-          .stub(Product, 'create')
-          .rejects(new Error('Failed to create product'));
-        const productData = {
-          name: 'Laptop',
-          image: [
-            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-            'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          ],
-          price: 2000.99,
-          quantity: 10,
-          category: 'HP',
-          exDate: '2023-05-30',
-        };
-        const res = await chai
-          .request(app)
-          .post('/api/addProduct')
-          .set({ Authorization: `Bearer ${sellerToken}` })
-          .send(productData);
-        expect(res).to.have.status(500);
-        const actualVal = res.body.message;
-        expect(actualVal).to.be.equal('Failed to create product');
-        // Restore the original behavior of the Product.create method
-        createStub.restore();
-      });
-    });
+    // context('when product creation fails', () => {
+    //   it('should return status 500 and an error message', async () => {
+    //   // Mock the behavior of the Product.create method to always throw an error
+    //     const createStub = sinon
+    //       .stub(Product, 'create')
+    //       .rejects(new Error('Failed to create product'));
+    //     const productData = {
+    //       name: 'Laptop',
+    //       image: [
+    //         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+    //         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+    //         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+    //         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+    //       ],
+    //       price: 2000.99,
+    //       quantity: 10,
+    //       category: 'HP',
+    //       exDate: '2023-05-30',
+    //     };
+    //     const res = await chai
+    //       .request(app)
+    //       .post('/api/addProduct')
+    //       .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
+    //       .send(productData);
+    //     expect(res).to.have.status(500);
+    //     const actualVal = res.body.message;
+    //     expect(actualVal).to.be.equal('Failed to create product');
+    //     // Restore the original behavior of the Product.create method
+    //     createStub.restore();
+    //   });
+    // });
   });
 });

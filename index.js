@@ -18,11 +18,11 @@ require('./src/services/auth');
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(
-  cors({
-    origin: `${process.env.CALLBACK_URL}/google/callback`,
-  })
-);
+// app.use(
+//   cors({
+//     origin: `${process.env.CALLBACK_URL}/google/callback`,
+//   })
+// );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -42,12 +42,12 @@ const io = new Server(httpServer, {
 const users = {};
 
 // listening events using socket.io instance
-io.on('connection', socket => {
-  socket.on('new-user', name => {
+io.on('connection', (socket) => {
+  socket.on('new-user', (name) => {
     users[socket.id] = name;
     socket.broadcast.emit('user-connected', name);
   });
-  socket.on('send-chat-message', message => {
+  socket.on('send-chat-message', (message) => {
     socket.broadcast.emit('chat-message', { message, name: users[socket.id] });
   });
   socket.on('disconnect', () => {

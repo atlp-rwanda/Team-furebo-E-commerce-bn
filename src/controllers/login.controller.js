@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable require-jsdoc */
+import crypto from 'crypto';
 import client from '../utils/redis.util';
 import db from '../Database/models';
 import { comparePassword, generateToken } from '../utils/user.util';
@@ -9,7 +11,7 @@ import {
   generateOTPCode,
 } from './two-factor-auth.controller';
 
-const { User } = db;
+const { User, signUpToken } = db;
 
 export class PublicController {
   static async PublicLogin(req, res) {
@@ -26,15 +28,43 @@ export class PublicController {
       if (!doesExist) {
         return res.status(404).json({ msg: "User doesn't exist", error: '' });
       }
+
       if (doesExist.dataValues.isEnabled === false) {
         return res
           .status(403)
           .json({ msg: 'Account is disabled please contact admin' });
       }
+
       const isValid = await comparePassword(password, doesExist.password);
       if (!isValid) {
         return res.status(401).json({ msg: 'Invalid password' });
       }
+
+      if (!doesExist.verified) {
+        let verifiedToken = await signUpToken.findOne({
+          where: {
+            userId: doesExist.id
+          }
+        });
+
+        if (!verifiedToken) {
+          verifiedToken = await signUpToken.create({
+            userId: doesExist.id,
+            token: crypto.randomBytes(32).toString('hex')
+          });
+
+          const url = `${process.env.BASE_URL}users/${doesExist.id}/verify/${verifiedToken.token}`;
+          const sentEmail = {
+            recipientEmail: doesExist.email,
+            emailSubject: 'Verify Email',
+            emailBody: url
+          };
+
+          await sendMail(sentEmail);
+        }
+        return res.status(400).json({ message: 'An Email sent to your account please verify' });
+      }
+
       const token = await generateToken(doesExist);
       if (doesExist.enable2FA) {
         const { base32 } = generateSecretKey();

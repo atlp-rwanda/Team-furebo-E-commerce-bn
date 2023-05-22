@@ -29,6 +29,11 @@ module.exports = {
         allowNull: false,
         defaultValue: true,
       },
+      verified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       role: {
         type: Sequelize.STRING,
         allowNull: true,
