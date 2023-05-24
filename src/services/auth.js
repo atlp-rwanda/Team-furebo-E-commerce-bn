@@ -1,5 +1,6 @@
 import passport from 'passport';
 import ROLES_LIST from '../utils/userRoles.util';
+
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 require('dotenv').config();
 
@@ -19,7 +20,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/google/callback',
+      callbackURL: `${process.env.CALLBACK_URL}/google/callback`,
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ where: { email: profile.email } })
