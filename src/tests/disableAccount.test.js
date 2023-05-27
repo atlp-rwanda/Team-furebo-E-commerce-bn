@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
@@ -7,6 +8,9 @@ import 'dotenv/config';
 chai.should();
 chai.use(chaiHttp);
 const { expect } = chai;
+
+let adminRegResVerifyToken;
+let adminId1;
 
 describe('DISABLE ACCOUNT', async () => {
   let adminToken;
@@ -30,6 +34,18 @@ describe('DISABLE ACCOUNT', async () => {
       .post('/api/registerAdmin')
       .send(adminData);
     adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
+
+    const verifyAdminToken1 = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId1 = verifyAdminToken1.id;
+
+    // verify email for admin
+    await chai
+      .request(app)
+      .get(`/api/${adminId1}/verify/${adminRegResVerifyToken.token}`);
 
     const adminRes = await chai
       .request(app)
@@ -43,7 +59,7 @@ describe('DISABLE ACCOUNT', async () => {
     );
     adminId = verifyAdminToken.id;
   });
-  it('Should disable an account', done => {
+  it('Should disable an account', (done) => {
     chai
       .request(app)
       .patch(`/api/disableAccount/${adminId}`)
@@ -54,7 +70,7 @@ describe('DISABLE ACCOUNT', async () => {
         done();
       });
   });
-  it('Should fail to disable an account if the user ID does not exist', done => {
+  it('Should fail to disable an account if the user ID does not exist', (done) => {
     chai
       .request(app)
       .patch(`/api/disableAccount/${adminId}`)
@@ -65,7 +81,7 @@ describe('DISABLE ACCOUNT', async () => {
         done();
       });
   });
-  it('Should fail to disable an account if the user ID does not exist', done => {
+  it('Should fail to disable an account if the user ID does not exist', (done) => {
     chai
       .request(app)
       .patch('/api/disableAccount/10')

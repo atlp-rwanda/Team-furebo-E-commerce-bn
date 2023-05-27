@@ -54,7 +54,7 @@ describe('logout controller', () => {
   });
 
   describe('GET /logout', () => {
-    it('redirects to home page', done => {
+    it('redirects to home page', (done) => {
       chai
         .request(app)
         .get('/logout')
@@ -65,7 +65,7 @@ describe('logout controller', () => {
     });
   });
 
-  it('GET HOME PAGE', done => {
+  it('GET HOME PAGE', (done) => {
     chai
       .request(app)
       .get('/home')
@@ -111,7 +111,7 @@ describe('logout controller', () => {
 });
 
 describe('App', () => {
-  it('should use port 4000 by default', done => {
+  it('should use port 4000 by default', (done) => {
     const port = 4000;
     const server = app.listen(port, () => {
       expect(server.address().port).to.equal(port);

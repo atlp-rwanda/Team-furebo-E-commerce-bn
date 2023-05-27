@@ -14,37 +14,48 @@ describe('ADD PRODUCT FEEDBACK /api/addProductFeedback/:id', () => {
   let productId;
   let buyerToken;
 
+  let user1RegResToken;
+  let user1RegResVerifyToken;
+  let user1Id;
+  let user2RegResToken;
+  let user2RegResVerifyToken;
+  let user2Id;
+
+  let adminRegResToken;
+  let adminRegResVerifyToken;
+  let adminId;
+
   // ADMING INFO
   const adminData = {
     firstname: 'Peter',
     lastname: 'adams',
-    email: 'adams@gmail.com',
+    email: 'adamskitp@gmail.com',
     password: 'Adams1912',
   };
   const loginAdmin = {
-    email: 'adams@gmail.com',
+    email: 'adamskitp@gmail.com',
     password: 'Adams1912',
   };
   // SELLER INFO
   const sellerData = {
     firstname: 'State',
     lastname: 'Price',
-    email: 'state19@gmail.com',
+    email: 'state19kknh@gmail.com',
     password: 'State1912',
   };
   const loginSeller = {
-    email: 'state19@gmail.com',
+    email: 'state19kknh@gmail.com',
     password: 'State1912',
   };
   // BUYER INFO
   const buyerData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugabo@gmail.com',
+    email: 'mugaboooytfgr@gmail.com',
     password: 'Mugabo1234',
   };
   const buyerLogin = {
-    email: 'mugabo@gmail.com',
+    email: 'mugaboooytfgr@gmail.com',
     password: 'Mugabo1234',
   };
   // FEEDBACK DATA
@@ -55,8 +66,21 @@ describe('ADD PRODUCT FEEDBACK /api/addProductFeedback/:id', () => {
 
   before(async () => {
     // ========= ADMIN ACCOUNT
-    await chai.request(app).post('/api/registerAdmin').send(adminData);
-    // let adminRegResToken = adminRegRes.body.token;
+    const adminRegRes = await chai.request(app).post('/api/registerAdmin').send(adminData);
+
+    adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
+
+    const verifyAdminToken = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
+
+    // verify email for admin
+    await chai
+      .request(app)
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
 
     const adminRes = await chai
       .request(app)
@@ -66,7 +90,21 @@ describe('ADD PRODUCT FEEDBACK /api/addProductFeedback/:id', () => {
     adminToken = adminRes.body.token;
 
     // ========= SELLER ACCOUNT
-    await chai.request(app).post('/api/register').send(sellerData);
+    const user1RegRes = await chai.request(app).post('/api/register').send(sellerData);
+
+    user1RegResToken = user1RegRes.body.token;
+    user1RegResVerifyToken = user1RegRes.body.verifyToken;
+
+    const verifyUser1Token = await jwt.verify(
+      user1RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user1Id = verifyUser1Token.id;
+
+    // verify email for user1
+    await chai
+      .request(app)
+      .get(`/api/${user1Id}/verify/${user1RegResVerifyToken.token}`);
 
     const customerTokenBeforeMechantRes = await chai
       .request(app)
@@ -82,7 +120,21 @@ describe('ADD PRODUCT FEEDBACK /api/addProductFeedback/:id', () => {
     sellerId = verifyCustomerBeforeMerchant.id;
 
     // ========= BUYER ACCOUNT
-    await chai.request(app).post('/api/register').send(buyerData);
+    const user2RegRes = await chai.request(app).post('/api/register').send(buyerData);
+
+    user2RegResToken = user2RegRes.body.token;
+    user2RegResVerifyToken = user2RegRes.body.verifyToken;
+
+    const verifyUser2Token = await jwt.verify(
+      user2RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user2Id = verifyUser2Token.id;
+
+    // verify email for user2
+    await chai
+      .request(app)
+      .get(`/api/${user2Id}/verify/${user2RegResVerifyToken.token}`);
 
     const buyerLoginRes = await chai
       .request(app)
