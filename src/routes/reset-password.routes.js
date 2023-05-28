@@ -48,7 +48,7 @@ router.post('/requestPasswordReset', requestPasswordReset);
  *                   example: User not found
  */
 
-router.post('/reset-password', resetPassword);
+router.post('/reset-password/:id', resetPassword);
 /**
  * @swagger
  *
@@ -58,6 +58,13 @@ router.post('/reset-password', resetPassword);
  *     description: Reset user password using a user ID and new password.
  *     tags:
  *       - Reset User Password
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: ID of the user to update
+ *         required: true
+ *         schema:
+ *           type: string
  *     requestBody:
  *       description: Reset password request body.
  *       required: true
@@ -66,7 +73,6 @@ router.post('/reset-password', resetPassword);
  *           schema:
  *             type: object
  *             required:
- *               - userId
  *               - newPassword
  *             properties:
  *               userId:

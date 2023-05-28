@@ -129,7 +129,7 @@ describe('LOGIN USER', () => {
     });
 
     expect(res).to.have.status(200);
-    expect(res.body).to.have.property('msg', 'Logged in succesfully');
+    expect(res.body).to.have.property('message', 'Logged in succesfully');
     expect(res.body).to.have.property('token');
   });
 
@@ -140,7 +140,7 @@ describe('LOGIN USER', () => {
     });
 
     expect(res).to.have.status(400);
-    expect(res.body).to.have.property('msg', 'Please Fiil in blank fields');
+    expect(res.body).to.have.property('message', 'Please Fiil in blank fields');
   });
 
   it('should return status 401 and deny access if the password is invalid', async () => {
@@ -150,7 +150,7 @@ describe('LOGIN USER', () => {
     });
 
     expect(res).to.have.status(401);
-    expect(res.body).to.have.property('msg', 'Invalid password');
+    expect(res.body).to.have.property('message', 'Invalid password');
   });
 
   it('should return status 404 when user does not exist', async () => {
@@ -160,7 +160,7 @@ describe('LOGIN USER', () => {
     });
 
     expect(res).to.have.status(404);
-    expect(res.body).to.have.property('msg', "User doesn't exist");
+    expect(res.body).to.have.property('message', "User doesn't exist");
   });
   it('It should grant access to a user with a valid token ', async () => {
     const res = await chai
