@@ -16,28 +16,28 @@ const { User, signUpToken } = db;
 export class PublicController {
   static async PublicLogin(req, res) {
     try {
-      const { email, password } = req.body;
-      if (!email || !password) {
+      const { email } = req.body;
+      if (!email || !req.body.password) {
         return res
           .status(400)
-          .json({ msg: 'Please Fiil in blank fields', error: '' });
+          .json({ message: 'Please Fiil in blank fields', error: '' });
       }
 
       const doesExist = await User.findOne({ where: { email } });
 
       if (!doesExist) {
-        return res.status(404).json({ msg: "User doesn't exist", error: '' });
+        return res.status(404).json({ message: "User doesn't exist", error: '' });
       }
 
       if (doesExist.dataValues.isEnabled === false) {
         return res
           .status(403)
-          .json({ msg: 'Account is disabled please contact admin' });
+          .json({ message: 'Account is disabled please contact admin' });
       }
 
-      const isValid = await comparePassword(password, doesExist.password);
+      const isValid = await comparePassword(req.body.password, doesExist.password);
       if (!isValid) {
-        return res.status(401).json({ msg: 'Invalid password' });
+        return res.status(401).json({ message: 'Invalid password' });
       }
 
       if (!doesExist.verified) {
@@ -80,16 +80,21 @@ export class PublicController {
         const checkEmail = await sendMail(recipient);
         if (checkEmail) {
           return res.status(200).header('authenticate', token).json({
-            msg: 'Please check your email for the authentication code',
+            message: 'Please check your email for the authentication code',
             token,
           });
         }
-        return res.status(500).json({ msg: 'Email is not sent' });
+        return res.status(500).json({ message: 'Email is not sent' });
       }
+      const userData = {
+        id: doesExist.id,
+        fullname: doesExist.fullname,
+        email: doesExist.email
+      };
       return res
         .status(200)
         .header('authenticate', token)
-        .json({ msg: 'Logged in succesfully', token });
+        .json({ message: 'Logged in succesfully', token, userData });
     } catch (error) {
       throw new Error(error);
     }
