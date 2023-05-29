@@ -51,15 +51,6 @@ export const createUser = asyncWrapper(async (req, res) => {
     });
 
     const url = `${process.env.BASE_URL}users/${data.id}/verify/${verifyToken.token}`;
-    // console.log(url);
-    // const sentEmail = {
-    //   recipientEmail: data.email,
-    //   emailSubject: 'Verify Email',
-    //   emailBody: url
-    // };
-    // console.log(sentEmail);
-
-    // await sendMail(sentEmail);
 
     const msg = {
       to: data.email,

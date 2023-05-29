@@ -195,7 +195,7 @@ describe(' 2FA for Merchant', () => {
 
     expect(res).to.have.status(200);
     expect(res.body).to.have.property(
-      'msg',
+      'message',
       'Please check your email for the authentication code'
     );
     sellerToken = res.header.authenticate;
