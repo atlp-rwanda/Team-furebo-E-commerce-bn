@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 import db from '../Database/models';
 import asyncWrapper from '../utils/handlingTryCatchBlocks';

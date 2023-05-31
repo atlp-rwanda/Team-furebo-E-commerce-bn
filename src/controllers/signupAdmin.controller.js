@@ -1,10 +1,12 @@
 import crypto from 'crypto';
+import sgMail from '@sendgrid/mail';
 import db from '../Database/models';
 import validateSignup from '../validation/signup.validator';
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import ROLES_LIST from '../utils/userRoles.util';
 import { generateToken, hashPassword } from '../utils/user.util';
-import sendMail from '../utils/sendEmail.util';
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const { User, signUpToken } = db;
 const createAdminAccount = asyncWrapper(async (req, res) => {
@@ -40,13 +42,14 @@ const createAdminAccount = asyncWrapper(async (req, res) => {
       token: crypto.randomBytes(32).toString('hex')
     });
     const url = `${process.env.BASE_URL}users/${data.id}/verify/${verifyToken.token}`;
-    const sentEmail = {
-      recipientEmail: data.email,
-      emailSubject: 'Verify Email',
-      emailBody: url
+    const msg = {
+      to: data.email,
+      from: process.env.SENDER_EMAIL, // replace with your own email address
+      subject: 'Verify Email',
+      text: url,
     };
 
-    await sendMail(sentEmail);
+    await sgMail.send(msg);
 
     const token = await generateToken(data);
     res
