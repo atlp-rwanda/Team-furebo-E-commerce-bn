@@ -89,7 +89,8 @@ export class PublicController {
       const userData = {
         id: doesExist.id,
         fullname: doesExist.fullname,
-        email: doesExist.email
+        email: doesExist.email,
+        role: doesExist.role
       };
       return res
         .status(200)
