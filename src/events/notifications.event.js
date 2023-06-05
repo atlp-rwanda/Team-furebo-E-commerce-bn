@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { EventEmitter } from 'events';
 import socketIOClient from 'socket.io-client';
 import {

@@ -35,7 +35,8 @@ export const requestPasswordReset = asyncWrapper(async (req, res) => {
 });
 
 export const resetPassword = asyncWrapper(async (req, res) => {
-  const { userId, newPassword } = req.body;
+  const userId = req.params.id;
+  const { newPassword } = req.body;
 
   if (!newPassword) {
     return res.status(500).json({ message: 'New password is required' });
@@ -51,7 +52,7 @@ export const resetPassword = asyncWrapper(async (req, res) => {
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   await db.User.update(
     { password: hashedPassword },
-    { where: { id: user.id } }
+    { where: { id: user.id } },
   );
 
   res.json({ message: 'Password reset successfully' });

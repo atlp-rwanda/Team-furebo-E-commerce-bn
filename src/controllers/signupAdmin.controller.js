@@ -1,10 +1,12 @@
 import crypto from 'crypto';
+import sgMail from '@sendgrid/mail';
 import db from '../Database/models';
 import validateSignup from '../validation/signup.validator';
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import ROLES_LIST from '../utils/userRoles.util';
 import { generateToken, hashPassword } from '../utils/user.util';
-import sendMail from '../utils/sendEmail.util';
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const { User, signUpToken } = db;
 const createAdminAccount = asyncWrapper(async (req, res) => {
@@ -21,6 +23,12 @@ const createAdminAccount = asyncWrapper(async (req, res) => {
     return res
       .status(401)
       .json({ message: 'Email already used, please use different email.' });
+  }
+
+  const adminCodes = process.env.ADMIN_CODE;
+
+  if (Number(adminCodes) !== Number(req.body.adminCode)) {
+    return res.status(401).json({ message: 'Wrong Admin code, please provide the valid code!, or register as user' });
   }
 
   const hashedPassword = await hashPassword(req.body.password);
@@ -40,13 +48,14 @@ const createAdminAccount = asyncWrapper(async (req, res) => {
       token: crypto.randomBytes(32).toString('hex')
     });
     const url = `${process.env.BASE_URL}users/${data.id}/verify/${verifyToken.token}`;
-    const sentEmail = {
-      recipientEmail: data.email,
-      emailSubject: 'Verify Email',
-      emailBody: url
+    const msg = {
+      to: data.email,
+      from: process.env.SENDER_EMAIL,
+      subject: 'Verify Email',
+      text: url,
     };
 
-    await sendMail(sentEmail);
+    await sgMail.send(msg);
 
     const token = await generateToken(data);
     res

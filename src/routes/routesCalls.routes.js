@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import express from 'express';
 import resetPassword from './reset-password.routes';
 import signupRouter from './signup.routes';
@@ -27,6 +28,9 @@ import profilePage from './profile.routes';
 import readNotificatioRouter from './notificationRead.routes';
 import findProduct from './findProduct.routes';
 import addProductFeedback from './productFeedback.routes';
+import userProfile from './userProfile.routes';
+import getNotification from './getNotification.routes';
+import fetchUsers from './get-users.routes'
 
 const routes = express();
 
@@ -61,5 +65,8 @@ routes.use('/api', profilePage);
 routes.use('/api', readNotificatioRouter);
 routes.use('/api', findProduct);
 routes.use('/api', addProductFeedback);
+routes.use('/api', userProfile);
+routes.use('/api', getNotification);
+routes.use('/api', fetchUsers);
 
 export default routes;
