@@ -2,7 +2,7 @@ import { User } from '../Database/models';
 import { hashPassword, comparePassword } from '../utils/user.util';
 
 const changePasswordMiddleware = async (req, res, next) => {
-  const { id } = req.params;
+  const { id } = req.user;
   const { currentPassword, newPassword } = req.body;
 
   // GET USER BY ID

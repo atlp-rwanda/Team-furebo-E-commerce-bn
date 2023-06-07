@@ -13,6 +13,7 @@ describe('ADMIN REGISTRATION', () => {
       lastname: 'acc',
       email: 'admin@gmail.com',
       password: 'Test123456',
+      adminCode: '0547583903',
     };
     chai
       .request(app)
@@ -46,6 +47,7 @@ describe('ADMIN REGISTRATION', () => {
       lastname: 'acc',
       email: 'admin2@gmail.com',
       password: 'test123',
+      adminCode: '0547583903',
     };
     chai
       .request(app)
@@ -62,6 +64,7 @@ describe('ADMIN REGISTRATION', () => {
       lastname: 'acc',
       email: 'admin@gmail.com',
       password: 'Test123456',
+      adminCode: '0547583903',
     };
     chai
       .request(app)

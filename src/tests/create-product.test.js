@@ -32,6 +32,7 @@ describe('POST PRODUCT', async () => {
     lastname: 'SHEILA',
     email: 'sheila1@gmail.com',
     password: 'Admin1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
     email: 'sheila1@gmail.com',
@@ -182,7 +183,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       };
 
       const res = await chai
@@ -209,7 +210,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       };
 
       const res = await chai
@@ -228,7 +229,7 @@ describe('POST PRODUCT', async () => {
   context('when a required field is missing', () => {
     it('should return status 400 and an error message detailing the missing field', async () => {
       const productData = {
-        name: 'Laptop',
+        name: 'Laptop1',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -294,7 +295,7 @@ describe('POST PRODUCT', async () => {
         price: 2000.99,
         quantity: 10,
         category: 'Electronics',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       };
       const res = chai
         .request(app)
@@ -323,7 +324,7 @@ describe('POST PRODUCT', async () => {
           quantity: -12,
           price: 200,
           category: 'example',
-          exDate: '2023-05-30',
+          exDate: '2024-05-30',
         };
 
         const res = await chai

@@ -33,6 +33,7 @@ describe('SEARCH PRODUCTS', async () => {
     lastname: 'SHEILA',
     email: 'sheila1kb6deh@gmail.com',
     password: 'Admin1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
     email: 'sheila1kb6deh@gmail.com',
@@ -164,7 +165,7 @@ describe('SEARCH PRODUCTS', async () => {
 
   it('should return status 201 and add first product to the database', (done) => {
     const productData = {
-      name: 'Screen',
+      name: 'Screen1',
       image: [
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -192,7 +193,7 @@ describe('SEARCH PRODUCTS', async () => {
 
   it('should return status 201 and add second product to the database', (done) => {
     const productData = {
-      name: 'lenovo',
+      name: 'lenovo1',
       image: [
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -222,7 +223,7 @@ describe('SEARCH PRODUCTS', async () => {
   it('should return products that match the name query', (done) => {
     const req = {
       query: {
-        name: 'lenovo'
+        name: 'lenovo1'
       }
     };
     chai

@@ -110,7 +110,7 @@ const router = express();
  */
 
 router.patch(
-  '/modify-password/:id',
+  '/modify-password',
   authorizeUser,
   changePasswordMiddleware,
   modifyPassword

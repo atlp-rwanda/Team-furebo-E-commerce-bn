@@ -36,6 +36,7 @@ describe('UPDATE PRODUCT', () => {
     lastname: 'SHEILA',
     email: 'sheilajubrap@gmail.com',
     password: 'Admin1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
     email: 'sheilajubrap@gmail.com',
