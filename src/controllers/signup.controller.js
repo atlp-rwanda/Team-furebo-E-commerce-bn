@@ -54,7 +54,7 @@ export const createUser = asyncWrapper(async (req, res) => {
 
     const msg = {
       to: data.email,
-      from: process.env.SENDER_EMAIL, // replace with your own email address
+      from: process.env.SENDER_EMAIL,
       subject: 'Verify Email',
       text: url,
     };

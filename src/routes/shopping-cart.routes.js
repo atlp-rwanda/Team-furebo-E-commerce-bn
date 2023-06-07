@@ -1,6 +1,6 @@
 import express from 'express';
 import addItemToCart from '../controllers/shopping-cart.controller';
-import { authorizeCustomer } from '../middlewares/userRoles.middleware';
+import { authorizeUser } from '../middlewares/userRoles.middleware';
 
 const router = express.Router();
 /**
@@ -118,6 +118,6 @@ const router = express.Router();
  *                   type: string
  *                   example: Error message
  */
-router.post('/addItemToCart', authorizeCustomer, addItemToCart);
+router.post('/addItemToCart', authorizeUser, addItemToCart);
 
 export default router;
