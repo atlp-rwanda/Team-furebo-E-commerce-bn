@@ -15,11 +15,11 @@ describe('USER PROFILE TESTS', () => {
   const userData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugabojs@gmail.com',
+    email: 'mugabojs12@gmail.com',
     password: 'Mugabo1234',
   };
   const userLoginData = {
-    email: 'mugabojs@gmail.com',
+    email: 'mugabojs12@gmail.com',
     password: 'Mugabo1234',
   };
 

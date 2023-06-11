@@ -75,6 +75,7 @@ const adminData = {
   lastname: 'Doe',
   email: 'admindoe12@gmail.com',
   password: 'Password1234',
+  adminCode: '0547583903',
 };
 
 const loginAdmin = {
@@ -210,7 +211,7 @@ describe('MARK NOTIFICATIONS', async () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${merchantToken}`)
       .send({
-        name: 'HCT/RP 360ST',
+        name: 'HCT/RP 360ST10',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -220,7 +221,7 @@ describe('MARK NOTIFICATIONS', async () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       });
     expect(product).to.have.status(201);
     const merchant = await User.findByPk(merchantId);
@@ -237,7 +238,7 @@ describe('MARK NOTIFICATIONS', async () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${customerToken}`)
       .send({
-        name: 'HCT/RPhhhy 360ST',
+        name: 'HCT/RPhhhy 360ST09',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -247,7 +248,7 @@ describe('MARK NOTIFICATIONS', async () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PCwwy',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       });
     expect(product2).to.have.status(201);
     const merchant2 = await User.findByPk(customerId);

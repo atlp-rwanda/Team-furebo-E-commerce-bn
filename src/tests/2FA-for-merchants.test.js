@@ -63,6 +63,7 @@ const adminData = {
   lastname: 'admin',
   email: 'nshimyimanavictorddop@gmail.com',
   password: 'Admin1912',
+  adminCode: '0547583903',
 };
 const sellerData = {
   firstname: 'baho',

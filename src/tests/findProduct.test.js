@@ -26,6 +26,7 @@ describe('VIEW SPECIFIC PRODUCT /api/getProduct/:id', () => {
     lastname: 'adams',
     email: 'adamsniu@gmail.com',
     password: 'Adams1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
     email: 'adamsniu@gmail.com',
@@ -111,7 +112,7 @@ describe('VIEW SPECIFIC PRODUCT /api/getProduct/:id', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${SELLER_TOKEN}`)
       .send({
-        name: 'HCT/RP 36ST',
+        name: 'HCT/RP 36ST6',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',

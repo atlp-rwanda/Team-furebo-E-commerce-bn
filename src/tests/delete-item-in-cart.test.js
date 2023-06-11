@@ -1,5 +1,4 @@
 /* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
@@ -8,10 +7,11 @@ import app from '../../index';
 const { expect } = chai;
 chai.use(chaiHttp);
 
-describe('UPDATING SHOPPING CART TEST', () => {
+describe('DELETING ITEM FROM SHOPPING CART', () => {
   const NO_EXISTING_PRODUCT_ID = 98745;
   let BUYER_TOKEN;
   let CART_ITEM_ID;
+  let INVALID_USER_TOKEN;
 
   let sellerRegResToken;
   let sellerRegResVerifyToken;
@@ -30,34 +30,34 @@ describe('UPDATING SHOPPING CART TEST', () => {
   const adminData = {
     firstname: 'Peter',
     lastname: 'adams',
-    email: 'adam9986skijhy@gmail.com',
+    email: 'adam9986skijhy12@gmail.com',
     password: 'Adams1912',
     adminCode: '0547583903',
   };
   const loginAdmin = {
-    email: 'adam9986skijhy@gmail.com',
+    email: 'adam9986skijhy12@gmail.com',
     password: 'Adams1912',
   };
-  // SELLER INFO
+    // SELLER INFO
   const sellerData = {
     firstname: 'State',
     lastname: 'Price',
-    email: 'state19okj876@gmail.com',
+    email: 'state19okj87612@gmail.com',
     password: 'State1912',
   };
   const sellerLoginData = {
-    email: 'state19okj876@gmail.com',
+    email: 'state19okj87612@gmail.com',
     password: 'State1912',
   };
-  // BUYER INFO
+    // BUYER INFO
   const buyerData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugabonju7895r@gmail.com',
+    email: 'mugabonju7895r12@gmail.com',
     password: 'Mugabo1234',
   };
   const buyerLoginData = {
-    email: 'mugabonju7895r@gmail.com',
+    email: 'mugabonju7895r12@gmail.com',
     password: 'Mugabo1234',
   };
 
@@ -155,7 +155,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${SELLER_TOKEN}`)
       .send({
-        name: 'HCT/RP 360STSB',
+        name: 'HCT/RPsTSB',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -183,136 +183,34 @@ describe('UPDATING SHOPPING CART TEST', () => {
       .ID;
   });
 
-  context('IT SHOULD UPATE ITEM IN SHOPPING CART ', () => {
-    it('should add item to the shopping cart and return status 200', async () => {
-      // make request to add item to cart
-      const res = await chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send({ quantity: 3 });
+  it('should delete the item from the shopping cart and return status 200', async () => {
+    const response = await chai
+      .request(app)
+      .delete(`/api/delete-item-in-cart/${CART_ITEM_ID}`)
+      .set('Authorization', `Bearer ${BUYER_TOKEN}`);
 
-      // assert response
-      expect(res).to.have.status(200);
-      const actualVal = res.body.message;
-      expect(actualVal).to.be.equal(
-        'THE ITEM IN THE CART WAS UPDATED SUCCESSFULLY!!!'
-      );
-    });
-  });
-  context('WHEN PRODUCT WITH THAT ID, ID NOT IN PRODUCT', () => {
-    it('should return status 404 and an error message', async () => {
-      // make request to add item to cart
-      const res = await chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${NO_EXISTING_PRODUCT_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send({ quantity: 1 });
-
-      // assert response
-      expect(res).to.have.status(404);
-      const actualVal = res.body.message;
-      expect(actualVal).to.be.equal('THE PRODUCT IS NOT IN THE CART');
-    });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.equal('Item removed from cart');
   });
 
-  context('WHEN TOKEN IS NOT VALID', () => {
-    it('should return status 401 and an error message', (done) => {
-      const itemData = {
-        quantity: 2,
-      };
+  it('should return status 404 if the cart item is not found', async () => {
+    const invalidCartItemId = 98765;
+    const response = await chai
+      .request(app)
+      .delete(`/api/delete-item-in-cart/${invalidCartItemId}`)
+      .set('Authorization', `Bearer ${BUYER_TOKEN}`);
 
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: 'Bearer invalid_token' })
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(401);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Invalid token');
-          done();
-        });
-    });
-  });
-  context('WHEN NO TOKEN IS GIVEN', () => {
-    it('should return status 401 and an error message', (done) => {
-      const itemData = {
-        quantity: 2,
-      };
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(401);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Authorization header missing');
-          done();
-        });
-    });
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.equal('The cart item is not found');
   });
 
-  context('WHEN QUANTITY GIVEN IS NOT A NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
-      const itemData = {
-        quantity: 'two',
-      };
+  it('should return status 403 if the user is unauthorized', async () => {
+    const response = await chai
+      .request(app)
+      .delete(`/api/delete-item-in-cart/${CART_ITEM_ID}`)
+      .set('Authorization', 'Bearer invalid_token');
 
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal(
-            'QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]'
-          );
-          done();
-        });
-    });
-  });
-  context('WHEN QUANTITY GIVEN HAS A NEGATIVE NUMBER', () => {
-    it('should return status 400 and an error message', (done) => {
-      const itemData = {
-        quantity: -2,
-      };
-
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal(
-            'PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]'
-          );
-          done();
-        });
-    });
-  });
-
-  context('WHEN QUANTITY GIVEN IS GREATER THAN STOCK', () => {
-    it('should return status 400 and an error message', (done) => {
-      const itemData = {
-        quantity: 98765,
-      };
-
-      chai
-        .request(app)
-        .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
-        .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send(itemData)
-        .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('THE STOCK HAS LESS QUANTITY');
-          done();
-        });
-    });
+    expect(response).to.have.status(403);
+    expect(response.body.message).to.equal('Unauthorized');
   });
 });

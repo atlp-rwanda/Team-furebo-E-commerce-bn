@@ -1,3 +1,7 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable max-len */
+/* eslint-disable no-shadow */
+/* eslint-disable linebreak-style */
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import { ShoppingCart, Product } from '../Database/models';
 
@@ -17,10 +21,14 @@ const viewCartItems = asyncWrapper(async (req, res) => {
 
   // Map the viewCart array to include the product details in the response
   const cartItems = viewCart.map((item) => {
-    const { id, userId, productId, quantity, totalPrice, cartTotalPrice, itemCounts, createdAt, updatedAt, Product } = item;
-    const { name, price, category, image } = Product; 
+    const {
+      id, userId, productId, quantity, totalPrice, cartTotalPrice, itemCounts, createdAt, updatedAt, Product
+    } = item;
+    const {
+      name, price, category, image
+    } = Product;
     const firstImage = image[0];
-  
+
     const formattedCreatedAt = new Date(createdAt).toLocaleString('en-US', {
       month: 'long',
       day: 'numeric',
@@ -28,7 +36,7 @@ const viewCartItems = asyncWrapper(async (req, res) => {
       hour: 'numeric',
       minute: 'numeric',
     });
-  
+
     const formattedUpdatedAt = new Date(updatedAt).toLocaleString('en-US', {
       month: 'long',
       day: 'numeric',
@@ -36,7 +44,7 @@ const viewCartItems = asyncWrapper(async (req, res) => {
       hour: 'numeric',
       minute: 'numeric',
     });
-  
+
     return {
       id,
       userId,
@@ -47,13 +55,12 @@ const viewCartItems = asyncWrapper(async (req, res) => {
       itemCounts,
       createdAt: formattedCreatedAt,
       updatedAt: formattedUpdatedAt,
-      image: firstImage, 
+      image: firstImage,
       name,
       price,
-      category, 
+      category,
     };
   });
-  
 
   return res.status(200).json(cartItems);
 });
