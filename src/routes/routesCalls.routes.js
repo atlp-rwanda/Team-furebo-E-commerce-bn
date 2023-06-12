@@ -31,6 +31,7 @@ import addProductFeedback from './productFeedback.routes';
 import userProfile from './userProfile.routes';
 import getNotification from './getNotification.routes';
 import fetchUsers from './get-users.routes'
+import deleteItemInCart from './detele-item-in-cart.routes'
 
 const routes = express();
 
@@ -68,5 +69,7 @@ routes.use('/api', addProductFeedback);
 routes.use('/api', userProfile);
 routes.use('/api', getNotification);
 routes.use('/api', fetchUsers);
+routes.use('/api', deleteItemInCart);
+
 
 export default routes;

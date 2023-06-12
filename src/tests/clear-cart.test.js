@@ -35,33 +35,34 @@ describe(' CLEAR SHOPPING CART TEST', () => {
   const adminData = {
     firstname: 'Peter',
     lastname: 'adams',
-    email: 'adamsww@gmail.com',
+    email: 'peteradamsii@gmail.com',
     password: 'Adams1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
-    email: 'adamsww@gmail.com',
+    email: 'peteradamsii@gmail.com',
     password: 'Adams1912',
   };
   // SELLER INFO
   const sellerData = {
     firstname: 'State',
     lastname: 'Price',
-    email: 'state19hh@gmail.com',
+    email: 'peterstateii@gmail.com',
     password: 'State1912',
   };
   const loginSeller = {
-    email: 'state19hh@gmail.com',
+    email: 'peterstateii@gmail.com',
     password: 'State1912',
   };
   // BUYER INFO
   const buyerData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugaboki@gmail.com',
+    email: 'mugabojamesii@gmail.com',
     password: 'Mugabo1234',
   };
   const buyerLogin = {
-    email: 'mugaboki@gmail.com',
+    email: 'mugabojamesii@gmail.com',
     password: 'Mugabo1234',
   };
 
@@ -172,7 +173,7 @@ describe(' CLEAR SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${sellerToken}`)
       .send({
-        name: 'HCT/RP 360ST',
+        name: 'HCT/RP 360ST2',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -182,7 +183,7 @@ describe(' CLEAR SHOPPING CART TEST', () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       });
     productId = productRes.body.data.id;
 

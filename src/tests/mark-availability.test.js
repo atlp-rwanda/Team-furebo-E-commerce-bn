@@ -33,6 +33,7 @@ describe(' MARK PRODUCT AVAILABILITY', () => {
     lastname: 'SHEILA',
     email: 'sheila@gmail.com',
     password: 'Admin1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
     email: 'sheila@gmail.com',

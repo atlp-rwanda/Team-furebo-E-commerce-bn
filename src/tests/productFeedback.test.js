@@ -31,6 +31,7 @@ describe('ADD PRODUCT FEEDBACK /api/addProductFeedback/:id', () => {
     lastname: 'adams',
     email: 'adamskitp@gmail.com',
     password: 'Adams1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
     email: 'adamskitp@gmail.com',
@@ -175,7 +176,7 @@ describe('ADD PRODUCT FEEDBACK /api/addProductFeedback/:id', () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       });
     productId = productRes.body.data.id;
   });

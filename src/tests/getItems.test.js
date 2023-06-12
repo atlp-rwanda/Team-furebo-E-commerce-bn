@@ -34,6 +34,7 @@ describe('Retrieve list of items', () => {
     lastname: 'admin',
     email: 'john@gmail.com',
     password: 'Test123456',
+    adminCode: '0547583903',
   };
   const sellerData = {
     firstname: 'Jana',

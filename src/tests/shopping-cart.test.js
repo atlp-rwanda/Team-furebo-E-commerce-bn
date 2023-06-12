@@ -35,6 +35,7 @@ describe('SHOPPING CART TEST', () => {
     lastname: 'Gymson',
     email: 'gymson@gmail.com',
     password: 'Gymson1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
     email: 'gymson@gmail.com',
@@ -157,7 +158,7 @@ describe('SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${SELLER_TOKEN}`)
       .send({
-        name: 'HCT/RP 360STS',
+        name: 'HCT/RP 360STSS',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -167,7 +168,7 @@ describe('SHOPPING CART TEST', () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       });
     expect(product).to.have.status(201);
     EXISTING_PRODUCT_ID = product.body.data.id;

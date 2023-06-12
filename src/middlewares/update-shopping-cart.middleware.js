@@ -3,7 +3,7 @@
 import { ShoppingCart, Product, User } from '../Database/models';
 
 const updateShoppingCartMiddleware = async (req, res, next) => {
-  const productId = req.params.id;
+  const cartItemId = req.params.id; // Change variable name to cartItemId
   const { quantity } = req.body;
 
   const { id } = req.user;
@@ -15,24 +15,24 @@ const updateShoppingCartMiddleware = async (req, res, next) => {
     return res.status(404).json({ status: 'error', message: 'User not found' });
   }
 
-  // CHECK IF ID IS FORM USER WHO LOGGED IN
+  // CHECK IF ID IS FROM USER WHO LOGGED IN
   if (user.id !== req.user.id) {
-    return res.status(403).json({ status: 'error', message: 'Unautholized' });
+    return res.status(403).json({ status: 'error', message: 'Unauthorized' });
   }
 
   // Check if the user has already added this product to their shopping cart
   const cartItem = await ShoppingCart.findOne({
-    where: { userId: req.user.id, productId },
+    where: { userId: req.user.id, id: cartItemId }, // Use cartItemId instead of productId
     include: Product,
   });
 
   if (!cartItem) {
     return res.status(404).json({
       status: 'error',
-      message: 'THE PRODUCT IS NOT IN THE CART',
+      message: 'THE CART ITEM IS NOT FOUND',
     });
   }
-  // Check if the quantity is a valid numbe(s)
+  // Check if the quantity is a valid number(s)
   if (isNaN(quantity)) {
     return res.status(400).json({
       status: 'error',
@@ -48,13 +48,14 @@ const updateShoppingCartMiddleware = async (req, res, next) => {
     });
   }
 
-  // Check if the requested quantity amount are less
+  // Check if the requested quantity is greater than the available quantity
   if (quantity > cartItem.Product.quantity) {
     return res.status(400).json({
       status: 'error',
-      message: 'THE STOCK HAS LESS QUANTITY',
+      message: 'THE STOCK HAS INSUFFICIENT QUANTITY',
     });
   }
+  
   req.user = user;
   req.quantity = quantity;
   req.cartItem = cartItem;

@@ -554,6 +554,7 @@ describe(' Customer and merchant role', () => {
       lastname: 'acc',
       email: 'admin274@gmail.com',
       password: 'Test123456',
+      adminCode: '0547583903',
     };
     chai
       .request(app)
@@ -583,6 +584,7 @@ describe(' Customer and merchant role', () => {
       lastname: 'acc',
       email: 'admin24@gmail.com',
       password: 'Test123456',
+      adminCode: '0547583903',
     };
     chai
       .request(app)

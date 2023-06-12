@@ -33,33 +33,33 @@ describe('CHANGE USER PASSWORD', async () => {
   const userOneData = {
     firstname: 'KABELA',
     lastname: 'Dom',
-    email: 'kabera@gmail.com',
+    email: 'kaberadom@gmail.com',
     password: 'Kabera1912',
   };
   const userOneLoginData = {
-    email: 'kabera@gmail.com',
+    email: 'kaberadom@gmail.com',
     password: 'Kabera1912',
   };
   // USER TWO
   const userTwoData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugabo@gmail.com',
+    email: 'mugabojames@gmail.com',
     password: 'Mugabo1234',
   };
   const userTwoLoginData = {
-    email: 'mugabo@gmail.com',
+    email: 'mugabojames@gmail.com',
     password: 'Mugabo1234',
   };
   // USER THREE
   const userThreeData = {
     firstname: 'BRUCE',
     lastname: 'James',
-    email: 'bruce1@gmail.com',
+    email: 'brucejames@gmail.com',
     password: 'Bruce12345',
   };
   const userThreeLoginData = {
-    email: 'bruce1@gmail.com',
+    email: 'brucejames@gmail.com',
     password: 'Bruce12345',
   };
 

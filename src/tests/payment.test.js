@@ -70,7 +70,8 @@ const adminData = {
   firstname: 'Admin',
   lastname: 'Doe',
   email: 'admindoehhg@gmail.com',
-  password: 'Password1234'
+  password: 'Password1234',
+  adminCode: '0547583903',
 };
 
 const loginAdmin = {
@@ -193,7 +194,7 @@ describe('MAKING PAYMENT', async () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${merchantToken}`)
       .send({
-        name: 'HCT/RPKKOOPPVhbg 360ST',
+        name: 'HCT/RPKKOOPPVhbg 360ST98',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -203,7 +204,7 @@ describe('MAKING PAYMENT', async () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMINGjut PC',
-        exDate: '2023-05-30'
+        exDate: '2024-05-30'
       });
     expect(product).to.have.status(201);
     const productId = product.body.data.id;
