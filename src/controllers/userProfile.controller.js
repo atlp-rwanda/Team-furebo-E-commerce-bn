@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
 /* eslint-disable no-undef */
@@ -36,7 +37,11 @@ export const theUserProfile = asyncWrapper(async (req, res) => {
     userId: id
   });
 
-  return res.status(201).json(userProfile);
+  return res.status(201).json({
+    status: 'success',
+    message: 'ADDED SUCCESSFULLY!!!',
+    userProfile
+  });
 });
 
 export const getUserProfiles = asyncWrapper(async (req, res) => {
@@ -83,7 +88,11 @@ export const updateUserProfile = asyncWrapper(async (req, res) => {
 
     const updatedDate = await userProfile.update(value);
 
-    return res.status(200).json(userProfile);
+    return res.status(200).json({
+      status: 'success',
+      message: 'UPDATED SUCCESSFULLY!!!',
+      userProfile
+    });
   }
   return res.status(404).json({
     success: false,
@@ -138,7 +147,11 @@ export const updateUser = asyncWrapper(async (req, res) => {
       email: req.body.email,
     });
 
-    return res.status(200).json(user);
+    return res.status(200).json({
+      status: 'success',
+      message: 'UPDATED SUCCESSFULLY!!!',
+      user
+    });
   }
   return res.status(404).json({
     success: false,

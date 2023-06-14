@@ -22,7 +22,8 @@ const deleteCartItem = asyncWrapper(async (req, res) => {
   );
 
   res.status(200).json({
-    message: 'Item removed from cart',
+    status: 'success',
+    message: 'REMOVED FROM CART SUCCESSFULLY!!!',
   });
 });
 
