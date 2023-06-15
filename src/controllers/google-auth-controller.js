@@ -30,6 +30,10 @@ const googleProtected = async (req, res) => {
 </html>`);
 };
 
+const googleRedirectHome = async (req,res) => {
+  res.redirect("https://fascinating-piroshki-10faa1.netlify.app/home")
+}
+
 const logout = async (req, res, next) => {
   req.logout((err) => {
     if (err) {
@@ -43,5 +47,6 @@ module.exports = {
   initialize,
   googleFailure,
   googleProtected,
+  googleRedirectHome,
   logout,
 };
