@@ -4,6 +4,7 @@ import session from 'express-session';
 import googleAuth from '../controllers/google-auth-controller';
 import googleFailure from '../controllers/google-auth-controller';
 import googleProtected from '../controllers/google-auth-controller';
+import googleRedirectHome from '../controllers/google-auth-controller';
 import 'dotenv/config';
 // eslint-disable-next-line import/no-duplicates
 import logout from '../controllers/google-auth-controller';
@@ -16,7 +17,7 @@ router.use(
   session({
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { secure: false },
   })
 );
@@ -28,12 +29,13 @@ router.get('/', googleAuth.initialize);
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/protected',
+    successRedirect: '/redirectHome',
     failureRedirect: '/auth/failure',
   })
 );
 router.get('/auth/failure', googleFailure.googleFailure);
 router.get('/protected', isLoggedIn, googleProtected.googleProtected);
+router.get('/redirectHome', isLoggedIn, googleRedirectHome.googleRedirectHome);
 router.get('/logout', logout.logout);
 /**
  * @swagger

@@ -50,3 +50,10 @@ describe('GET /protected', () => {
     expect(res).to.have.status(401);
   });
 });
+describe('GET /redirectHome', () => {
+  it('should return status code 401 when user is not authenticated', async () => {
+    const res = await chai.request(app).get('/redirectHome');
+
+    expect(res).to.have.status(401);
+  });
+});
