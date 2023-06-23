@@ -24,7 +24,7 @@ export const buyerCheckout = asyncWrapper(async (req, res) => {
   currentCart.forEach((item) => {
     const product = {
       productId: item.productId,
-      quantity: item.productId,
+      quantity: item.quantity,
       price: item.totalPrice,
     };
     products.push(product);

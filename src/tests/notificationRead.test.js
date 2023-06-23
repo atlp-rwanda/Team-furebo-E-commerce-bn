@@ -5,7 +5,10 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
 import app from '../../index';
-import { users } from '../Database/models';
+import db from '../Database/models';
+import { emitProductAddedEvent } from '../events/notifications.event';
+
+const { User } = db;
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -15,66 +18,138 @@ let customerToken;
 let adminToken;
 let customer2Token;
 let orderId;
+let notificationId;
+
+let user1RegResToken;
+let user1RegResVerifyToken;
+let user1Id;
+let user2RegResToken;
+let user2RegResVerifyToken;
+let user2Id;
+let user3RegResToken;
+let user3RegResVerifyToken;
+let user3Id;
+
+let adminRegResToken;
+let adminRegResVerifyToken;
+let adminId;
 
 const merchantData = {
   firstname: 'Jane',
   lastname: 'Doe',
-  email: 'janedoe@gmail.com',
+  email: 'janedoe12@gmail.com',
   password: 'Password1234',
 };
 
 const loginMerchant = {
-  email: 'janedoe@gmail.com',
+  email: 'janedoe12@gmail.com',
   password: 'Password1234',
 };
 
 const customerData = {
   firstname: 'John',
   lastname: 'Doe',
-  email: 'johndoe@gmail.com',
+  email: 'johndoe12@gmail.com',
   password: 'Password1234',
 };
 
 const loginCustomer = {
-  email: 'johndoe@gmail.com',
+  email: 'johndoe12@gmail.com',
   password: 'Password1234',
 };
 
 const customer2Data = {
   firstname: 'customer',
   lastname: 'two',
-  email: 'customer2@gmail.com',
+  email: 'customer212@gmail.com',
   password: 'Password1234',
 };
 
 const loginCustomer2 = {
-  email: 'customer2@gmail.com',
+  email: 'customer212@gmail.com',
   password: 'Password1234',
 };
 
 const adminData = {
   firstname: 'Admin',
   lastname: 'Doe',
-  email: 'admindoe@gmail.com',
+  email: 'admindoe12@gmail.com',
   password: 'Password1234',
+  adminCode: '0547583903',
 };
 
 const loginAdmin = {
-  email: 'admindoe@gmail.com',
+  email: 'admindoe12@gmail.com',
   password: 'Password1234',
 };
 
 describe('MARK NOTIFICATIONS', async () => {
   before(async () => {
     // Register user
-    await chai.request(app).post('/api/register').send(merchantData);
+    const user1RegRes = await chai.request(app).post('/api/register').send(merchantData);
 
-    await chai.request(app).post('/api/register').send(customerData);
+    user1RegResToken = user1RegRes.body.token;
+    user1RegResVerifyToken = user1RegRes.body.verifyToken;
 
-    await chai.request(app).post('/api/register').send(customer2Data);
+    const verifyUser1Token = await jwt.verify(
+      user1RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user1Id = verifyUser1Token.id;
+
+    // verify email for user1
+    await chai
+      .request(app)
+      .get(`/api/${user1Id}/verify/${user1RegResVerifyToken.token}`);
+
+    const user2RegRes = await chai.request(app).post('/api/register').send(customerData);
+
+    user2RegResToken = user2RegRes.body.token;
+    user2RegResVerifyToken = user2RegRes.body.verifyToken;
+
+    const verifyUser2Token = await jwt.verify(
+      user2RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user2Id = verifyUser2Token.id;
+
+    // verify email for user2
+    await chai
+      .request(app)
+      .get(`/api/${user2Id}/verify/${user2RegResVerifyToken.token}`);
+
+    const user3RegRes = await chai.request(app).post('/api/register').send(customer2Data);
+
+    user3RegResToken = user3RegRes.body.token;
+    user3RegResVerifyToken = user3RegRes.body.verifyToken;
+
+    const verifyUser3Token = await jwt.verify(
+      user3RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user3Id = verifyUser3Token.id;
+
+    // verify email for user3
+    await chai
+      .request(app)
+      .get(`/api/${user3Id}/verify/${user3RegResVerifyToken.token}`);
 
     // Register admin
-    await chai.request(app).post('/api/registerAdmin').send(adminData);
+    const adminRegRes = await chai.request(app).post('/api/registerAdmin').send(adminData);
+
+    adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
+
+    const verifyAdminToken = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
+
+    // verify email for admin
+    await chai
+      .request(app)
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
 
     const merchantLogin = await chai
       .request(app)
@@ -136,7 +211,7 @@ describe('MARK NOTIFICATIONS', async () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${merchantToken}`)
       .send({
-        name: 'HCT/RP 360ST',
+        name: 'HCT/RP 360ST10',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -146,9 +221,16 @@ describe('MARK NOTIFICATIONS', async () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       });
     expect(product).to.have.status(201);
+    const merchant = await User.findByPk(merchantId);
+
+    const notification = await emitProductAddedEvent(
+      product.body.data,
+      merchant
+    );
+    notificationId = notification.id;
 
     // create a 2nd product to be added to the shopping cart
     const product2 = await chai
@@ -156,7 +238,7 @@ describe('MARK NOTIFICATIONS', async () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${customerToken}`)
       .send({
-        name: 'HCT/RPhhh 360ST',
+        name: 'HCT/RPhhhy 360ST09',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -165,50 +247,16 @@ describe('MARK NOTIFICATIONS', async () => {
         ],
         price: 2500,
         quantity: 12,
-        category: 'GAMMING PCww',
-        exDate: '2023-05-30',
+        category: 'GAMMING PCwwy',
+        exDate: '2024-05-30',
       });
     expect(product2).to.have.status(201);
+    const merchant2 = await User.findByPk(customerId);
 
-    // create a 3rd product to be added to the shopping cart
-    const product3 = await chai
-      .request(app)
-      .post('/api/addProduct')
-      .set('Authorization', `Bearer ${customerToken}`)
-      .send({
-        name: 'HCT/RPee 360ST',
-        image: [
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        ],
-        price: 2500,
-        quantity: 12,
-        category: '1GAMMING PCwwee',
-        exDate: '2023-05-30',
-      });
-    expect(product3).to.have.status(201);
-
-    // create a 4th product to be added to the shopping cart
-    const product4 = await chai
-      .request(app)
-      .post('/api/addProduct')
-      .set('Authorization', `Bearer ${customerToken}`)
-      .send({
-        name: 'HCT/RPeeyt 360ST',
-        image: [
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        ],
-        price: 2500,
-        quantity: 12,
-        category: '1GAMMINGhg PCwwee',
-        exDate: '2023-05-30',
-      });
-    expect(product4).to.have.status(201);
+    const notification2 = await emitProductAddedEvent(
+      product2.body.data,
+      merchant2
+    );
   });
 
   context(
@@ -230,25 +278,38 @@ describe('MARK NOTIFICATIONS', async () => {
       });
     }
   );
-  context(
-    'It should mark notification as read',
-    () => {
-      it('should return a status of 200 when notification is read', (done) => {
-        const requestBody = {
-          isRead: true,
-        };
-        chai
-          .request(app)
-          .post('/api/singleNotification/7')
-          .set({ Authorization: `Bearer ${merchantToken}` })
-          .send(requestBody)
-          .end((err, res) => {
-            chai.expect(res).to.have.status(200);
-            done();
-          });
-      });
-    }
-  );
+  context('It should mark notification as read', () => {
+    it('should return a status of 200 when notification is read', (done) => {
+      const requestBody = {
+        isRead: true,
+      };
+      chai
+        .request(app)
+        .post(`/api/singleNotification/${notificationId}`)
+        .set({ Authorization: `Bearer ${merchantToken}` })
+        .send(requestBody)
+        .end((err, res) => {
+          chai.expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
+  context('It should mark all notifications as read', () => {
+    it('should return a status of 200 when all notifications are read', (done) => {
+      const requestBody = {
+        isRead: true,
+      };
+      chai
+        .request(app)
+        .post('/api/allNotifications')
+        .set({ Authorization: `Bearer ${customerToken}` })
+        .send(requestBody)
+        .end((err, res) => {
+          chai.expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
   context(
     'It should fail to mark notification as read because there will not be notfication',
     () => {
@@ -259,29 +320,10 @@ describe('MARK NOTIFICATIONS', async () => {
         chai
           .request(app)
           .post('/api/allNotifications')
-          .set({ Authorization: `Bearer ${merchantToken}` })
-          .send(requestBody)
-          .end((err, res) => {
-            chai.expect(res).to.have.status(404);
-            done();
-          });
-      });
-    }
-  );
-  context(
-    'It should mark all notifications as read',
-    () => {
-      it('should return a status of 200 when all notifications are read', (done) => {
-        const requestBody = {
-          isRead: true,
-        };
-        chai
-          .request(app)
-          .post('/api/allNotifications')
           .set({ Authorization: `Bearer ${customerToken}` })
           .send(requestBody)
           .end((err, res) => {
-            chai.expect(res).to.have.status(200);
+            chai.expect(res).to.have.status(404);
             done();
           });
       });

@@ -1,8 +1,10 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-unused-vars */
 import 'dotenv/config';
+import jwt from 'jsonwebtoken';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../index';
-// import { sequelize } from '../Database/models';
 import { verifyToken } from '../utils/user.util';
 
 const { expect } = chai;
@@ -17,49 +19,102 @@ describe('CHANGE USER PASSWORD', async () => {
   let USER_THREE_ID;
   const NONE_ACCOUNT_USER_ID = 9876;
 
+  let user1RegResToken;
+  let user1RegResVerifyToken;
+  let user1Id;
+  let user2RegResToken;
+  let user2RegResVerifyToken;
+  let user2Id;
+  let user3RegResToken;
+  let user3RegResVerifyToken;
+  let user3Id;
+
   // USER ONE
   const userOneData = {
     firstname: 'KABELA',
     lastname: 'Dom',
-    email: 'kabera@gmail.com',
+    email: 'kaberadom@gmail.com',
     password: 'Kabera1912',
   };
   const userOneLoginData = {
-    email: 'kabera@gmail.com',
+    email: 'kaberadom@gmail.com',
     password: 'Kabera1912',
   };
   // USER TWO
   const userTwoData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugabo@gmail.com',
+    email: 'mugabojames@gmail.com',
     password: 'Mugabo1234',
   };
   const userTwoLoginData = {
-    email: 'mugabo@gmail.com',
+    email: 'mugabojames@gmail.com',
     password: 'Mugabo1234',
   };
   // USER THREE
   const userThreeData = {
     firstname: 'BRUCE',
     lastname: 'James',
-    email: 'bruce1@gmail.com',
+    email: 'brucejames@gmail.com',
     password: 'Bruce12345',
   };
   const userThreeLoginData = {
-    email: 'bruce1@gmail.com',
+    email: 'brucejames@gmail.com',
     password: 'Bruce12345',
   };
 
-  beforeEach(async () => {
+  before(async () => {
     // ========= USER ONE
-    await chai.request(app).post('/api/register').send(userOneData);
+    const user1RegRes = await chai.request(app).post('/api/register').send(userOneData);
+
+    user1RegResToken = user1RegRes.body.token;
+    user1RegResVerifyToken = user1RegRes.body.verifyToken;
+
+    const verifyUser1Token = await jwt.verify(
+      user1RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user1Id = verifyUser1Token.id;
+
+    // verify email for user1
+    await chai
+      .request(app)
+      .get(`/api/${user1Id}/verify/${user1RegResVerifyToken.token}`);
 
     // ========= USER TWO
-    await chai.request(app).post('/api/register').send(userTwoData);
+    const user2RegRes = await chai.request(app).post('/api/register').send(userTwoData);
+
+    user2RegResToken = user2RegRes.body.token;
+    user2RegResVerifyToken = user2RegRes.body.verifyToken;
+
+    const verifyUser2Token = await jwt.verify(
+      user2RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user2Id = verifyUser2Token.id;
+
+    // verify email for user2
+    await chai
+      .request(app)
+      .get(`/api/${user2Id}/verify/${user2RegResVerifyToken.token}`);
 
     // ========= USER THREE
-    await chai.request(app).post('/api/register').send(userThreeData);
+    const user3RegRes = await chai.request(app).post('/api/register').send(userThreeData);
+
+    user3RegResToken = user3RegRes.body.token;
+    user3RegResVerifyToken = user3RegRes.body.verifyToken;
+
+    const verifyUser3Token = await jwt.verify(
+      user3RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+
+    user3Id = verifyUser3Token.id;
+
+    // verify email for user3
+    await chai
+      .request(app)
+      .get(`/api/${user3Id}/verify/${user3RegResVerifyToken.token}`);
 
     const userOneLogin = await chai
       .request(app)
@@ -67,7 +122,7 @@ describe('CHANGE USER PASSWORD', async () => {
       .send(userOneLoginData);
     expect(userOneLogin).to.have.status(200);
     USER_ONE_TOKEN = userOneLogin.body.token;
-    const user1DecodToken = await verifyToken(
+    const user1DecodToken = await jwt.verify(
       USER_ONE_TOKEN,
       process.env.USER_SECRET_KEY
     );
@@ -79,7 +134,7 @@ describe('CHANGE USER PASSWORD', async () => {
       .send(userTwoLoginData);
     expect(userTwoLogin).to.have.status(200);
     USER_TWO_TOKEN = userTwoLogin.body.token;
-    const user2DecodToken = await verifyToken(
+    const user2DecodToken = await jwt.verify(
       USER_TWO_TOKEN,
       process.env.USER_SECRET_KEY
     );
@@ -91,15 +146,12 @@ describe('CHANGE USER PASSWORD', async () => {
       .send(userThreeLoginData);
     expect(userThreeLogin).to.have.status(200);
     USER_THREE_TOKEN = userThreeLogin.body.token;
-    const user3DecodToken = await verifyToken(
+    const user3DecodToken = await jwt.verify(
       USER_THREE_TOKEN,
       process.env.USER_SECRET_KEY
     );
     USER_THREE_ID = user3DecodToken.id;
   });
-  // after(async () => {
-  //   await sequelize.sync({ force: true });
-  // });
 
   context('WHEN USER TRIED TO CHANGE SOMEONE ELSE PASSWORD', () => {
     it('should return a 403 error response with "Unauthorized" message when a user attempts to change another user\'s password', async () => {

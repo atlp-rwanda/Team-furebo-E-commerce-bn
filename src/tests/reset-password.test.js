@@ -1,9 +1,13 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable padded-blocks */
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-expressions */
 import bcrypt from 'bcryptjs';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sgMail from '@sendgrid/mail';
 import jwt from 'jsonwebtoken';
+import sinon from 'sinon';
 import app from '../../index';
 import db from '../Database/models';
 
@@ -12,6 +16,11 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 describe('Reset Password Via Email', () => {
+
+  let userRegResToken;
+  let userRegResVerifyToken;
+  let theUserId;
+
   let userToken;
   let userId;
   const registerUser = {
@@ -26,8 +35,24 @@ describe('Reset Password Via Email', () => {
   };
 
   before(async () => {
+    sinon.stub(sgMail, 'send').resolves({});
+
     // Register seller
-    await chai.request(app).post('/api/register').send(registerUser);
+    const sellerAccount = await chai.request(app).post('/api/register').send(registerUser);
+
+    userRegResToken = sellerAccount.body.token;
+    userRegResVerifyToken = sellerAccount.body.verifyToken;
+
+    const verifySerllerToken = await jwt.verify(
+      userRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    theUserId = verifySerllerToken.id;
+
+    // verify email for seller
+    await chai
+      .request(app)
+      .get(`/api/${theUserId}/verify/${userRegResVerifyToken.token}`);
 
     const loginResetUser = await chai
       .request(app)
@@ -84,8 +109,8 @@ describe('Reset Password Via Email', () => {
       it('should return status 200 and update the user password', async () => {
         const res = await chai
           .request(app)
-          .post('/api/reset-password')
-          .send({ userId, newPassword: 'Rbr12' });
+          .post(`/api/reset-password/${userId}`)
+          .send({ newPassword: 'Rbr12' });
 
         expect(res).to.have.status(200);
         expect(res.body).to.have.property(
@@ -107,8 +132,8 @@ describe('Reset Password Via Email', () => {
       it('should return status 404 and an error message', async () => {
         const res = await chai
           .request(app)
-          .post('/api/reset-password')
-          .send({ userId: 999, newPassword: 'Rbr12' });
+          .post('/api/reset-password/999')
+          .send({ newPassword: 'Rbr12' });
 
         expect(res).to.have.status(404);
         expect(res.body).to.have.property('message', 'User not found');
@@ -116,13 +141,13 @@ describe('Reset Password Via Email', () => {
     });
 
     context('when no userId is provided', () => {
-      it('should return status 500 and an error message', async () => {
+      it('should return status 404 and an error message', async () => {
         const res = await chai
           .request(app)
           .post('/api/reset-password')
           .send({ newPassword: 'Rbr12' });
 
-        expect(res).to.have.status(500);
+        expect(res).to.have.status(404);
       });
     });
 
@@ -131,8 +156,8 @@ describe('Reset Password Via Email', () => {
         // Send the reset password request without providing a new password
         const res = await chai
           .request(app)
-          .post('/api/reset-password')
-          .send({ userId });
+          .post(`/api/reset-password/${userId}`)
+          .send({ newPassword: '' });
 
         // Expect the response to have a status of 500 and an error message
         expect(res).to.have.status(500);

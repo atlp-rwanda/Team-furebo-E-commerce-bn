@@ -3,8 +3,7 @@ import { joiPasswordExtendCore } from 'joi-password';
 
 const joiPassword = joi.extend(joiPasswordExtendCore);
 
-const validator = schema => payload =>
-  schema.validate(payload, { abortEarly: false });
+const validator = (schema) => (payload) => schema.validate(payload, { abortEarly: false });
 
 const signupSchema = joi.object({
   firstname: joi.string().required(),
@@ -19,6 +18,7 @@ const signupSchema = joi.object({
     .min(8)
     .alphanum()
     .required(),
+  adminCode: joi.string(),
 });
 
 validator(signupSchema);

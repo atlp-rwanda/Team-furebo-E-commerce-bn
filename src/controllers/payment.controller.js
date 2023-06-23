@@ -4,6 +4,7 @@ import stripe from 'stripe';
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
 import paymentCardShema from '../validation/paymentCard.validator';
 import db from '../Database/models';
+import emitter from '../events/notifications.event';
 
 // LOAD MODELS FROM DB
 const { Payment, ShoppingCart, Order, OrderStatus } = db;
@@ -79,12 +80,13 @@ export const makePayment = asyncWrapper(async (req, res) => {
   });
 
   // DELETING PAYED PRODUCTS FROM SHOPING CART
-  orderProductsDataArray.forEach(async element => {
+  orderProductsDataArray.forEach(async (element) => {
     const data = await ShoppingCart.findOne({
       where: {
         productId: element.id,
       },
     });
+    emitter.emit('productPurchased', findOrder, user);
     await data.destroy();
   });
 

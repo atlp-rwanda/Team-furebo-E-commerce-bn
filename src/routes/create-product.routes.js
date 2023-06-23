@@ -2,6 +2,7 @@ import express from 'express';
 import createProduct from '../controllers/create-product.controller';
 import { authorizeMerchant } from '../middlewares/userRoles.middleware';
 import AuthMiddleware from '../middlewares/login.middleware';
+import validateProductMiddleware from '../middlewares/validateProductMiddleware';
 
 const router = express.Router();
 
@@ -99,6 +100,7 @@ router.post(
   '/addProduct',
   AuthMiddleware.checkAuthentication,
   authorizeMerchant,
+  validateProductMiddleware,
   createProduct,
 );
 

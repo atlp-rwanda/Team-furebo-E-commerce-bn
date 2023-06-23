@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
 import chai from 'chai';
@@ -13,122 +14,160 @@ const { expect } = chai;
 describe('UPDATE PRODUCT', () => {
   let existingProductId;
   let existingProduct2Id;
-  let sellerToken;
-  let seller2Token;
-  let adminToken;
-  let sellerId;
-  let adminRegResToken;
   let customerTokenBeforeMechant;
+
+  let SELLER_TOKEN;
+  let SELLER2_TOKEN;
+
+  let sellerRegResToken;
+  let sellerRegResVerifyToken;
+  let sellerId;
+  let seller2RegResToken;
+  let seller2RegResVerifyToken;
+  let seller2Id;
+
+  let adminRegResToken;
+  let adminRegResVerifyToken;
+  let adminId;
+  let adminToken;
 
   const adminData = {
     firstname: 'ZIGA',
     lastname: 'SHEILA',
-    email: 'sheila@gmail.com',
+    email: 'sheilajubrap@gmail.com',
     password: 'Admin1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
-    email: 'sheila@gmail.com',
+    email: 'sheilajubrap@gmail.com',
     password: 'Admin1912',
   };
   const sellerData = {
     firstname: 'Mike',
     lastname: 'sinzi',
-    email: 'sinzi@gmail.com',
+    email: 'sinzikingtrw@gmail.com',
     password: 'Seller1912',
   };
-  const loginSeller = {
-    email: 'sinzi@gmail.com',
+  const loginSellerData = {
+    email: 'sinzikingtrw@gmail.com',
     password: 'Seller1912',
   };
   const seller2Data = {
     firstname: 'Michael',
     lastname: 'sinzi',
-    email: 'michael@gmail.com',
+    email: 'michaeljackson87@gmail.com',
     password: 'Seller1912',
   };
-  const login2Seller = {
-    email: 'michael@gmail.com',
+  const loginSeller2Data = {
+    email: 'michaeljackson87@gmail.com',
     password: 'Seller1912',
   };
 
   before(async () => {
-    // Register admin
-    const adminRegRes = await chai
+    // ========= SELLER 1 ACCOUNT
+    const sellerAccount = await chai.request(app).post('/api/register').send(sellerData);
+
+    sellerRegResToken = sellerAccount.body.token;
+    sellerRegResVerifyToken = sellerAccount.body.verifyToken;
+
+    const verifySerllerToken = await jwt.verify(
+      sellerRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    sellerId = verifySerllerToken.id;
+
+    // verify email for seller
+    await chai
       .request(app)
-      .post('/api/registerAdmin')
-      .send(adminData);
+      .get(`/api/${sellerId}/verify/${sellerRegResVerifyToken.token}`);
+
+    // ========= SELLER 2 ACCOUNT
+    const seller2Account = await chai.request(app).post('/api/register').send(seller2Data);
+
+    seller2RegResToken = seller2Account.body.token;
+    seller2RegResVerifyToken = seller2Account.body.verifyToken;
+
+    const verifySerller2Token = await jwt.verify(
+      seller2RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    seller2Id = verifySerller2Token.id;
+
+    // verify email for seller
+    await chai
+      .request(app)
+      .get(`/api/${seller2Id}/verify/${seller2RegResVerifyToken.token}`);
+
+    // ===== ADMIN ACCOUNT
+    const adminRegRes = await chai.request(app).post('/api/registerAdmin').send(adminData);
+
     adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
 
-    // Register seller
-    await chai.request(app).post('/api/register').send(sellerData);
-    await chai.request(app).post('/api/register').send(seller2Data);
+    const verifyAdminToken = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
 
-    // Login as admin and get token
-    const adminRes = await chai
+    // verify email for admin
+    await chai
+      .request(app)
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
+
+    // ADMIN
+    const adminLogin = await chai
       .request(app)
       .post('/api/login')
       .send(loginAdmin);
-    expect(adminRes).to.have.status(200);
-    adminToken = adminRes.body.token;
+    expect(adminLogin).to.have.status(200);
+    adminToken = adminLogin.body.token;
 
-    // Login as Login Seller before updted and get token
-    const customerTokenBeforeMechantRes = await chai
+    /// SELLER
+    const sellerLogin = await chai
       .request(app)
       .post('/api/login')
-      .send(loginSeller);
-    expect(customerTokenBeforeMechantRes).to.have.status(200);
-    customerTokenBeforeMechant = customerTokenBeforeMechantRes.body.token;
+      .send(loginSellerData);
+    expect(sellerLogin).to.have.status(200);
+    SELLER_TOKEN = sellerLogin.body.token;
 
-    const verifyCustomerBeforeMerchant = await jwt.verify(
-      customerTokenBeforeMechant,
+    const verifyMerchant = await jwt.verify(
+      SELLER_TOKEN,
       process.env.USER_SECRET_KEY
     );
-    sellerId = verifyCustomerBeforeMerchant.id;
-
+    const merchantId = verifyMerchant.id;
     // Update seller's role
     await chai
       .request(app)
-      .patch(`/api/updateRole/${sellerId}`)
+      .patch(`/api/updateRole/${merchantId}`)
       .set('Authorization', `Bearer ${adminToken}`)
       .send({ role: 'merchant' });
-    expect(adminRes).to.have.status(200);
 
-    // Login as seller and get token
-    const sellerLoginRes = await chai
+    /// SELLER 2
+    const seller2Login = await chai
       .request(app)
       .post('/api/login')
-      .send(loginSeller);
-    expect(sellerLoginRes).to.have.status(200);
-    sellerToken = sellerLoginRes.body.token;
+      .send(loginSeller2Data);
+    expect(seller2Login).to.have.status(200);
+    SELLER2_TOKEN = seller2Login.body.token;
 
-    // Login as seller 2 and get token
-    const seller2LoginRes = await chai
-      .request(app)
-      .post('/api/login')
-      .send(login2Seller);
-    expect(seller2LoginRes).to.have.status(200);
-    seller2Token = seller2LoginRes.body.token;
-    seller2Token = seller2LoginRes.body.token;
-
-    const verifySeller2BeforeMerchant = await jwt.verify(
-      seller2Token,
+    const verifyMerchant2 = await jwt.verify(
+      SELLER2_TOKEN,
       process.env.USER_SECRET_KEY
     );
-    const seller2Id = verifySeller2BeforeMerchant.id;
+    const merchant2Id = verifyMerchant2.id;
 
-    // Update seller's role
+    // Update seller2's role
     await chai
       .request(app)
-      .patch(`/api/updateRole/${seller2Id}`)
+      .patch(`/api/updateRole/${merchant2Id}`)
       .set('Authorization', `Bearer ${adminToken}`)
       .send({ role: 'merchant' });
-    expect(adminRes).to.have.status(200);
-
     // create a new product to be added to the shopping cart
     const productRes = await chai
       .request(app)
       .post('/api/addProduct')
-      .set('Authorization', `Bearer ${sellerToken}`)
+      .set('Authorization', `Bearer ${SELLER_TOKEN}`)
       .send({
         name: 'HCT/RP 36ST',
         image: [
@@ -148,7 +187,7 @@ describe('UPDATE PRODUCT', () => {
     const product2Res = await chai
       .request(app)
       .post('/api/addProduct')
-      .set('Authorization', `Bearer ${sellerToken}`)
+      .set('Authorization', `Bearer ${SELLER_TOKEN}`)
       .send({
         name: 'HCT/RP 36ST',
         image: [
@@ -166,7 +205,7 @@ describe('UPDATE PRODUCT', () => {
   });
 
   context('when updating an existing product with valid data', () => {
-    it('should return status 200 and update the product in the database', done => {
+    it('should return status 200 and update the product in the database', (done) => {
       const productData = {
         name: 'PCp',
 
@@ -179,7 +218,7 @@ describe('UPDATE PRODUCT', () => {
       chai
         .request(app)
         .patch(`/api/updateProduct/${existingProductId}`)
-        .set({ Authorization: `Bearer ${sellerToken}` })
+        .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
         .send(productData)
         .end((err, res) => {
           chai.expect(res).to.have.status(200);
@@ -189,7 +228,7 @@ describe('UPDATE PRODUCT', () => {
     });
   });
   context('DO NOT UPDATE IF USER IS NOT AUTHOLIZED', () => {
-    it('should return status 401 and update the product in the database', done => {
+    it('should return status 401 and update the product in the database', (done) => {
       const productData = {
         name: 'PCz',
         price: 14.99,
@@ -201,7 +240,7 @@ describe('UPDATE PRODUCT', () => {
       chai
         .request(app)
         .patch(`/api/updateProduct/${existingProductId}`)
-        .set({ Authorization: `Bearer ${seller2Token}` })
+        .set({ Authorization: `Bearer ${SELLER2_TOKEN}` })
         .send(productData)
         .end((err, res) => {
           chai.expect(res).to.have.status(401);
@@ -212,7 +251,7 @@ describe('UPDATE PRODUCT', () => {
   });
 
   context('when updating a non-existing product', () => {
-    it('should return status 404 and an error message', done => {
+    it('should return status 404 and an error message', (done) => {
       const productData = {
         name: 'Laptop',
         price: 2000.99,
@@ -222,7 +261,7 @@ describe('UPDATE PRODUCT', () => {
       chai
         .request(app)
         .patch('/api/updateProduct/9999')
-        .set({ Authorization: `Bearer ${sellerToken}` })
+        .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
         .send(productData)
         .end((err, res) => {
           chai.expect(res).to.have.status(404);

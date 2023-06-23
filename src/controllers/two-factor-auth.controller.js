@@ -98,9 +98,15 @@ export const verify2FAkey = asyncWrapper(async (req, res) => {
           },
         }
       );
+      const userData = {
+        id: existingUser.id,
+        fullname: existingUser.fullname,
+        email: existingUser.email,
+        role: existingUser.role
+      };
       return res
         .status(200)
-        .json({ message: 'Two Factor Authentication has been verified' });
+        .json({ message: 'Two Factor Authentication has been verified', userData });
     }
     return res.status(403).json({
       message:

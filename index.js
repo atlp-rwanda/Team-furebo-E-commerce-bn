@@ -7,7 +7,10 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import routes from './src/routes/routesCalls.routes';
 import swaggerDocs from './src/swagger';
-import { schedulingJob, isProductExpiredschedulingJob } from './src/jobs/schedulingTask';
+import {
+  schedulingJob,
+  isProductExpiredschedulingJob,
+} from './src/jobs/schedulingTask';
 
 const app = express();
 require('./src/services/auth');
@@ -15,7 +18,11 @@ require('./src/services/auth');
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(cors({ origin: 'http://localhost:3000/google/callback' }));
+// app.use(
+//   cors({
+//     origin: `${process.env.CALLBACK_URL}/google/callback`,
+//   })
+// );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -35,13 +42,16 @@ const io = new Server(httpServer, {
 const users = {};
 
 // listening events using socket.io instance
-io.on('connection', socket => {
-  socket.on('new-user', name => {
+io.on('connection', (socket) => {
+  socket.on('new-user', (name) => {
     users[socket.id] = name;
     socket.broadcast.emit('user-connected', name);
   });
-  socket.on('send-chat-message', message => {
+  socket.on('send-chat-message', (message) => {
     socket.broadcast.emit('chat-message', { message, name: users[socket.id] });
+  });
+  socket.on('update-order', (orderStatus) => {
+    socket.emit('order-status', { orderStatus });
   });
   socket.on('disconnect', () => {
     socket.broadcast.emit('user-disconnected', users[socket.id]);
@@ -49,6 +59,6 @@ io.on('connection', socket => {
   });
 });
 
-httpServer.listen(port, () => {console.log(port); });
+httpServer.listen(port, () => { console.log(port); });
 
 export default app;

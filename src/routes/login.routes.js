@@ -1,3 +1,5 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-unused-vars */
 import express from 'express';
 import { json } from 'body-parser';
 import AuthMiddleware from '../middlewares/login.middleware';

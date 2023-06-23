@@ -1,9 +1,9 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
+import jwt from 'jsonwebtoken';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import jwt from 'jsonwebtoken';
 import app from '../../index';
 import { users } from '../Database/models';
 
@@ -15,65 +15,136 @@ let customerToken;
 let adminToken;
 let customer2Token;
 
+let user1RegResToken;
+let user1RegResVerifyToken;
+let user1Id;
+let user2RegResToken;
+let user2RegResVerifyToken;
+let user2Id;
+let user3RegResToken;
+let user3RegResVerifyToken;
+let user3Id;
+
+let adminRegResToken;
+let adminRegResVerifyToken;
+let adminId;
+
 const merchantData = {
   firstname: 'Jane',
   lastname: 'Doe',
-  email: 'janedoe@gmail.com',
+  email: 'janedorr@gmail.com',
   password: 'Password1234',
 };
 
 const loginMerchant = {
-  email: 'janedoe@gmail.com',
+  email: 'janedorr@gmail.com',
   password: 'Password1234',
 };
 
 const customerData = {
   firstname: 'John',
   lastname: 'Doe',
-  email: 'johndoe@gmail.com',
+  email: 'johndoepp@gmail.com',
   password: 'Password1234',
 };
 
 const loginCustomer = {
-  email: 'johndoe@gmail.com',
+  email: 'johndoepp@gmail.com',
   password: 'Password1234',
 };
 
 const customer2Data = {
   firstname: 'customer',
   lastname: 'two',
-  email: 'customer2@gmail.com',
+  email: 'customer2cc@gmail.com',
   password: 'Password1234',
 };
 
 const loginCustomer2 = {
-  email: 'customer2@gmail.com',
+  email: 'customer2cc@gmail.com',
   password: 'Password1234',
 };
 
 const adminData = {
   firstname: 'Admin',
   lastname: 'Doe',
-  email: 'admindoe@gmail.com',
+  email: 'admindoeff@gmail.com',
   password: 'Password1234',
+  adminCode: '0547583903',
 };
 
 const loginAdmin = {
-  email: 'admindoe@gmail.com',
+  email: 'admindoeff@gmail.com',
   password: 'Password1234',
 };
 
 describe('POST /api/checkout', async () => {
   before(async () => {
     // Register user
-    await chai.request(app).post('/api/register').send(merchantData);
+    const user1RegRes = await chai.request(app).post('/api/register').send(merchantData);
 
-    await chai.request(app).post('/api/register').send(customerData);
+    user1RegResToken = user1RegRes.body.token;
+    user1RegResVerifyToken = user1RegRes.body.verifyToken;
 
-    await chai.request(app).post('/api/register').send(customer2Data);
+    const verifyUser1Token = await jwt.verify(
+      user1RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user1Id = verifyUser1Token.id;
+
+    // verify email for user1
+    await chai
+      .request(app)
+      .get(`/api/${user1Id}/verify/${user1RegResVerifyToken.token}`);
+
+    const user2RegRes = await chai.request(app).post('/api/register').send(customerData);
+
+    user2RegResToken = user2RegRes.body.token;
+    user2RegResVerifyToken = user2RegRes.body.verifyToken;
+
+    const verifyUser2Token = jwt.verify(
+      user2RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user2Id = verifyUser2Token.id;
+
+    // verify email for user2
+    await chai
+      .request(app)
+      .get(`/api/${user2Id}/verify/${user2RegResVerifyToken.token}`);
+
+    const user3RegRes = await chai.request(app).post('/api/register').send(customer2Data);
+
+    user3RegResToken = user3RegRes.body.token;
+    user3RegResVerifyToken = user3RegRes.body.verifyToken;
+
+    const verifyUser3Token = jwt.verify(
+      user3RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user3Id = verifyUser3Token.id;
+
+    // verify email for user3
+    await chai
+      .request(app)
+      .get(`/api/${user3Id}/verify/${user3RegResVerifyToken.token}`);
 
     // Register admin
-    await chai.request(app).post('/api/registerAdmin').send(adminData);
+    const adminRegRes = await chai.request(app).post('/api/registerAdmin').send(adminData);
+
+    adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
+
+    const verifyAdminToken = jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
+
+    // verify email for admin
+    await chai
+      .request(app)
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
 
     const merchantLogin = await chai
       .request(app)
@@ -122,7 +193,7 @@ describe('POST /api/checkout', async () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${merchantToken}`)
       .send({
-        name: 'HCT/RP 360ST',
+        name: 'HCT/RP 360ST1',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -132,7 +203,7 @@ describe('POST /api/checkout', async () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       });
     expect(product).to.have.status(201);
     const productId = product.body.data.id;
@@ -146,13 +217,6 @@ describe('POST /api/checkout', async () => {
         quantity: 5,
       });
   });
-
-  after(async () => {
-    await users.destroy({
-        where: { email: customer2Data.email, email: customerData.email, email: merchantData.email, email: adminData.email},
-        truncate: { cascade: true },
-    });
-});
 
   context('It should create a new order', () => {
     it('It should create a new order and return status code 200', (done) => {

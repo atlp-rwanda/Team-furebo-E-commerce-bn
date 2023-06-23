@@ -2,9 +2,9 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
+import jwt from 'jsonwebtoken';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import jwt from 'jsonwebtoken';
 import app from '../../index';
 import { sequelize } from '../Database/models';
 
@@ -22,37 +22,47 @@ describe(' CLEAR SHOPPING CART TEST', () => {
   let BUYER_TOKEN;
   let CART_ITEM_ID;
 
+  let user1RegResToken;
+  let user1RegResVerifyToken;
+  let user1Id;
+  let user2RegResToken;
+  let user2RegResVerifyToken;
+  let user2Id;
+  let adminRegResVerifyToken;
+  let adminId;
+
   // ADMING INFO
   const adminData = {
     firstname: 'Peter',
     lastname: 'adams',
-    email: 'adams@gmail.com',
+    email: 'peteradamsii@gmail.com',
     password: 'Adams1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
-    email: 'adams@gmail.com',
+    email: 'peteradamsii@gmail.com',
     password: 'Adams1912',
   };
   // SELLER INFO
   const sellerData = {
     firstname: 'State',
     lastname: 'Price',
-    email: 'state19@gmail.com',
+    email: 'peterstateii@gmail.com',
     password: 'State1912',
   };
   const loginSeller = {
-    email: 'state19@gmail.com',
+    email: 'peterstateii@gmail.com',
     password: 'State1912',
   };
   // BUYER INFO
   const buyerData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugabo@gmail.com',
+    email: 'mugabojamesii@gmail.com',
     password: 'Mugabo1234',
   };
   const buyerLogin = {
-    email: 'mugabo@gmail.com',
+    email: 'mugabojamesii@gmail.com',
     password: 'Mugabo1234',
   };
 
@@ -63,6 +73,18 @@ describe(' CLEAR SHOPPING CART TEST', () => {
       .post('/api/registerAdmin')
       .send(adminData);
     adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
+
+    const verifyAdminToken = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
+
+    // verify email for admin
+    await chai
+      .request(app)
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
 
     const adminRes = await chai
       .request(app)
@@ -76,6 +98,20 @@ describe(' CLEAR SHOPPING CART TEST', () => {
       .request(app)
       .post('/api/register')
       .send(sellerData);
+
+    user1RegResToken = sellerRes.body.token;
+    user1RegResVerifyToken = sellerRes.body.verifyToken;
+
+    const verifyUser1Token = await jwt.verify(
+      user1RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user1Id = verifyUser1Token.id;
+
+    // verify email for user1
+    await chai
+      .request(app)
+      .get(`/api/${user1Id}/verify/${user1RegResVerifyToken.token}`);
 
     const customerTokenBeforeMechantRes = await chai
       .request(app)
@@ -91,7 +127,21 @@ describe(' CLEAR SHOPPING CART TEST', () => {
     sellerId = verifyCustomerBeforeMerchant.id;
 
     // ========= BUYER ACCOUNT
-    await chai.request(app).post('/api/register').send(buyerData);
+    const customerRes = await chai.request(app).post('/api/register').send(buyerData);
+
+    user2RegResToken = customerRes.body.token;
+    user2RegResVerifyToken = customerRes.body.verifyToken;
+
+    const verifyCutomerToken = await jwt.verify(
+      user2RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    user2Id = verifyCutomerToken.id;
+
+    // verify email for customer
+    await chai
+      .request(app)
+      .get(`/api/${user2Id}/verify/${user2RegResVerifyToken.token}`);
 
     const buyerLoginRes = await chai
       .request(app)
@@ -123,7 +173,7 @@ describe(' CLEAR SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${sellerToken}`)
       .send({
-        name: 'HCT/RP 360ST',
+        name: 'HCT/RP 360ST2',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -133,7 +183,7 @@ describe(' CLEAR SHOPPING CART TEST', () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2023-05-30',
+        exDate: '2024-05-30',
       });
     productId = productRes.body.data.id;
 

@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable require-jsdoc */
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {

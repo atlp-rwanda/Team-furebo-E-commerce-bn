@@ -1,6 +1,8 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import jwt from 'jsonwebtoken';
 import app from '../../index';
 
 import { Product } from '../Database/models';
@@ -13,71 +15,215 @@ describe('SHOPPING CART TEST', () => {
   let UNVAILABLE_PRODUCT_ID;
   let NO_EXISTING_PRODUCT_ID;
   let BUYER_TOKEN;
+  let SELLER_TOKEN;
 
-  const sellerData = {
-    firstname: 'KALISA',
-    lastname: 'MUSONI',
-    email: 'albert@gmail.com',
-    password: 'Seller1912',
+  let sellerRegResToken;
+  let sellerRegResVerifyToken;
+  let sellerId;
+  let buyerRegResToken;
+  let buyerRegResVerifyToken;
+  let buyerId;
+
+  let adminRegResToken;
+  let adminRegResVerifyToken;
+  let adminId;
+  let adminToken;
+
+  // ADMING INFO
+  const adminData = {
+    firstname: 'Peter',
+    lastname: 'Gymson',
+    email: 'gymson@gmail.com',
+    password: 'Gymson1912',
+    adminCode: '0547583903',
   };
-  const loginSeller = {
-    email: 'albert@gmail.com',
-    password: 'Seller1912',
+  const loginAdmin = {
+    email: 'gymson@gmail.com',
+    password: 'Gymson1912',
+  };
+  // SELLER INFO
+  const sellerData = {
+    firstname: 'Joice',
+    lastname: 'Price',
+    email: 'joice19@gmail.com',
+    password: 'Joice1912',
+  };
+  const sellerLoginData = {
+    email: 'joice19@gmail.com',
+    password: 'Joice1912',
+  };
+  // BUYER INFO
+  const buyerData = {
+    firstname: 'Brathics',
+    lastname: 'James',
+    email: 'brathics@gmail.com',
+    password: 'Brathics1234',
+  };
+  const buyerLoginData = {
+    email: 'brathics@gmail.com',
+    password: 'Brathics1234',
   };
 
   before(async () => {
-    // Register seller
-    const sellerRes = await chai
-      .request(app)
-      .post('/api/register')
-      .send(sellerData);
+    // ========= SELLER ACCOUNT
+    const sellerAccount = await chai.request(app).post('/api/register').send(sellerData);
 
-    // Login as seller and get token
-    const sellerLoginRes = await chai
+    sellerRegResToken = sellerAccount.body.token;
+    sellerRegResVerifyToken = sellerAccount.body.verifyToken;
+
+    const verifySerllerToken = await jwt.verify(
+      sellerRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    sellerId = verifySerllerToken.id;
+
+    // verify email for seller
+    await chai
+      .request(app)
+      .get(`/api/${sellerId}/verify/${sellerRegResVerifyToken.token}`);
+
+    // ========= BUYER ACCOUNT
+    const buyerAccount = await chai.request(app).post('/api/register').send(buyerData);
+
+    buyerRegResToken = buyerAccount.body.token;
+    buyerRegResVerifyToken = buyerAccount.body.verifyToken;
+
+    const verifybuyerToken = await jwt.verify(
+      buyerRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    buyerId = verifybuyerToken.id;
+
+    // verify email for buyer
+    await chai
+      .request(app)
+      .get(`/api/${buyerId}/verify/${buyerRegResVerifyToken.token}`);
+
+    // ===== ADMIN ACCOUNT
+    const adminRegRes = await chai.request(app).post('/api/registerAdmin').send(adminData);
+
+    adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
+
+    const verifyAdminToken = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
+
+    // verify email for admin
+    await chai
+      .request(app)
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
+
+    // ADMIN
+    const adminLogin = await chai
       .request(app)
       .post('/api/login')
-      .send(loginSeller);
-    expect(sellerLoginRes).to.have.status(200);
-    BUYER_TOKEN = sellerLoginRes.body.token;
-  });
+      .send(loginAdmin);
+    expect(adminLogin).to.have.status(200);
+    adminToken = adminLogin.body.token;
 
-  before(async () => {
+    /// SELLER
+    const sellerLogin = await chai
+      .request(app)
+      .post('/api/login')
+      .send(sellerLoginData);
+    expect(sellerLogin).to.have.status(200);
+    SELLER_TOKEN = sellerLogin.body.token;
+
+    const buyerLogin = await chai
+      .request(app)
+      .post('/api/login')
+      .send(buyerLoginData);
+    expect(buyerLogin).to.have.status(200);
+    BUYER_TOKEN = buyerLogin.body.token;
+
+    const verifyMerchant = await jwt.verify(
+      SELLER_TOKEN,
+      process.env.USER_SECRET_KEY
+    );
+    const merchantId = verifyMerchant.id;
+
+    // Update seller's role
+    await chai
+      .request(app)
+      .patch(`/api/updateRole/${merchantId}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ role: 'merchant' });
+
+    // create a new product to be added to the shopping cart
+    const product = await chai
+      .request(app)
+      .post('/api/addProduct')
+      .set('Authorization', `Bearer ${SELLER_TOKEN}`)
+      .send({
+        name: 'HCT/RP 360STSS',
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
+        price: 2500,
+        quantity: 12,
+        category: 'GAMMING PC',
+        exDate: '2024-05-30',
+      });
+    expect(product).to.have.status(201);
+    EXISTING_PRODUCT_ID = product.body.data.id;
+
+    // PRODUCT 2
+    const product2 = await chai
+      .request(app)
+      .post('/api/addProduct')
+      .set('Authorization', `Bearer ${SELLER_TOKEN}`)
+      .send({
+        name: 'HCT/RP 360STSGc',
+        image: [
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+          'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
+        ],
+        price: 2500,
+        quantity: 12,
+        category: 'GAMMING PC/2',
+        exDate: '2023-05-30',
+      });
+    expect(product2).to.have.status(201);
+    UNVAILABLE_PRODUCT_ID = product2.body.data.id;
+
+    // Make product 2 unvailable
     const productData = {
-      name: 'Laptop',
-      image: [
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-      ],
-      price: 2000.99,
-      quantity: 10,
-      status: 'available',
-      type: 'HP',
-      category: 'Electronics',
-      exDate: '2023-05-30',
+      quantity: 5,
+      exDate: '2020-04-30',
     };
-    const product = await Product.create(productData);
-    EXISTING_PRODUCT_ID = product.id;
+    chai
+      .request(app)
+      .patch(`/api/mark-product-availability/${UNVAILABLE_PRODUCT_ID}`)
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
+      .send(productData)
+      .end((err, res) => {
+        chai.expect(res).to.have.status(200);
+      });
 
-    const noAvailableProduct = {
-      name: 'Unvailable Laptop',
-      image: [
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-        'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
-      ],
-      price: 2000.99,
-      quantity: 10,
-      status: 'unavailable',
-      type: 'HP',
-      category: 'Electronics',
-      exDate: '2023-05-30',
-    };
-    const unvailableProduct = await Product.create(noAvailableProduct);
-    UNVAILABLE_PRODUCT_ID = unvailableProduct.id;
+    // ADD ITEM TO CART
+    const addItemInCart = await chai
+      .request(app)
+      .post('/api/addItemToCart')
+      .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
+      .send({
+        EXISTING_PRODUCT_ID,
+        quantity: 5,
+      });
+
+    console.log(`1 ========== Product ID ${EXISTING_PRODUCT_ID} `);
+    console.log(`2 ========== UNAVAILABLE Product ID ${UNVAILABLE_PRODUCT_ID} `);
+    console.log(`1 ========== SELLER ID ${SELLER_TOKEN} `);
+    console.log(`2 ========== SELLER ID ${SELLER_TOKEN} `);
   });
+
   context('WHEN VALID PRODUCT ID AND QUANTITY ARE GIVEN ', () => {
     it('should add item to the shopping cart and return status 201', (done) => {
       const itemData = {

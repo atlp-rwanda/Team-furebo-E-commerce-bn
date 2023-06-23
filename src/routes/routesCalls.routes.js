@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import express from 'express';
 import resetPassword from './reset-password.routes';
 import signupRouter from './signup.routes';
@@ -26,6 +27,13 @@ import chatRouter from './chats.routes';
 import profilePage from './profile.routes';
 import readNotificatioRouter from './notificationRead.routes';
 import trackOrder from './track-order.routes';
+import findProduct from './findProduct.routes';
+import addProductFeedback from './productFeedback.routes';
+import userProfile from './userProfile.routes';
+import getNotification from './getNotification.routes';
+import fetchUsers from './get-users.routes';
+import deleteItemInCart from './detele-item-in-cart.routes';
+import customerSupport from './customer-support.routes';
 
 const routes = express();
 
@@ -59,5 +67,11 @@ routes.use('/api', chatRouter);
 routes.use('/api', profilePage);
 routes.use('/api', readNotificatioRouter);
 routes.use('/api', trackOrder);
-
+routes.use('/api', findProduct);
+routes.use('/api', addProductFeedback);
+routes.use('/api', userProfile);
+routes.use('/api', getNotification);
+routes.use('/api', fetchUsers);
+routes.use('/api', deleteItemInCart);
+routes.use('/api', customerSupport);
 export default routes;

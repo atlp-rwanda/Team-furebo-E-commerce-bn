@@ -1,5 +1,5 @@
 import express from 'express';
-import createUser from '../controllers/signup.controller';
+import { createUser, verifyUser } from '../controllers/signup.controller';
 
 const router = express.Router();
 
@@ -56,6 +56,8 @@ const router = express.Router();
 
 // Create a new User
 router.post('/register', createUser);
+
+router.get('/:id/verify/:token', verifyUser);
 
 /**
  * @swagger

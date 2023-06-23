@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
@@ -8,118 +9,153 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 describe('UPDATING SHOPPING CART TEST', () => {
-  let sellerToken;
-  let adminToken;
-  let sellerId;
-  let adminRegResToken;
-  let customerTokenBeforeMechant;
-  let productId;
   const NO_EXISTING_PRODUCT_ID = 98745;
   let BUYER_TOKEN;
   let CART_ITEM_ID;
 
+  let sellerRegResToken;
+  let sellerRegResVerifyToken;
+  let sellerId;
+  let buyerRegResToken;
+  let buyerRegResVerifyToken;
+  let buyerId;
+
+  let adminRegResToken;
+  let adminRegResVerifyToken;
+  let adminId;
+  let adminToken;
+
+  let SELLER_TOKEN;
   // ADMING INFO
   const adminData = {
     firstname: 'Peter',
     lastname: 'adams',
-    email: 'adams@gmail.com',
+    email: 'adam9986skijhy@gmail.com',
     password: 'Adams1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
-    email: 'adams@gmail.com',
+    email: 'adam9986skijhy@gmail.com',
     password: 'Adams1912',
   };
   // SELLER INFO
   const sellerData = {
     firstname: 'State',
     lastname: 'Price',
-    email: 'state19@gmail.com',
+    email: 'state19okj876@gmail.com',
     password: 'State1912',
   };
-  const loginSeller = {
-    email: 'state19@gmail.com',
+  const sellerLoginData = {
+    email: 'state19okj876@gmail.com',
     password: 'State1912',
   };
   // BUYER INFO
   const buyerData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugabo@gmail.com',
+    email: 'mugabonju7895r@gmail.com',
     password: 'Mugabo1234',
   };
-  const buyerLogin = {
-    email: 'mugabo@gmail.com',
+  const buyerLoginData = {
+    email: 'mugabonju7895r@gmail.com',
     password: 'Mugabo1234',
   };
 
   before(async () => {
-    // ========= ADMIN ACCOUNT
-    const adminRegRes = await chai
-      .request(app)
-      .post('/api/registerAdmin')
-      .send(adminData);
-    adminRegResToken = adminRegRes.body.token;
+    // ========= SELLER ACCOUNT
+    const sellerAccount = await chai.request(app).post('/api/register').send(sellerData);
 
-    const adminRes = await chai
+    sellerRegResToken = sellerAccount.body.token;
+    sellerRegResVerifyToken = sellerAccount.body.verifyToken;
+
+    const verifySerllerToken = await jwt.verify(
+      sellerRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    sellerId = verifySerllerToken.id;
+
+    // verify email for seller
+    await chai
+      .request(app)
+      .get(`/api/${sellerId}/verify/${sellerRegResVerifyToken.token}`);
+
+    // ========= BUYER ACCOUNT
+    const buyerAccount = await chai.request(app).post('/api/register').send(buyerData);
+
+    buyerRegResToken = buyerAccount.body.token;
+    buyerRegResVerifyToken = buyerAccount.body.verifyToken;
+
+    const verifybuyerToken = await jwt.verify(
+      buyerRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    buyerId = verifybuyerToken.id;
+
+    // verify email for buyer
+    await chai
+      .request(app)
+      .get(`/api/${buyerId}/verify/${buyerRegResVerifyToken.token}`);
+
+    // ===== ADMIN ACCOUNT
+    const adminRegRes = await chai.request(app).post('/api/registerAdmin').send(adminData);
+
+    adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
+
+    const verifyAdminToken = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
+
+    // verify email for admin
+    await chai
+      .request(app)
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
+
+    // ADMIN
+    const adminLogin = await chai
       .request(app)
       .post('/api/login')
       .send(loginAdmin);
-    expect(adminRes).to.have.status(200);
-    adminToken = adminRes.body.token;
+    expect(adminLogin).to.have.status(200);
+    adminToken = adminLogin.body.token;
 
-    // ========= SELLER ACCOUNT
-    const sellerRes = await chai
-      .request(app)
-      .post('/api/register')
-      .send(sellerData);
-
-    const customerTokenBeforeMechantRes = await chai
+    /// SELLER
+    const sellerLogin = await chai
       .request(app)
       .post('/api/login')
-      .send(loginSeller);
-    expect(customerTokenBeforeMechantRes).to.have.status(200);
-    customerTokenBeforeMechant = customerTokenBeforeMechantRes.body.token;
+      .send(sellerLoginData);
+    expect(sellerLogin).to.have.status(200);
+    SELLER_TOKEN = sellerLogin.body.token;
 
-    const verifyCustomerBeforeMerchant = await jwt.verify(
-      customerTokenBeforeMechant,
+    const buyerLogin = await chai
+      .request(app)
+      .post('/api/login')
+      .send(buyerLoginData);
+    expect(buyerLogin).to.have.status(200);
+    BUYER_TOKEN = buyerLogin.body.token;
+
+    const verifyMerchant = await jwt.verify(
+      SELLER_TOKEN,
       process.env.USER_SECRET_KEY
     );
-    sellerId = verifyCustomerBeforeMerchant.id;
-
-    // ========= BUYER ACCOUNT
-    await chai.request(app).post('/api/register').send(buyerData);
-
-    const buyerLoginRes = await chai
-      .request(app)
-      .post('/api/login')
-      .send(buyerLogin);
-    expect(buyerLoginRes).to.have.status(200);
-    const { token } = buyerLoginRes.body;
-    BUYER_TOKEN = token;
+    const merchantId = verifyMerchant.id;
 
     // Update seller's role
     await chai
       .request(app)
-      .patch(`/api/updateRole/${sellerId}`)
+      .patch(`/api/updateRole/${merchantId}`)
       .set('Authorization', `Bearer ${adminToken}`)
       .send({ role: 'merchant' });
-    expect(adminRes).to.have.status(200);
-
-    // Login as seller and get token
-    const sellerLoginRes = await chai
-      .request(app)
-      .post('/api/login')
-      .send(loginSeller);
-    expect(sellerLoginRes).to.have.status(200);
-    sellerToken = sellerLoginRes.body.token;
 
     // create a new product to be added to the shopping cart
-    const productRes = await chai
+    const product = await chai
       .request(app)
       .post('/api/addProduct')
-      .set('Authorization', `Bearer ${sellerToken}`)
+      .set('Authorization', `Bearer ${SELLER_TOKEN}`)
       .send({
-        name: 'HCT/RP 360ST',
+        name: 'HCT/RP 360STSB',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -129,9 +165,10 @@ describe('UPDATING SHOPPING CART TEST', () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC',
-        exDate: '2123-05-30',
+        exDate: '2024-05-30',
       });
-    productId = productRes.body.data.id;
+    expect(product).to.have.status(201);
+    const productId = product.body.data.id;
 
     const addItemInCart = await chai
       .request(app)
@@ -139,13 +176,13 @@ describe('UPDATING SHOPPING CART TEST', () => {
       .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
       .send({
         productId,
-        quantity: 2,
+        quantity: 5,
       });
 
-    CART_ITEM_ID =
-      addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
-        .ID;
+    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
+      .ID;
   });
+
   context('IT SHOULD UPATE ITEM IN SHOPPING CART ', () => {
     it('should add item to the shopping cart and return status 200', async () => {
       // make request to add item to cart
@@ -180,7 +217,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
   });
 
   context('WHEN TOKEN IS NOT VALID', () => {
-    it('should return status 401 and an error message', done => {
+    it('should return status 401 and an error message', (done) => {
       const itemData = {
         quantity: 2,
       };
@@ -199,7 +236,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
     });
   });
   context('WHEN NO TOKEN IS GIVEN', () => {
-    it('should return status 401 and an error message', done => {
+    it('should return status 401 and an error message', (done) => {
       const itemData = {
         quantity: 2,
       };
@@ -217,7 +254,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
   });
 
   context('WHEN QUANTITY GIVEN IS NOT A NUMBER', () => {
-    it('should return status 400 and an error message', done => {
+    it('should return status 400 and an error message', (done) => {
       const itemData = {
         quantity: 'two',
       };
@@ -238,7 +275,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
     });
   });
   context('WHEN QUANTITY GIVEN HAS A NEGATIVE NUMBER', () => {
-    it('should return status 400 and an error message', done => {
+    it('should return status 400 and an error message', (done) => {
       const itemData = {
         quantity: -2,
       };
@@ -260,7 +297,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
   });
 
   context('WHEN QUANTITY GIVEN IS GREATER THAN STOCK', () => {
-    it('should return status 400 and an error message', done => {
+    it('should return status 400 and an error message', (done) => {
       const itemData = {
         quantity: 98765,
       };

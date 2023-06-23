@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 import express from 'express';
 
-import { getOrderStatus, updateOrderStatus} from '../controllers/track-order.controller'
+import { getOrderStatus, updateOrderStatus, BuyerGetAllOrdersStatutes, GetAllOrdersStatutes} from '../controllers/track-order.controller'
 
 import { authorizeUser, authorizeAdmin, authorizeCustomer } from '../middlewares/userRoles.middleware';
 
@@ -134,7 +134,7 @@ router.get('/orderStatus/:id', AuthMiddleware.checkAuthentication, authorizeCust
  *                   example: Error message
  */
 
-router.patch('/orderStatus/:id', AuthMiddleware.checkAuthentication, authorizeAdmin, trackOrderMiddleware, updateOrderStatus);
+router.patch('/updateOrderStatus/:id', AuthMiddleware.checkAuthentication, authorizeAdmin, trackOrderMiddleware, updateOrderStatus);
 
 /**
  * @swagger
@@ -152,7 +152,7 @@ router.patch('/orderStatus/:id', AuthMiddleware.checkAuthentication, authorizeAd
 
 /**
  * @swagger
- * /api/orderStatus/{id}:
+ * /api/updateOrderStatus/{id}:
  *   patch:
  *     security:
  *      - bearerAuth: []
@@ -259,5 +259,6 @@ router.patch('/orderStatus/:id', AuthMiddleware.checkAuthentication, authorizeAd
  *                 message: Oops! Failed to update order status
  *
  */
-
+router.get('/buyerOrders', authorizeUser, BuyerGetAllOrdersStatutes);
+router.get('/getAllOrders', authorizeAdmin, GetAllOrdersStatutes)
 export default router;

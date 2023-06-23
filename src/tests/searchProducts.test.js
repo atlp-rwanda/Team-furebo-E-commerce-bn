@@ -13,88 +13,159 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 describe('SEARCH PRODUCTS', async () => {
-  let sellerToken;
-  let adminToken;
+  let SELLER_TOKEN;
+  let SELLER2_TOKEN;
+
+  let sellerRegResToken;
+  let sellerRegResVerifyToken;
   let sellerId;
+  let seller2RegResToken;
+  let seller2RegResVerifyToken;
+  let seller2Id;
+
   let adminRegResToken;
-  let customerTokenBeforeMechant;
+  let adminRegResVerifyToken;
+  let adminId;
+  let adminToken;
 
   const adminData = {
-    firstname: 'James',
-    lastname: 'admin',
-    email: 'laura@gmail.com',
-    password: 'Admin1912'
-  };
-  const sellerData = {
-    firstname: 'Jana',
-    lastname: 'Seller',
-    email: 'idole@gmail.com',
-    password: 'Seller1912'
+    firstname: 'ZIGA',
+    lastname: 'SHEILA',
+    email: 'sheila1kb6deh@gmail.com',
+    password: 'Admin1912',
+    adminCode: '0547583903',
   };
   const loginAdmin = {
-    email: 'laura@gmail.com',
-    password: 'Admin1912'
+    email: 'sheila1kb6deh@gmail.com',
+    password: 'Admin1912',
   };
-  const loginSeller = {
-    email: 'idole@gmail.com',
-    password: 'Seller1912'
+  const sellerData = {
+    firstname: 'Mike',
+    lastname: 'sinzi',
+    email: 'sinzi1kmjhugbhy@gmail.com',
+    password: 'Seller1912',
+  };
+  const loginSellerData = {
+    email: 'sinzi1kmjhugbhy@gmail.com',
+    password: 'Seller1912',
+  };
+  const seller2Data = {
+    firstname: 'Michael',
+    lastname: 'sinzi',
+    email: 'michaenhbvgtrfvjuytgfl1@gmail.com',
+    password: 'Seller1912',
+  };
+  const loginSeller2Data = {
+    email: 'michaenhbvgtrfvjuytgfl1@gmail.com',
+    password: 'Seller1912',
   };
 
   before(async () => {
-    // Register admin
-    const adminRegRes = await chai
-      .request(app)
-      .post('/api/registerAdmin')
-      .send(adminData);
-    adminRegResToken = adminRegRes.body.token;
-    // Register seller
-    const sellerRes = await chai
-      .request(app)
-      .post('/api/register')
-      .send(sellerData);
+    // ========= SELLER 1 ACCOUNT
+    const sellerAccount = await chai.request(app).post('/api/register').send(sellerData);
 
-    // Login as admin and get token
-    const adminRes = await chai
+    sellerRegResToken = sellerAccount.body.token;
+    sellerRegResVerifyToken = sellerAccount.body.verifyToken;
+
+    const verifySerllerToken = await jwt.verify(
+      sellerRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    sellerId = verifySerllerToken.id;
+
+    // verify email for seller
+    await chai
+      .request(app)
+      .get(`/api/${sellerId}/verify/${sellerRegResVerifyToken.token}`);
+
+    // ========= SELLER 2 ACCOUNT
+    const seller2Account = await chai.request(app).post('/api/register').send(seller2Data);
+
+    seller2RegResToken = seller2Account.body.token;
+    seller2RegResVerifyToken = seller2Account.body.verifyToken;
+
+    const verifySerller2Token = await jwt.verify(
+      seller2RegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    seller2Id = verifySerller2Token.id;
+
+    // verify email for seller
+    await chai
+      .request(app)
+      .get(`/api/${seller2Id}/verify/${seller2RegResVerifyToken.token}`);
+
+    // ===== ADMIN ACCOUNT
+    const adminRegRes = await chai.request(app).post('/api/registerAdmin').send(adminData);
+
+    adminRegResToken = adminRegRes.body.token;
+    adminRegResVerifyToken = adminRegRes.body.verifyToken;
+
+    const verifyAdminToken = await jwt.verify(
+      adminRegResToken,
+      process.env.USER_SECRET_KEY
+    );
+    adminId = verifyAdminToken.id;
+
+    // verify email for admin
+    await chai
+      .request(app)
+      .get(`/api/${adminId}/verify/${adminRegResVerifyToken.token}`);
+
+    // ADMIN
+    const adminLogin = await chai
       .request(app)
       .post('/api/login')
       .send(loginAdmin);
-    expect(adminRes).to.have.status(200);
-    adminToken = adminRes.body.token;
+    expect(adminLogin).to.have.status(200);
+    adminToken = adminLogin.body.token;
 
-    // Login as Login Seller before updted and get token
-    const customerTokenBeforeMechantRes = await chai
+    /// SELLER
+    const sellerLogin = await chai
       .request(app)
       .post('/api/login')
-      .send(loginSeller);
-    expect(customerTokenBeforeMechantRes).to.have.status(200);
-    customerTokenBeforeMechant = customerTokenBeforeMechantRes.body.token;
+      .send(loginSellerData);
+    expect(sellerLogin).to.have.status(200);
+    SELLER_TOKEN = sellerLogin.body.token;
 
-    const verifyCustomerBeforeMerchant = await jwt.verify(
-      customerTokenBeforeMechant,
+    const verifyMerchant = await jwt.verify(
+      SELLER_TOKEN,
       process.env.USER_SECRET_KEY
     );
-    sellerId = verifyCustomerBeforeMerchant.id;
-
+    const merchantId = verifyMerchant.id;
     // Update seller's role
     await chai
       .request(app)
-      .patch(`/api/updateRole/${sellerId}`)
+      .patch(`/api/updateRole/${merchantId}`)
       .set('Authorization', `Bearer ${adminToken}`)
       .send({ role: 'merchant' });
-    expect(adminRes).to.have.status(200);
 
-    // Login as seller and get token
-    const sellerLoginRes = await chai
+    /// SELLER 2
+    const seller2Login = await chai
       .request(app)
       .post('/api/login')
-      .send(loginSeller);
-    expect(sellerLoginRes).to.have.status(200);
-    sellerToken = sellerLoginRes.body.token;
+      .send(loginSeller2Data);
+    expect(seller2Login).to.have.status(200);
+    SELLER2_TOKEN = seller2Login.body.token;
+
+    const verifyMerchant2 = await jwt.verify(
+      SELLER2_TOKEN,
+      process.env.USER_SECRET_KEY
+    );
+    const merchant2Id = verifyMerchant2.id;
+
+    // Update seller2's role
+    await chai
+      .request(app)
+      .patch(`/api/updateRole/${merchant2Id}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ role: 'merchant' });
+    // create a new product to be added to the shopping cart
   });
 
   it('should return status 201 and add first product to the database', (done) => {
     const productData = {
-      name: 'Screen',
+      name: 'Screen1',
       image: [
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -110,7 +181,7 @@ describe('SEARCH PRODUCTS', async () => {
     chai
       .request(app)
       .post('/api/addProduct')
-      .set({ Authorization: `Bearer ${sellerToken}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .send(productData)
       .end((err, res) => {
         chai.expect(res).to.have.status(201);
@@ -122,7 +193,7 @@ describe('SEARCH PRODUCTS', async () => {
 
   it('should return status 201 and add second product to the database', (done) => {
     const productData = {
-      name: 'lenovo',
+      name: 'lenovo1',
       image: [
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -138,7 +209,7 @@ describe('SEARCH PRODUCTS', async () => {
     chai
       .request(app)
       .post('/api/addProduct')
-      .set({ Authorization: `Bearer ${sellerToken}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .send(productData)
       .end((err, res) => {
         chai.expect(res).to.have.status(201);
@@ -152,13 +223,13 @@ describe('SEARCH PRODUCTS', async () => {
   it('should return products that match the name query', (done) => {
     const req = {
       query: {
-        name: 'lenovo'
+        name: 'lenovo1'
       }
     };
     chai
       .request(app)
       .get('/api/search')
-      .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .query(req.query)
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
@@ -177,7 +248,7 @@ describe('SEARCH PRODUCTS', async () => {
     chai
       .request(app)
       .get('/api/search')
-      .set({ Authorization: `Bearer ${customerTokenBeforeMechant}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .query(req.query)
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
@@ -190,7 +261,7 @@ describe('SEARCH PRODUCTS', async () => {
     chai
       .request(app)
       .get('/api/search?category=Electronics')
-      .set({ Authorization: `Bearer ${sellerToken}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
         done();
@@ -204,7 +275,7 @@ describe('SEARCH PRODUCTS', async () => {
       .get(
         '/api/search?name=Screen&category=Electronics&minPrice=100&maxPrice=1000'
       )
-      .set({ Authorization: `Bearer ${sellerToken}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
         done();
@@ -216,7 +287,7 @@ describe('SEARCH PRODUCTS', async () => {
     chai
       .request(app)
       .get('/api/search?name=Lion')
-      .set({ Authorization: `Bearer ${sellerToken}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(404);
         const actualVal = res.body.message;
@@ -229,7 +300,7 @@ describe('SEARCH PRODUCTS', async () => {
     chai
       .request(app)
       .get('/api/search?minPrice=1000&maxPrice=100')
-      .set({ Authorization: `Bearer ${sellerToken}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(406);
         done();
@@ -240,7 +311,7 @@ describe('SEARCH PRODUCTS', async () => {
     chai
       .request(app)
       .get('/api/search?name=')
-      .set({ Authorization: `Bearer ${sellerToken}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(406);
         done();
@@ -251,7 +322,7 @@ describe('SEARCH PRODUCTS', async () => {
     chai
       .request(app)
       .get('/api/search')
-      .set({ Authorization: `Bearer ${sellerToken}` })
+      .set({ Authorization: `Bearer ${SELLER_TOKEN}` })
       .end((err, res) => {
         chai.expect(res).to.have.status(406);
         const actualVal = res.body.message;
