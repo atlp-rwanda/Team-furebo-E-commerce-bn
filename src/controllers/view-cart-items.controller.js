@@ -15,8 +15,8 @@ const viewCartItems = asyncWrapper(async (req, res) => {
 
   if (viewCart.length === 0) {
     return res
-      .status(404)
-      .json({ message: 'You do not have items in your cart' });
+      .status(200)
+      .json(viewCart);
   }
 
   // Map the viewCart array to include the product details in the response

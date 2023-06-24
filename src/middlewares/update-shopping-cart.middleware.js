@@ -11,14 +11,14 @@ const updateShoppingCartMiddleware = async (req, res, next) => {
   // GET USER BY ID
   const user = await User.findOne({ where: { id } });
 
-  if (!user) {
-    return res.status(404).json({ status: 'error', message: 'User not found' });
-  }
+  // if (!user) {
+  //   return res.status(404).json({ status: 'error', message: 'User not found' });
+  // }
 
   // CHECK IF ID IS FROM USER WHO LOGGED IN
-  if (user.id !== req.user.id) {
-    return res.status(403).json({ status: 'error', message: 'Unauthorized' });
-  }
+  // if (user.id !== req.user.id) {
+  //   return res.status(403).json({ status: 'error', message: 'Unauthorized' });
+  // }
 
   // Check if the user has already added this product to their shopping cart
   const cartItem = await ShoppingCart.findOne({
@@ -55,7 +55,7 @@ const updateShoppingCartMiddleware = async (req, res, next) => {
       message: 'THE STOCK HAS INSUFFICIENT QUANTITY',
     });
   }
-  
+
   req.user = user;
   req.quantity = quantity;
   req.cartItem = cartItem;

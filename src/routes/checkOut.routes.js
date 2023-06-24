@@ -1,11 +1,11 @@
 import express from 'express';
-import { authorizeCustomer } from '../middlewares/userRoles.middleware';
+import { authorizeCustomer, authorizeUser } from '../middlewares/userRoles.middleware';
 
 import AuthMiddleware from '../middlewares/login.middleware';
 
 import checkOutMiddleware from '../middlewares/checkOut.middleware';
 
-import { buyerCheckout } from '../controllers/checkOut.controller';
+import { buyerCheckout, getOrderById } from '../controllers/checkOut.controller';
 
 const router = express.Router();
 
@@ -196,5 +196,7 @@ router.post(
  *                 message: Oops! Couldn't complete the checkout process
  *
  */
+
+router.get('/getOrder', authorizeUser, getOrderById);
 
 export default router;

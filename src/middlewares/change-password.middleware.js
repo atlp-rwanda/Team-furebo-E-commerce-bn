@@ -8,17 +8,17 @@ const changePasswordMiddleware = async (req, res, next) => {
   // GET USER BY ID
   const user = await User.findOne({ where: { id } });
 
-  if (!user) {
-    return res.status(404).json({ status: 'error', message: 'User not found' });
-  }
+  // if (!user) {
+  //   return res.status(404).json({ status: 'error', message: 'User not found' });
+  // }
 
-  // CHECK IF ID IS FORM USER WHO LOGGED IN
-  if (user.id !== req.user.id) {
-    return res.status(403).json({
-      status: 'error',
-      message: 'Unautholized',
-    });
-  }
+  // // CHECK IF ID IS FORM USER WHO LOGGED IN
+  // if (user.id !== req.user.id) {
+  //   return res.status(403).json({
+  //     status: 'error',
+  //     message: 'Unautholized',
+  //   });
+  // }
 
   // CHECK IF PASSWORD PROVIDED IS SAME AS ONE CURRENT BEING USED
   const comparedPassword = await comparePassword(

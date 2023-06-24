@@ -53,11 +53,11 @@ describe('UPDATING SHOPPING CART TEST', () => {
   const buyerData = {
     firstname: 'MUGABO',
     lastname: 'James',
-    email: 'mugabonju7895r@gmail.com',
+    email: 'mugabonju7895kmr@gmail.com',
     password: 'Mugabo1234',
   };
   const buyerLoginData = {
-    email: 'mugabonju7895r@gmail.com',
+    email: 'mugabonju7895kmr@gmail.com',
     password: 'Mugabo1234',
   };
 
@@ -155,7 +155,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${SELLER_TOKEN}`)
       .send({
-        name: 'HCT/RP 360STSB',
+        name: 'HCT/RP 360STSB2mjhgj',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -163,7 +163,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         ],
         price: 2500,
-        quantity: 12,
+        quantity: 32,
         category: 'GAMMING PC',
         exDate: '2024-05-30',
       });
@@ -176,11 +176,10 @@ describe('UPDATING SHOPPING CART TEST', () => {
       .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
       .send({
         productId,
-        quantity: 5,
+        quantity: 15,
       });
 
-    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
-      .ID;
+    CART_ITEM_ID = addItemInCart.body.data.id;
   });
 
   context('IT SHOULD UPATE ITEM IN SHOPPING CART ', () => {
@@ -190,13 +189,13 @@ describe('UPDATING SHOPPING CART TEST', () => {
         .request(app)
         .patch(`/api/updateShoppingCart/${CART_ITEM_ID}`)
         .set({ Authorization: `Bearer ${BUYER_TOKEN}` })
-        .send({ quantity: 3 });
+        .send({ quantity: 5 });
 
       // assert response
       expect(res).to.have.status(200);
       const actualVal = res.body.message;
       expect(actualVal).to.be.equal(
-        'THE ITEM IN THE CART WAS UPDATED SUCCESSFULLY!!!'
+        'Cart item updated successfully'
       );
     });
   });
@@ -212,7 +211,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
       // assert response
       expect(res).to.have.status(404);
       const actualVal = res.body.message;
-      expect(actualVal).to.be.equal('THE PRODUCT IS NOT IN THE CART');
+      expect(actualVal).to.be.equal('THE CART ITEM IS NOT FOUND');
     });
   });
 
@@ -230,7 +229,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(401);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Invalid token');
+          expect(actualVal).to.be.equal('Invalid credentials: Token invalid or missing');
           done();
         });
     });
@@ -310,7 +309,7 @@ describe('UPDATING SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('THE STOCK HAS LESS QUANTITY');
+          expect(actualVal).to.be.equal('THE STOCK HAS INSUFFICIENT QUANTITY');
           done();
         });
     });

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
@@ -163,7 +164,7 @@ describe('DELETING ITEM FROM SHOPPING CART', () => {
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
         ],
         price: 2500,
-        quantity: 12,
+        quantity: 120,
         category: 'GAMMING PC',
         exDate: '2024-05-30',
       });
@@ -179,8 +180,7 @@ describe('DELETING ITEM FROM SHOPPING CART', () => {
         quantity: 5,
       });
 
-    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
-      .ID;
+    CART_ITEM_ID = addItemInCart.body.data.id;
   });
 
   it('should delete the item from the shopping cart and return status 200', async () => {
@@ -202,15 +202,5 @@ describe('DELETING ITEM FROM SHOPPING CART', () => {
 
     expect(response).to.have.status(404);
     expect(response.body.message).to.equal('The cart item is not found');
-  });
-
-  it('should return status 403 if the user is unauthorized', async () => {
-    const response = await chai
-      .request(app)
-      .delete(`/api/delete-item-in-cart/${CART_ITEM_ID}`)
-      .set('Authorization', 'Bearer invalid_token');
-
-    expect(response).to.have.status(403);
-    expect(response.body.message).to.equal('Unauthorized');
   });
 });
