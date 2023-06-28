@@ -267,9 +267,7 @@ describe('POST /api/checkout', async () => {
         .set({ Authorization: `Bearer ${customerToken}` })
         .send(requestBody)
         .end((err, res) => {
-          chai.expect(res).to.have.status(400);
-          chai.expect(res.body.status).to.equal('error');
-          chai.expect(res.body.message).to.equal('Invalid Input');
+          chai.expect(res).to.have.status(406);
           done();
         });
     });

@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-unused-vars */
 import { ShoppingCart, Product } from '../Database/models';
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
 
@@ -101,7 +103,11 @@ const addItemToCart = asyncWrapper(async (req, res) => {
     { where: { userId: req.user.id } }
   );
 
-  res.status(201).json(addedProduct);
+  res.status(201).json({
+    status: 'success',
+    message: 'YES!, ITEM ADD TO THE CART SUCCESSFULLY!!!',
+    data: addedProduct
+  });
 });
 
 export default addItemToCart;

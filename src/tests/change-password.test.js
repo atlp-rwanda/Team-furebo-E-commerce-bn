@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 import 'dotenv/config';
@@ -152,23 +153,6 @@ describe('CHANGE USER PASSWORD', async () => {
     );
     USER_THREE_ID = user3DecodToken.id;
   });
-
-  context('WHEN USER TRIED TO CHANGE SOMEONE ELSE PASSWORD', () => {
-    it('should return a 403 error response with "Unauthorized" message when a user attempts to change another user\'s password', async () => {
-      const passwordData = {
-        currentPassword: 'Bruce12345',
-        newPassword: 'Bruce123456',
-      };
-      const res = await chai
-        .request(app)
-        .patch(`/api/modify-password/${USER_THREE_ID}`)
-        .set({ Authorization: `Bearer ${USER_TWO_TOKEN}` })
-        .send(passwordData);
-      expect(res.status).to.equal(403);
-      const actualVal = res.body.message;
-      expect(actualVal).to.be.equal('Unautholized');
-    });
-  });
   context('WHEN GIVEN NEW PASSWORD IS SAME AS CURRENT PASSWORD', () => {
     it('should return 400 status and error message ', async () => {
       const passwordData = {
@@ -177,7 +161,7 @@ describe('CHANGE USER PASSWORD', async () => {
       };
       const res = await chai
         .request(app)
-        .patch(`/api/modify-password/${USER_TWO_ID}`)
+        .patch('/api/modify-password')
         .set({ Authorization: `Bearer ${USER_TWO_TOKEN}` })
         .send(passwordData);
       expect(res.status).to.equal(400);
@@ -190,12 +174,12 @@ describe('CHANGE USER PASSWORD', async () => {
   context('WHEN GIVEN CURRENT PASSWORD IS INCORRECT', () => {
     it('should return 401 status and error message ', async () => {
       const passwordData = {
-        currentPassword: 'Mugabo123499',
+        currentPassword: 'Mugaboo123499',
         newPassword: 'Mugabo123400',
       };
       const res = await chai
         .request(app)
-        .patch(`/api/modify-password/${USER_TWO_ID}`)
+        .patch('/api/modify-password')
         .set({ Authorization: `Bearer ${USER_TWO_TOKEN}` })
         .send(passwordData);
       expect(res.status).to.equal(401);
@@ -210,25 +194,10 @@ describe('CHANGE USER PASSWORD', async () => {
       };
       const res = await chai
         .request(app)
-        .patch(`/api/modify-password/${USER_ONE_ID}`)
+        .patch('/api/modify-password')
         .send(passwordData);
       expect(res.status).to.equal(401);
       expect(res.body.message).to.equal('Authorization header missing');
-    });
-  });
-  context('WHEN USER HAS NO ACCOUNT', () => {
-    it('should return 404 status and error message ', async () => {
-      const passwordData = {
-        currentPassword: 'Kabera1912',
-        newPassword: 'Kabera19123',
-      };
-      const res = await chai
-        .request(app)
-        .patch(`/api/modify-password/${NONE_ACCOUNT_USER_ID}`)
-        .set({ Authorization: `Bearer ${USER_ONE_TOKEN}` })
-        .send(passwordData);
-      expect(res.status).to.equal(404);
-      expect(res.body.message).to.equal('User not found');
     });
   });
 
@@ -242,7 +211,7 @@ describe('CHANGE USER PASSWORD', async () => {
         };
         const res = await chai
           .request(app)
-          .patch(`/api/modify-password/${USER_ONE_ID}`)
+          .patch('/api/modify-password/')
           .set({ Authorization: `Bearer ${USER_ONE_TOKEN}` })
           .send(passwordData);
         expect(res.status).to.equal(200);

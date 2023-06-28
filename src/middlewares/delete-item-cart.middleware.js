@@ -11,10 +11,6 @@ const deleteCartItemMiddleware = async (req, res, next) => {
     return res.status(404).json({ status: 'error', message: 'User not found' });
   }
 
-  if (user.id !== req.user.id) {
-    return res.status(403).json({ status: 'error', message: 'Unauthorized' });
-  }
-
   const cartItem = await ShoppingCart.findOne({
     where: { userId: req.user.id, id: cartItemId },
     include: { model: Product },

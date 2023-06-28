@@ -57,3 +57,25 @@ export const buyerCheckout = asyncWrapper(async (req, res) => {
     data: order,
   });
 });
+
+export const getOrderById = asyncWrapper(async (req, res) => {
+  const { user } = req;
+
+  const userOrder = await Order.findAll({
+    where: {
+      userId: `${user.id}`,
+    },
+  });
+
+  if (!userOrder) {
+    return res.status(404).json({
+      message: 'Order not found',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Order retrived successfully',
+    userOrder,
+  });
+});

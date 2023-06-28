@@ -7,7 +7,9 @@ import db from '../Database/models';
 import emitter from '../events/notifications.event';
 
 // LOAD MODELS FROM DB
-const { Payment, ShoppingCart, Order } = db;
+const {
+  Payment, ShoppingCart, Product, Order
+} = db;
 
 // LOAD SECRET
 const { STRIPE_SECRET_KEY } = process.env;
@@ -75,6 +77,23 @@ export const makePayment = asyncWrapper(async (req, res) => {
     status: 'paid',
   });
 
+  // GET CURRENT CART
+  const currentCart = await ShoppingCart.findAll({
+    where: { userId: user.id },
+  });
+
+  // UPDATE INVENTORIES
+  currentCart.forEach(async (element) => {
+    const data = await Product.findOne({
+      where: {
+        id: element.productId,
+      },
+    });
+    await data.update({
+      quantity: data.quantity - element.quantity
+    });
+  });
+
   // DELETING PAYED PRODUCTS FROM SHOPING CART
   orderProductsDataArray.forEach(async (element) => {
     const data = await ShoppingCart.findOne({
@@ -89,7 +108,8 @@ export const makePayment = asyncWrapper(async (req, res) => {
   const { status } = updateOrder;
   return res.status(201).json({
     ok: true,
-    message: 'Payment successfully added and order status updated',
+    message: 'Payment is successful and order status updated',
+    stripeMessage: stripeCharge.outcome.seller_message,
     data: createPayment,
     status,
   });
