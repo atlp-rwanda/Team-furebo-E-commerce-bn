@@ -6,6 +6,7 @@ import {
   Product,
   User,
   Order,
+  OrderStatus,
   DeliveryAddress,
 } from '../Database/models';
 
@@ -23,7 +24,7 @@ export const buyerCheckout = asyncWrapper(async (req, res) => {
   currentCart.forEach((item) => {
     const product = {
       productId: item.productId,
-      quantity: item.productId,
+      quantity: item.quantity,
       price: item.totalPrice,
     };
     products.push(product);
@@ -49,6 +50,15 @@ export const buyerCheckout = asyncWrapper(async (req, res) => {
     totalPrice: cartTotalPrice,
     deliveryAddress,
     paymentMethod: paymentInformation.method,
+  });
+
+  const deliveryDate = new Date();
+  deliveryDate.setDate(deliveryDate.getDate() + 14); // add 14 days (2 weeks) to the current date
+
+  await OrderStatus.create({
+    orderId: order.id,
+    status: order.status,
+    deliveryDate: deliveryDate,
   });
 
   res.status(200).json({

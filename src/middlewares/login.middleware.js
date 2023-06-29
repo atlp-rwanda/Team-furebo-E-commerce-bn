@@ -10,7 +10,7 @@ class AuthMiddleware {
       // console.log(req.headers)
       if (!token) {
         return res.status(400).json({
-          error: 'error',
+          status: 'error',
           msg: 'Please sign in!',
         });
       }

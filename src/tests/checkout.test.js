@@ -219,7 +219,7 @@ describe('POST /api/checkout', async () => {
   });
 
   context('It should create a new order', () => {
-    it('should retrive user information with status code 200', (done) => {
+    it('It should create a new order and return status code 200', (done) => {
       const requestBody = {
         deliveryAddress: {
           street: 'KN 55 st',
@@ -333,7 +333,7 @@ describe('POST /api/checkout', async () => {
           .send(requestBody)
           .end((err, res) => {
             chai.expect(res).to.have.status(400);
-            // chai.expect(res.body.status).to.include('error');
+            chai.expect(res.body.status).to.include('error');
             done();
           });
       });

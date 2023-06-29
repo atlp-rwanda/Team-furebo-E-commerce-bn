@@ -50,6 +50,9 @@ io.on('connection', (socket) => {
   socket.on('send-chat-message', (message) => {
     socket.broadcast.emit('chat-message', { message, name: users[socket.id] });
   });
+  socket.on('update-order', (orderStatus) => {
+    socket.emit('order-status', { orderStatus });
+  });
   socket.on('disconnect', () => {
     socket.broadcast.emit('user-disconnected', users[socket.id]);
     delete users[socket.id];

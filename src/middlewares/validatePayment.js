@@ -5,7 +5,7 @@ import db from '../Database/models';
 // CONFIGURE DOTENV
 dotenv.config();
 
-const { Order, Product, Payment } = db;
+const { Order, Product, Payment, OrderStatus } = db;
 
 const validatePayment = asyncWrapper(async (req, res, next) => {
   const { id: orderId } = req.params;
@@ -18,6 +18,8 @@ const validatePayment = asyncWrapper(async (req, res, next) => {
       message: 'Order not found',
     });
   }
+  
+  const currentOrderStatus = await OrderStatus.findOne({where: {orderId}})
 
   // CHECK IF USER OWNS ORDER
   if (findOrder.dataValues.userId !== user.dataValues.id) {
@@ -60,6 +62,7 @@ const validatePayment = asyncWrapper(async (req, res, next) => {
     findOrder,
     isOrderPaid,
     orderProductsDataArray,
+    currentOrderStatus
   };
 
   next();
