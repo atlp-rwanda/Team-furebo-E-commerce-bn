@@ -1,6 +1,12 @@
 import express from 'express';
-import createProductFeedback from '../controllers/productFeedback.controller';
-import { authorizeCustomer } from '../middlewares/userRoles.middleware';
+import {
+  createProductFeedback,
+  getFeedback,
+} from '../controllers/productFeedback.controller';
+import {
+  authorizeCustomer,
+  authorizeUser,
+} from '../middlewares/userRoles.middleware';
 import AuthMiddleware from '../middlewares/login.middleware';
 import validateProductFeedbackMiddleware from '../middlewares/validateProductFeedbackMiddleware';
 
@@ -100,5 +106,6 @@ router.post(
   validateProductFeedbackMiddleware,
   createProductFeedback
 );
+router.get('/getProductFeedback/:id', authorizeUser, getFeedback);
 
 export default router;

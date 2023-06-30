@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Chats.init(
     {
-      message: DataTypes.STRING,
+      message: DataTypes.TEXT,
       sender: DataTypes.STRING,
     },
     {

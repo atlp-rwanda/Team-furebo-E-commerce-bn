@@ -196,8 +196,8 @@ describe(' CLEAR SHOPPING CART TEST', () => {
         quantity: 2,
       });
 
-    CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
-      .ID;
+    // CART_ITEM_ID = addItemInCart.body.data['CURRENT CART DETAILS']['ADDED PRODUCT DETAILS ']
+    //   .ID;
   });
   // after(async () => {
   //   await sequelize.sync({ force: true });

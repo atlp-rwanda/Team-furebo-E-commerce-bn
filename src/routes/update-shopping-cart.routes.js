@@ -94,7 +94,7 @@ const router = express.Router();
  *                   example: 'Internal Server Error'
  */
 
-router.patch(
+router.put(
   '/updateShoppingCart/:id',
   authorizeUser,
   updateShoppingCartMiddleware,

@@ -4,6 +4,7 @@ import {
   ShoppingCart,
   Product,
   User,
+  Order,
   DeliveryAddress,
 } from '../Database/models';
 
@@ -26,6 +27,22 @@ const checkOutMiddleware = asyncWrapper(async (req, res, next) => {
     });
   }
 
+  const isOrderExist = await Order.findAll({
+    where: {
+      userId: dbUser.id,
+      status: 'pending'
+    }
+  });
+
+  if (isOrderExist) {
+    await Order.destroy({
+      where: {
+        userId: dbUser.id,
+        status: 'pending'
+      }
+    });
+  }
+
   const cartTotalPrice = currentCart
     .reduce((total, item) => total + parseFloat(item.totalPrice), 0)
     .toFixed(2);
@@ -35,11 +52,7 @@ const checkOutMiddleware = asyncWrapper(async (req, res, next) => {
   const { error } = validateOrder(req.body);
 
   if (error) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Invalid Input',
-      data: error.details[0].message,
-    });
+    return res.status(406).send(error.details[0].message);
   }
 
   req.user = dbUser;

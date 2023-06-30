@@ -42,7 +42,8 @@ const updateShoppingCart = asyncWrapper(async (req, res) => {
   );
 
   res.status(200).json({
-    message: 'Cart item updated successfully',
+    status: 'success',
+    message: 'CART ITEM UPDATED SUCCESSFULLY!!!',
   });
 });
 

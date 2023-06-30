@@ -18,6 +18,14 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       });
     }
+
+    static associate(models) {
+      ProductFeedback.belongsTo(models.User, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+    }
   }
   ProductFeedback.init(
     {

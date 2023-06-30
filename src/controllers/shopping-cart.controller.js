@@ -1,3 +1,5 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-multi-assign */
 import { ShoppingCart, Product } from '../Database/models';
 import asyncWrapper from '../utils/handlingTryCatchBlocks';
 
@@ -56,7 +58,7 @@ const addItemToCart = asyncWrapper(async (req, res) => {
   if (existingCartItem) {
     // If the user has already added this product to their shopping cart,
     // update the quantity and totalPrice fields
-    const newQuantity = existingCartItem.quantity + quantity;
+    const newQuantity = existingCartItem.quantity = +quantity;
     const totalPrice = newQuantity * product.price;
     const newTotalPrice = totalPrice.toFixed(2);
 
@@ -101,7 +103,11 @@ const addItemToCart = asyncWrapper(async (req, res) => {
     { where: { userId: req.user.id } }
   );
 
-  res.status(201).json(addedProduct);
+  res.status(201).json({
+    status: 'success',
+    message: 'YES!, ITEM ADD TO THE CART SUCCESSFULLY!!!',
+    addedProduct
+  });
 });
 
-export default addItemToCart;
+export default addItemToCart;

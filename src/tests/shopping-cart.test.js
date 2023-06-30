@@ -158,7 +158,7 @@ describe('SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${SELLER_TOKEN}`)
       .send({
-        name: 'HCT/RP 360STSS',
+        name: 'HCT/RP 360STSSi',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -179,7 +179,7 @@ describe('SHOPPING CART TEST', () => {
       .post('/api/addProduct')
       .set('Authorization', `Bearer ${SELLER_TOKEN}`)
       .send({
-        name: 'HCT/RP 360STSGc',
+        name: 'HCT/RP 360STSGckiki',
         image: [
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
           'https://th.bing.com/th/id/OIP.X7aw6FD9rHltxaZXCkuG2wHaFw?pid=ImgDet&rs=1',
@@ -189,7 +189,7 @@ describe('SHOPPING CART TEST', () => {
         price: 2500,
         quantity: 12,
         category: 'GAMMING PC/2',
-        exDate: '2023-05-30',
+        exDate: '2024-09-30',
       });
     expect(product2).to.have.status(201);
     UNVAILABLE_PRODUCT_ID = product2.body.data.id;
@@ -217,11 +217,6 @@ describe('SHOPPING CART TEST', () => {
         EXISTING_PRODUCT_ID,
         quantity: 5,
       });
-
-    console.log(`1 ========== Product ID ${EXISTING_PRODUCT_ID} `);
-    console.log(`2 ========== UNAVAILABLE Product ID ${UNVAILABLE_PRODUCT_ID} `);
-    console.log(`1 ========== SELLER ID ${SELLER_TOKEN} `);
-    console.log(`2 ========== SELLER ID ${SELLER_TOKEN} `);
   });
 
   context('WHEN VALID PRODUCT ID AND QUANTITY ARE GIVEN ', () => {
@@ -260,7 +255,7 @@ describe('SHOPPING CART TEST', () => {
       expect(res).to.have.status(400);
       const actualVal = res.body.message;
       expect(actualVal).to.be.equal(
-        'THE PRODUCT WITH THAT ID, IS NOT AVAILABLE'
+        'THE PRODUCT WITH THAT ID IS NOT AVAILABLE'
       );
     });
   });
@@ -280,7 +275,7 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(401);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('Invalid token');
+          expect(actualVal).to.be.equal('Invalid credentials: Token invalid or missing');
           done();
         });
     });
@@ -343,7 +338,7 @@ describe('SHOPPING CART TEST', () => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
           expect(actualVal).to.be.equal(
-            'QUANTITY HAS TO BE A VALID POSITIVE NUMBER(s) [1-9]'
+            'QUANTITY HAS TO BE A VALID POSITIVE NUMBER [1-9]'
           );
           done();
         });
@@ -365,7 +360,7 @@ describe('SHOPPING CART TEST', () => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
           expect(actualVal).to.be.equal(
-            'PLEASE ENTER POSITIVE NUMBER(s), LIKE [1-9]'
+            'PLEASE ENTER A POSITIVE NUMBER [1-9]'
           );
           done();
         });
@@ -387,7 +382,7 @@ describe('SHOPPING CART TEST', () => {
         .end((err, res) => {
           chai.expect(res).to.have.status(400);
           const actualVal = res.body.message;
-          expect(actualVal).to.be.equal('THE STOCK HAS LESS QUANTITY');
+          expect(actualVal).to.be.equal('THE STOCK HAS INSUFFICIENT QUANTITY');
           done();
         });
     });

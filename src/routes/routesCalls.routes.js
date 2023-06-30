@@ -30,8 +30,11 @@ import findProduct from './findProduct.routes';
 import addProductFeedback from './productFeedback.routes';
 import userProfile from './userProfile.routes';
 import getNotification from './getNotification.routes';
-import fetchUsers from './get-users.routes'
-import deleteItemInCart from './detele-item-in-cart.routes'
+import fetchUsers from './get-users.routes';
+import deleteItemInCart from './detele-item-in-cart.routes';
+import wishlist from './Wishlist.routes';
+import trackOrder from './track-order.routes';
+import customerSupport from './customer-support.routes';
 
 const routes = express();
 
@@ -70,6 +73,8 @@ routes.use('/api', userProfile);
 routes.use('/api', getNotification);
 routes.use('/api', fetchUsers);
 routes.use('/api', deleteItemInCart);
-
+routes.use('/api', wishlist);
+routes.use('/api', trackOrder);
+routes.use('/api', customerSupport);
 
 export default routes;
